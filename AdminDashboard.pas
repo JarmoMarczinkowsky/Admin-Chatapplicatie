@@ -11,7 +11,7 @@ uses
 type
   TForm2 = class(TForm)
     Panel1: TPanel;
-    Panel2: TPanel;
+    pnlLeft: TPanel;
     dscShowUsers: TDataSource;
     pgqGetUsers: TPgQuery;
     pgqGetUsersgbr_id: TIntegerField;
@@ -22,10 +22,11 @@ type
     pgqGetUsersgbr_nicknaam: TStringField;
     pgqGetUsersgbr_wachtwoord: TStringField;
     advShowUsers: TDBAdvGrid;
-    sbtnRetrieveUsers: TAdvSmoothButton;
+    sbtnAddUser: TAdvSmoothButton;
+    sbtnDeleteUser: TAdvSmoothButton;
+    pnlUserOverview: TPanel;
 
     procedure FormShow(Sender: TObject);
-    procedure sbtnRetrieveUsersClick(Sender: TObject);
   private
     { Private declarations }
     DBConnection : TPgConnection;
@@ -52,12 +53,9 @@ begin
   pgqGetUsers.Open;
 
   advShowUsers.Refresh;
-end;
 
-procedure TForm2.sbtnRetrieveUsersClick(Sender: TObject);
-begin
-
-  //ShowMessage('Records found: ' + IntToStr(pgqGetUsers.RecordCount));
+  pnlLeft.BringToFront;
+  pnlLeft.Visible := true;
 end;
 
 end.
