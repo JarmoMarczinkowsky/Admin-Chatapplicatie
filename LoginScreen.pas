@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   StrUtils,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, AdvSmoothButton, Data.DB,
-  DBAccess, PgAccess, MemDS;
+  DBAccess, PgAccess, MemDS, Vcl.ExtCtrls, Vcl.Imaging.pngimage;
 
 type
   TForm1 = class(TForm)
@@ -18,6 +18,7 @@ type
     pgcDBconnection: TPgConnection;
     pgqGetUser: TPgQuery;
     lblError: TLabel;
+    Image1: TImage;
     procedure sbtnLoginClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
   private
@@ -30,6 +31,7 @@ var
   Form1: TForm1;
 
 implementation
+  uses AdminDashboard;
 
 {$R *.dfm}
 
@@ -40,7 +42,7 @@ end;
 
 procedure TForm1.sbtnLoginClick(Sender: TObject);
 begin
-  pgcDBconnection.Open;
+  if(NOT pgcDBconnection.Connected) then pgcDBconnection.Open;
 
   if((Length(edtUser.Text) > 0) AND (Length(edtPassword.Text) > 0)) then
   begin
@@ -64,7 +66,7 @@ begin
 
     if(pgqGetUser.RecordCount > 0) then
     begin
-      ShowMessage('Succes');
+      Form2.Show;
     end
     else
     begin
