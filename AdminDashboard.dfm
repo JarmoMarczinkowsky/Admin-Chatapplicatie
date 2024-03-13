@@ -19,118 +19,6 @@ object Form2: TForm2
     Height = 15
     Caption = 'Winkelnaam'
   end
-  object pnlAddUser: TPanel
-    Left = 111
-    Top = 88
-    Width = 681
-    Height = 345
-    TabOrder = 6
-    object lblName: TLabel
-      Left = 56
-      Top = 59
-      Width = 32
-      Height = 15
-      Caption = 'Naam'
-    end
-    object lblStoreName: TLabel
-      Left = 56
-      Top = 88
-      Width = 66
-      Height = 15
-      Caption = 'Winkelnaam'
-    end
-    object lblEmail: TLabel
-      Left = 56
-      Top = 117
-      Width = 29
-      Height = 15
-      Caption = 'Email'
-    end
-    object Label2: TLabel
-      Left = 56
-      Top = 146
-      Width = 91
-      Height = 15
-      Caption = 'Telefoonnummer'
-    end
-    object lblNickname: TLabel
-      Left = 56
-      Top = 175
-      Width = 86
-      Height = 15
-      Caption = 'Gebruikersnaam'
-    end
-    object edtName: TEdit
-      Left = 176
-      Top = 56
-      Width = 145
-      Height = 23
-      TabOrder = 0
-    end
-    object edtStoreName: TEdit
-      Left = 176
-      Top = 85
-      Width = 145
-      Height = 23
-      TabOrder = 1
-    end
-    object AdvSmoothButton1: TAdvSmoothButton
-      Left = 56
-      Top = 224
-      Width = 125
-      Height = 27
-      Appearance.SimpleLayout = True
-      Appearance.Rounding = 5
-      Status.Caption = '0'
-      Status.Appearance.Fill.Color = clRed
-      Status.Appearance.Fill.ColorMirror = clNone
-      Status.Appearance.Fill.ColorMirrorTo = clNone
-      Status.Appearance.Fill.GradientType = gtSolid
-      Status.Appearance.Fill.GradientMirrorType = gtSolid
-      Status.Appearance.Fill.BorderColor = clGray
-      Status.Appearance.Fill.Rounding = 0
-      Status.Appearance.Fill.ShadowOffset = 0
-      Status.Appearance.Fill.Glow = gmNone
-      Status.Appearance.Font.Charset = DEFAULT_CHARSET
-      Status.Appearance.Font.Color = clWhite
-      Status.Appearance.Font.Height = -11
-      Status.Appearance.Font.Name = 'Segoe UI'
-      Status.Appearance.Font.Style = []
-      Caption = 'Toevoegen'
-      Color = 6612379
-      TabOrder = 2
-      Version = '2.2.3.1'
-      TMSStyle = 8
-    end
-    object AdvSmoothButton2: TAdvSmoothButton
-      Left = 196
-      Top = 224
-      Width = 125
-      Height = 27
-      Appearance.SimpleLayout = True
-      Appearance.Rounding = 5
-      Status.Caption = '0'
-      Status.Appearance.Fill.Color = clRed
-      Status.Appearance.Fill.ColorMirror = clNone
-      Status.Appearance.Fill.ColorMirrorTo = clNone
-      Status.Appearance.Fill.GradientType = gtSolid
-      Status.Appearance.Fill.GradientMirrorType = gtSolid
-      Status.Appearance.Fill.BorderColor = clGray
-      Status.Appearance.Fill.Rounding = 0
-      Status.Appearance.Fill.ShadowOffset = 0
-      Status.Appearance.Fill.Glow = gmNone
-      Status.Appearance.Font.Charset = DEFAULT_CHARSET
-      Status.Appearance.Font.Color = clWhite
-      Status.Appearance.Font.Height = -11
-      Status.Appearance.Font.Name = 'Segoe UI'
-      Status.Appearance.Font.Style = []
-      Caption = 'Annuleren'
-      Color = clWhite
-      TabOrder = 3
-      Version = '2.2.3.1'
-      TMSStyle = 8
-    end
-  end
   object Panel1: TPanel
     Left = 0
     Top = 0
@@ -152,34 +40,13 @@ object Form2: TForm2
     ExplicitTop = 49
     ExplicitHeight = 392
   end
-  object Edit1: TEdit
-    Left = 304
-    Top = 202
-    Width = 145
-    Height = 23
-    TabOrder = 2
-  end
-  object edtTelephone: TEdit
-    Left = 304
-    Top = 231
-    Width = 145
-    Height = 23
-    TabOrder = 3
-  end
-  object edtUserName: TEdit
-    Left = 304
-    Top = 260
-    Width = 145
-    Height = 23
-    TabOrder = 4
-  end
   object pcPages: TPageControl
     Left = 111
     Top = 72
     Width = 720
     Height = 361
-    ActivePage = tbsUserOverview
-    TabOrder = 5
+    ActivePage = tbsAddUser
+    TabOrder = 2
     object tbsUserOverview: TTabSheet
       Caption = 'User Overview'
       object Label3: TLabel
@@ -665,6 +532,132 @@ object Form2: TForm2
     object tbsAddUser: TTabSheet
       Caption = 'Add User'
       ImageIndex = 1
+      object lblTelephone: TLabel
+        Left = 56
+        Top = 146
+        Width = 91
+        Height = 15
+        Caption = 'Telefoonnummer'
+      end
+      object lblEmail: TLabel
+        Left = 56
+        Top = 117
+        Width = 29
+        Height = 15
+        Caption = 'Email'
+      end
+      object lblName: TLabel
+        Left = 56
+        Top = 59
+        Width = 32
+        Height = 15
+        Caption = 'Naam'
+      end
+      object lblNickname: TLabel
+        Left = 56
+        Top = 175
+        Width = 86
+        Height = 15
+        Caption = 'Gebruikersnaam'
+      end
+      object lblStoreName: TLabel
+        Left = 56
+        Top = 88
+        Width = 66
+        Height = 15
+        Caption = 'Winkelnaam'
+      end
+      object AdvSmoothButton1: TAdvSmoothButton
+        Left = 56
+        Top = 224
+        Width = 125
+        Height = 27
+        Appearance.SimpleLayout = True
+        Appearance.Rounding = 5
+        Status.Caption = '0'
+        Status.Appearance.Fill.Color = clRed
+        Status.Appearance.Fill.ColorMirror = clNone
+        Status.Appearance.Fill.ColorMirrorTo = clNone
+        Status.Appearance.Fill.GradientType = gtSolid
+        Status.Appearance.Fill.GradientMirrorType = gtSolid
+        Status.Appearance.Fill.BorderColor = clGray
+        Status.Appearance.Fill.Rounding = 0
+        Status.Appearance.Fill.ShadowOffset = 0
+        Status.Appearance.Fill.Glow = gmNone
+        Status.Appearance.Font.Charset = DEFAULT_CHARSET
+        Status.Appearance.Font.Color = clWhite
+        Status.Appearance.Font.Height = -11
+        Status.Appearance.Font.Name = 'Segoe UI'
+        Status.Appearance.Font.Style = []
+        Caption = 'Toevoegen'
+        Color = 6612379
+        TabOrder = 0
+        Version = '2.2.3.1'
+        TMSStyle = 8
+      end
+      object AdvSmoothButton2: TAdvSmoothButton
+        Left = 196
+        Top = 224
+        Width = 125
+        Height = 27
+        Appearance.SimpleLayout = True
+        Appearance.Rounding = 5
+        Status.Caption = '0'
+        Status.Appearance.Fill.Color = clRed
+        Status.Appearance.Fill.ColorMirror = clNone
+        Status.Appearance.Fill.ColorMirrorTo = clNone
+        Status.Appearance.Fill.GradientType = gtSolid
+        Status.Appearance.Fill.GradientMirrorType = gtSolid
+        Status.Appearance.Fill.BorderColor = clGray
+        Status.Appearance.Fill.Rounding = 0
+        Status.Appearance.Fill.ShadowOffset = 0
+        Status.Appearance.Fill.Glow = gmNone
+        Status.Appearance.Font.Charset = DEFAULT_CHARSET
+        Status.Appearance.Font.Color = clWhite
+        Status.Appearance.Font.Height = -11
+        Status.Appearance.Font.Name = 'Segoe UI'
+        Status.Appearance.Font.Style = []
+        Caption = 'Annuleren'
+        Color = clWhite
+        TabOrder = 1
+        Version = '2.2.3.1'
+        TMSStyle = 8
+      end
+      object edtName: TEdit
+        Left = 176
+        Top = 56
+        Width = 145
+        Height = 23
+        TabOrder = 2
+      end
+      object edtStoreName: TEdit
+        Left = 176
+        Top = 85
+        Width = 145
+        Height = 23
+        TabOrder = 3
+      end
+      object edtTelephone: TEdit
+        Left = 176
+        Top = 143
+        Width = 145
+        Height = 23
+        TabOrder = 4
+      end
+      object edtUserName: TEdit
+        Left = 176
+        Top = 172
+        Width = 145
+        Height = 23
+        TabOrder = 5
+      end
+      object edtEmail: TEdit
+        Left = 176
+        Top = 114
+        Width = 145
+        Height = 23
+        TabOrder = 6
+      end
     end
   end
   object dscShowUsers: TDataSource

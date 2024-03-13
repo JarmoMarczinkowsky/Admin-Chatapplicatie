@@ -24,16 +24,15 @@ type
     advShowUsers: TDBAdvGrid;
     sbtnAddUser: TAdvSmoothButton;
     sbtnDeleteUser: TAdvSmoothButton;
-    pnlAddUser: TPanel;
     edtName: TEdit;
     lblName: TLabel;
     edtStoreName: TEdit;
     lblStoreName: TLabel;
     Label1: TLabel;
-    Edit1: TEdit;
+    edtEmail: TEdit;
     lblEmail: TLabel;
     edtTelephone: TEdit;
-    Label2: TLabel;
+    lblTelephone: TLabel;
     edtUserName: TEdit;
     lblNickname: TLabel;
     AdvSmoothButton1: TAdvSmoothButton;
