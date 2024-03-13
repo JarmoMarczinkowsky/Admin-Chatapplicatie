@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, AdvUtil, Vcl.Grids, AdvObj, BaseGrid,
   AdvGrid, DBAdvGrid, Vcl.ExtCtrls, Data.DB, MemDS, DBAccess, PgAccess,
-  AdvSmoothButton;
+  AdvSmoothButton, Vcl.StdCtrls, Vcl.ComCtrls;
 
 type
   TForm2 = class(TForm)
@@ -24,7 +24,24 @@ type
     advShowUsers: TDBAdvGrid;
     sbtnAddUser: TAdvSmoothButton;
     sbtnDeleteUser: TAdvSmoothButton;
-    pnlUserOverview: TPanel;
+    pnlAddUser: TPanel;
+    edtName: TEdit;
+    lblName: TLabel;
+    edtStoreName: TEdit;
+    lblStoreName: TLabel;
+    Label1: TLabel;
+    Edit1: TEdit;
+    lblEmail: TLabel;
+    edtTelephone: TEdit;
+    Label2: TLabel;
+    edtUserName: TEdit;
+    lblNickname: TLabel;
+    AdvSmoothButton1: TAdvSmoothButton;
+    AdvSmoothButton2: TAdvSmoothButton;
+    pcPages: TPageControl;
+    tbsUserOverview: TTabSheet;
+    Label3: TLabel;
+    tbsAddUser: TTabSheet;
 
     procedure FormShow(Sender: TObject);
   private
