@@ -7,7 +7,7 @@ uses
   System.SysUtils, System.Variants, System.Classes, System.RegularExpressions,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Graphics, AdvUtil, Vcl.Grids, AdvObj, BaseGrid,
   AdvGrid, DBAdvGrid, Vcl.ExtCtrls, Data.DB, MemDS, DBAccess, PgAccess,
-  AdvSmoothButton, Vcl.StdCtrls, Vcl.ComCtrls, DMdatabaseInfo;
+  AdvSmoothButton, Vcl.StdCtrls, Vcl.ComCtrls, DMdatabaseInfo, AdvSmoothListBox;
 
 type
   TForm2 = class(TForm)
@@ -49,12 +49,10 @@ type
     tbsAddGroup: TTabSheet;
     edtGroupName: TEdit;
     Label4: TLabel;
-    Edit2: TEdit;
-    Edit3: TEdit;
+    edtGroupDescription: TEdit;
     lblAddGroupError: TLabel;
     Label2: TLabel;
     AdvSmoothButton4: TAdvSmoothButton;
-    Label5: TLabel;
     AdvSmoothButton3: TAdvSmoothButton;
     Label9: TLabel;
     advShowGroups: TDBAdvGrid;
@@ -67,6 +65,12 @@ type
     pgqGetGroupsgro_igenaar: TIntegerField;
     pgqGetGroupsgro_aangemaakt: TDateTimeField;
     pgqGetGroupsgro_del: TBooleanField;
+    AdvSmoothButton5: TAdvSmoothButton;
+    Image1: TImage;
+    slsbUser: TAdvSmoothListBox;
+    edtAddGroupSearchUser: TEdit;
+    sbtnAddUserToGroup: TAdvSmoothButton;
+    pgqAddGroupSearchUser: TPgQuery;
 
     procedure FormShow(Sender: TObject);
     procedure sbtnAddUserClick(Sender: TObject);
@@ -74,6 +78,7 @@ type
     procedure AdvSmoothButton1Click(Sender: TObject);
     procedure pcPagesChange(Sender: TObject);
     procedure sbtnAddGroupClick(Sender: TObject);
+    procedure sbtnAddUserToGroupClick(Sender: TObject);
   private
     { Private declarations }
     DBConnection : TPgConnection;
@@ -158,6 +163,8 @@ begin
 end;
 
 procedure TForm2.pcPagesChange(Sender: TObject);
+var
+  i: integer;
 begin
   if(pcPages.ActivePage = tbsUserOverview) then
   begin
@@ -166,6 +173,21 @@ begin
   else if(pcPages.ActivePage = tbsGroupOverview) then
   begin
     RefreshGroupOverView;
+  end
+  else if (pcPages.ActivePage = tbsAddGroup) then
+  begin
+    slsbUser.Items.Clear;
+    pgqGetUsers.First;
+    
+    for i := 1 to pgqGetUsers.RecordCount do
+    begin
+      with slsbUser.Items.Add do
+      begin
+        Caption := pgqGetUsersgbr_naam.Text;
+        pgqGetUsers.Next;      
+      end;
+    end;
+
   end;
 end;
 
@@ -195,9 +217,35 @@ begin
 end;
 
 procedure TForm2.sbtnAddUserClick(Sender: TObject);
+var
+  i: integer;
+begin
+  pcPages.ActivePage := tbsAddUser;
+end;
+
+procedure TForm2.sbtnAddUserToGroupClick(Sender: TObject);
+var
+  i: integer;
 begin
   lblAddUserError.Caption := '';
-  pcPages.ActivePage := tbsAddUser;
+
+  slsbUser.Items.Clear;
+  pgqAddGroupSearchUser.SQL.Text := '';
+  pgqAddGroupSearchUser.SQL.Add('SELECT * FROM tbl_gebruikers');
+  pgqAddGroupSearchUser.SQL.Add('WHERE LOWER(gbr_nicknaam)=:user');
+  pgqAddGroupSearchUser.SQL.Add('OR LOWER(gbr_email)=:user');
+  pgqAddGroupSearchUser.ParamByName('user').AsString := LowerCase(edtAddGroupSearchUser.Text);
+  pgqAddGroupSearchUser.Open;
+
+  pgqAddGroupSearchUser.First;
+  for i := 1 to pgqAddGroupSearchUser.RecordCount do
+  begin
+    with slsbUser.Items.Add do
+    begin
+      Caption := pgqAddGroupSearchUser.FieldByName('gbr_naam').AsString;
+      pgqAddGroupSearchUser.Next;
+    end;
+  end;
 end;
 
 end.
