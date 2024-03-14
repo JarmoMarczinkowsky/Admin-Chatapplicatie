@@ -532,6 +532,7 @@ object Form2: TForm2
         ParentFont = False
         TabOrder = 2
         Version = '2.2.3.1'
+        OnClick = sbtnDeleteUserClick
         TMSStyle = 8
       end
       object sgrUsers: TStringGrid

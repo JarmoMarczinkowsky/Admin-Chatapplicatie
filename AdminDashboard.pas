@@ -90,6 +90,7 @@ type
     procedure sbtnagSearchUserClick(Sender: TObject);
     procedure sbtnAddGroupClick(Sender: TObject);
     procedure sbtnDeleteGroupClick(Sender: TObject);
+    procedure sbtnDeleteUserClick(Sender: TObject);
   private
     { Private declarations }
     DBConnection : TPgConnection;
@@ -234,7 +235,7 @@ var
   i: integer;
 begin
   pgqGetUsers.SQL.Text := '';
-  pgqGetUsers.SQL.Add('SELECT * FROM tbl_gebruikers');
+  pgqGetUsers.SQL.Add('SELECT * FROM tbl_gebruikers ORDER BY gbr_id');
   pgqGetUsers.Open;
 
 //  advShowUsers.Refresh;
@@ -275,7 +276,7 @@ begin
 //
 //  advShowUsers.Refresh;
 
-  pgqGetGroups.SQL.Text := 'SELECT * FROM tbl_groepen';
+  pgqGetGroups.SQL.Text := 'SELECT * FROM tbl_groepen ORDER BY gro_id';
   pgqGetGroups.Open;
 
   pgqGetGroups.First;
@@ -387,6 +388,21 @@ begin
   pgqDelete.Execute;
 
   RefreshGroupOverView;
+end;
+
+procedure TForm2.sbtnDeleteUserClick(Sender: TObject);
+var 
+  selectedRowId, getUserId: integer;
+begin
+  selectedRowId := sgrUsers.Row;
+  getUserId := StrToInt(sgrUsers.Cells[0, selectedRowId]);
+
+  pgqDelete.SQL.Text := 'DELETE FROM tbl_gebruikers WHERE gbr_id=:SelectedId';
+  pgqDelete.ParamByName('SelectedId').AsInteger := getUserId;
+  pgqDelete.Execute;
+
+  RefreshUserOverView;
+
 end;
 
 end.
