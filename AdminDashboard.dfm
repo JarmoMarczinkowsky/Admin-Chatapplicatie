@@ -46,7 +46,7 @@ object Form2: TForm2
     Top = 72
     Width = 720
     Height = 361
-    ActivePage = tbsUserOverview
+    ActivePage = tbsAddUser
     TabOrder = 2
     object tbsUserOverview: TTabSheet
       Caption = 'User Overview'
@@ -571,13 +571,26 @@ object Form2: TForm2
         Height = 15
         Caption = 'Winkelnaam'
       end
+      object lblAddUserError: TLabel
+        Left = 54
+        Top = 280
+        Width = 28
+        Height = 15
+        Caption = 'Error'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clCrimson
+        Font.Height = -12
+        Font.Name = 'Segoe UI'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
       object AdvSmoothButton1: TAdvSmoothButton
         Left = 56
         Top = 224
         Width = 125
         Height = 27
         Appearance.Font.Charset = DEFAULT_CHARSET
-        Appearance.Font.Color = clWindowText
+        Appearance.Font.Color = clWhite
         Appearance.Font.Height = -12
         Appearance.Font.Name = 'Segoe UI'
         Appearance.Font.Style = [fsBold]
@@ -603,6 +616,7 @@ object Form2: TForm2
         ParentFont = False
         TabOrder = 0
         Version = '2.2.3.1'
+        OnClick = AdvSmoothButton1Click
         TMSStyle = 8
       end
       object AdvSmoothButton2: TAdvSmoothButton
@@ -611,7 +625,7 @@ object Form2: TForm2
         Width = 125
         Height = 27
         Appearance.Font.Charset = DEFAULT_CHARSET
-        Appearance.Font.Color = clWindowText
+        Appearance.Font.Color = clWhite
         Appearance.Font.Height = -12
         Appearance.Font.Name = 'Segoe UI'
         Appearance.Font.Style = [fsBold]
@@ -637,6 +651,7 @@ object Form2: TForm2
         ParentFont = False
         TabOrder = 1
         Version = '2.2.3.1'
+        OnClick = AdvSmoothButton2Click
         TMSStyle = 8
       end
       object edtName: TEdit
@@ -721,5 +736,15 @@ object Form2: TForm2
       FixedChar = True
       Size = 65
     end
+  end
+  object pgqCheckExistingUser: TPgQuery
+    Connection = DataModule2.pgcDBconnection
+    Left = 491
+    Top = 290
+  end
+  object pgqAddUser: TPgQuery
+    Connection = DataModule2.pgcDBconnection
+    Left = 491
+    Top = 234
   end
 end
