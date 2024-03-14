@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, AdvUtil, Vcl.Grids, AdvObj, BaseGrid,
   AdvGrid, DBAdvGrid, Vcl.ExtCtrls, Data.DB, MemDS, DBAccess, PgAccess,
-  AdvSmoothButton, Vcl.StdCtrls, Vcl.ComCtrls;
+  AdvSmoothButton, Vcl.StdCtrls, Vcl.ComCtrls, DMdatabaseInfo;
 
 type
   TForm2 = class(TForm)
@@ -43,6 +43,7 @@ type
     tbsAddUser: TTabSheet;
 
     procedure FormShow(Sender: TObject);
+    procedure sbtnAddUserClick(Sender: TObject);
   private
     { Private declarations }
     DBConnection : TPgConnection;
@@ -55,14 +56,14 @@ var
   Form2: TForm2;
 
 implementation
-  uses LoginScreen;
+//  uses DMdatabaseInfo;
 
 {$R *.dfm}
 
 procedure TForm2.FormShow(Sender: TObject);
 begin
-  DBConnection := Form1.pgcDBconnection;
-  DBLoggedInUser := Form1.pgqGetUser;
+  DBConnection := DataModule2.pgcDBconnection;
+  DBLoggedInUser := DataModule2.pgqGetUser;
 
   pgqGetUsers.SQL.Text := '';
   pgqGetUsers.SQL.Add('SELECT * FROM tbl_gebruikers');
@@ -72,6 +73,11 @@ begin
 
   pnlLeft.BringToFront;
   pnlLeft.Visible := true;
+end;
+
+procedure TForm2.sbtnAddUserClick(Sender: TObject);
+begin
+  pcPages.ActivePage := tbsAddUser;
 end;
 
 end.

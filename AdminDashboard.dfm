@@ -27,7 +27,7 @@ object Form2: TForm2
     Align = alTop
     Caption = 'Panel1'
     TabOrder = 0
-    ExplicitWidth = 628
+    ExplicitWidth = 837
   end
   object pnlLeft: TPanel
     Left = 0
@@ -36,16 +36,17 @@ object Form2: TForm2
     Height = 382
     Align = alLeft
     Caption = 'Panel'
+    Color = clSkyBlue
+    ParentBackground = False
     TabOrder = 1
-    ExplicitTop = 49
-    ExplicitHeight = 392
+    ExplicitTop = 65
   end
   object pcPages: TPageControl
     Left = 111
     Top = 72
     Width = 720
     Height = 361
-    ActivePage = tbsAddUser
+    ActivePage = tbsUserOverview
     TabOrder = 2
     object tbsUserOverview: TTabSheet
       Caption = 'User Overview'
@@ -67,8 +68,6 @@ object Form2: TForm2
         RowCount = 2
         FixedRows = 1
         TabOrder = 0
-        GridLineColor = 13948116
-        GridFixedLineColor = 11250603
         ActiveCellFont.Charset = DEFAULT_CHARSET
         ActiveCellFont.Color = 4474440
         ActiveCellFont.Height = -15
@@ -134,7 +133,7 @@ object Form2: TForm2
         FixedColWidth = 20
         FixedRowHeight = 22
         FixedFont.Charset = DEFAULT_CHARSET
-        FixedFont.Color = 3881787
+        FixedFont.Color = clWindowText
         FixedFont.Height = -11
         FixedFont.Name = 'Segoe UI'
         FixedFont.Style = [fsBold]
@@ -182,6 +181,7 @@ object Form2: TForm2
         SearchFooter.MatchCaseCaption = 'Match case'
         SearchFooter.ResultFormat = '(%d of %d)'
         SelectionColor = 13744549
+        SelectionTextColor = clWindowText
         SortSettings.HeaderColor = clWhite
         SortSettings.HeaderColorTo = clWhite
         SortSettings.HeaderMirrorColor = clWhite
@@ -238,7 +238,7 @@ object Form2: TForm2
             PrintFont.Height = -15
             PrintFont.Name = 'Segoe UI'
             PrintFont.Style = []
-            Width = 20
+            Width = 12
           end>
         DataSource = dscShowUsers
         InvalidPicture.Data = {
@@ -458,7 +458,10 @@ object Form2: TForm2
         ShowUnicode = False
         ColWidths = (
           20
-          20)
+          12)
+        RowHeights = (
+          22
+          22)
       end
       object sbtnAddUser: TAdvSmoothButton
         Left = 573
@@ -492,6 +495,7 @@ object Form2: TForm2
         ParentFont = False
         TabOrder = 1
         Version = '2.2.3.1'
+        OnClick = sbtnAddUserClick
         TMSStyle = 8
       end
       object sbtnDeleteUser: TAdvSmoothButton
@@ -572,6 +576,11 @@ object Form2: TForm2
         Top = 224
         Width = 125
         Height = 27
+        Appearance.Font.Charset = DEFAULT_CHARSET
+        Appearance.Font.Color = clWindowText
+        Appearance.Font.Height = -12
+        Appearance.Font.Name = 'Segoe UI'
+        Appearance.Font.Style = [fsBold]
         Appearance.SimpleLayout = True
         Appearance.Rounding = 5
         Status.Caption = '0'
@@ -590,7 +599,8 @@ object Form2: TForm2
         Status.Appearance.Font.Name = 'Segoe UI'
         Status.Appearance.Font.Style = []
         Caption = 'Toevoegen'
-        Color = 6612379
+        Color = 13472847
+        ParentFont = False
         TabOrder = 0
         Version = '2.2.3.1'
         TMSStyle = 8
@@ -600,6 +610,11 @@ object Form2: TForm2
         Top = 224
         Width = 125
         Height = 27
+        Appearance.Font.Charset = DEFAULT_CHARSET
+        Appearance.Font.Color = clWindowText
+        Appearance.Font.Height = -12
+        Appearance.Font.Name = 'Segoe UI'
+        Appearance.Font.Style = [fsBold]
         Appearance.SimpleLayout = True
         Appearance.Rounding = 5
         Status.Caption = '0'
@@ -618,7 +633,8 @@ object Form2: TForm2
         Status.Appearance.Font.Name = 'Segoe UI'
         Status.Appearance.Font.Style = []
         Caption = 'Annuleren'
-        Color = clWhite
+        Color = 16764551
+        ParentFont = False
         TabOrder = 1
         Version = '2.2.3.1'
         TMSStyle = 8
@@ -666,7 +682,7 @@ object Form2: TForm2
     Top = 8
   end
   object pgqGetUsers: TPgQuery
-    Connection = Form1.pgcDBconnection
+    Connection = DataModule2.pgcDBconnection
     SQL.Strings = (
       'SELECT * FROM tbl_gebruikers')
     Left = 200

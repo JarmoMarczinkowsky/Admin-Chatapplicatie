@@ -8182,19 +8182,4 @@ object Form1: TForm1
     PasswordChar = #8226
     TabOrder = 2
   end
-  object pgcDBconnection: TPgConnection
-    Username = 'stage2'
-    Server = '142.132.213.151'
-    LoginPrompt = False
-    Database = 'rchat'
-    Connected = True
-    Left = 16
-    Top = 80
-    EncryptedPassword = 'CDFFACFF8BFF9EFF98FF9AFFD5FF'
-  end
-  object pgqGetUser: TPgQuery
-    Connection = pgcDBconnection
-    Left = 16
-    Top = 24
-  end
 end

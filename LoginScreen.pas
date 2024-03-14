@@ -15,8 +15,6 @@ type
     edtPassword: TEdit;
     Label1: TLabel;
     Label2: TLabel;
-    pgcDBconnection: TPgConnection;
-    pgqGetUser: TPgQuery;
     lblError: TLabel;
     Image1: TImage;
     procedure sbtnLoginClick(Sender: TObject);
@@ -31,7 +29,7 @@ var
   Form1: TForm1;
 
 implementation
-  uses AdminDashboard;
+  uses DMdatabaseInfo, AdminDashboard;
 
 {$R *.dfm}
 
@@ -42,29 +40,29 @@ end;
 
 procedure TForm1.sbtnLoginClick(Sender: TObject);
 begin
-  if(NOT pgcDBconnection.Connected) then pgcDBconnection.Open;
+  if(NOT DataModule2.pgcDBconnection.Connected) then DataModule2.pgcDBconnection.Open;
 
   if((Length(edtUser.Text) > 0) AND (Length(edtPassword.Text) > 0)) then
   begin
 
-    pgqGetUser.SQL.Text := '';
-    pgqGetUser.SQL.Add('SELECT * FROM tbl_gebruikers');
+    DataModule2.pgqGetUser.SQL.Text := '';
+    DataModule2.pgqGetUser.SQL.Add('SELECT * FROM tbl_gebruikers');
 
     if(ContainsText(edtUser.Text, '@')) then
     begin
-      pgqGetUser.SQL.Add('WHERE LOWER(gbr_email)=:user');
+      DataModule2.pgqGetUser.SQL.Add('WHERE LOWER(gbr_email)=:user');
     end
     else
     begin
-      pgqGetUser.SQL.Add('WHERE LOWER(gbr_nicknaam)=:user');
+      DataModule2.pgqGetUser.SQL.Add('WHERE LOWER(gbr_nicknaam)=:user');
     end;
 
-    pgqGetUser.SQL.Add('AND gbr_wachtwoord=:password');
-    pgqGetUser.ParamByName('user').AsString := Trim(LowerCase(edtUser.Text));
-    pgqGetUser.ParamByName('password').AsString := edtPassword.Text;
-    pgqGetUser.Open;
+    DataModule2.pgqGetUser.SQL.Add('AND gbr_wachtwoord=:password');
+    DataModule2.pgqGetUser.ParamByName('user').AsString := Trim(LowerCase(edtUser.Text));
+    DataModule2.pgqGetUser.ParamByName('password').AsString := edtPassword.Text;
+    DataModule2.pgqGetUser.Open;
 
-    if(pgqGetUser.RecordCount > 0) then
+    if(DataModule2.pgqGetUser.RecordCount > 0) then
     begin
       Form2.Show;
     end
