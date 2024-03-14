@@ -3451,4 +3451,9 @@ object Form2: TForm2
     Left = 363
     Top = 18
   end
+  object pgqDelete: TPgQuery
+    Connection = DataModule2.pgcDBconnection
+    Left = 611
+    Top = 22
+  end
 end

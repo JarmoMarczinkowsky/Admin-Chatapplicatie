@@ -77,6 +77,7 @@ type
     sbtnagSearchUser: TAdvSmoothButton;
     cboxGroupOwner: TComboBox;
     sgrGroups: TStringGrid;
+    pgqDelete: TPgQuery;
 
     procedure FormShow(Sender: TObject);
     procedure sbtnAddUserClick(Sender: TObject);
@@ -178,30 +179,7 @@ begin
 
   RefreshUserOverView;
 
-  pgqGetGroups.SQL.Text := 'SELECT * FROM tbl_groepen';
-  pgqGetGroups.Open;
-
-  pgqGetGroups.First;
-
-  sgrGroups.ColCount := 5;
-  sgrGroups.RowCount := pgqGetGroups.RecordCount + 1;
-  
-  sgrGroups.Cells[0, 0] := 'Id';
-  sgrGroups.Cells[1, 0] := 'Naam';
-  sgrGroups.Cells[2, 0] := 'Eigenaar';
-  sgrGroups.Cells[3, 0] := 'Aangemaakt';
-  sgrGroups.Cells[4, 0] := 'Verwijderd';
-   
-  for i := 1 to pgqGetGroups.RecordCount do
-  begin
-    sgrGroups.Cells[0, i] := pgqGetGroups.FieldByName('gro_id').AsString;
-    sgrGroups.Cells[1, i] := pgqGetGroups.FieldByName('gro_naam').AsString;
-    sgrGroups.Cells[2, i] := pgqGetGroups.FieldByName('gro_igenaar').AsString;
-    sgrGroups.Cells[3, i] := pgqGetGroups.FieldByName('gro_aangemaakt').AsString;
-    sgrGroups.Cells[4, i] := pgqGetGroups.FieldByName('gro_del').AsString;
-
-    pgqGetGroups.Next;
-  end;
+  RefreshGroupOverView;
 //
 //
 //  
@@ -261,12 +239,41 @@ begin
 end;
 
 procedure TForm2.RefreshGroupOverView;
+var
+  i: integer;
 begin
-  pgqGetGroups.SQL.Text := '';
-  pgqGetGroups.SQL.Add('SELECT * FROM tbl_groepen');
+//  pgqGetGroups.SQL.Text := '';
+//  pgqGetGroups.SQL.Add('SELECT * FROM tbl_groepen');
+//  pgqGetGroups.Open;
+//
+//  advShowUsers.Refresh;
+
+  pgqGetGroups.SQL.Text := 'SELECT * FROM tbl_groepen';
   pgqGetGroups.Open;
 
-  advShowUsers.Refresh;
+  pgqGetGroups.First;
+
+  sgrGroups.ColCount := 5;
+  sgrGroups.RowCount := pgqGetGroups.RecordCount + 1;
+  
+  sgrGroups.Cells[0, 0] := 'Id';
+  sgrGroups.Cells[1, 0] := 'Naam';
+  sgrGroups.Cells[2, 0] := 'Eigenaar';
+  sgrGroups.Cells[3, 0] := 'Aangemaakt';
+  sgrGroups.Cells[4, 0] := 'Verwijderd';
+   
+  for i := 1 to pgqGetGroups.RecordCount do
+  begin
+    sgrGroups.Cells[0, i] := pgqGetGroups.FieldByName('gro_id').AsString;
+    sgrGroups.Cells[1, i] := pgqGetGroups.FieldByName('gro_naam').AsString;
+    sgrGroups.Cells[2, i] := pgqGetGroups.FieldByName('gro_igenaar').AsString;
+    sgrGroups.Cells[3, i] := pgqGetGroups.FieldByName('gro_aangemaakt').AsString;
+    sgrGroups.Cells[4, i] := pgqGetGroups.FieldByName('gro_del').AsString;
+
+    pgqGetGroups.Next;
+  end;
+
+  
 end;
 
 procedure TForm2.sbtnGoToAddGroupClick(Sender: TObject);
@@ -343,12 +350,16 @@ end;
 
 procedure TForm2.sbtnDeleteGroupClick(Sender: TObject);
 var
-  i: integer;
-  getSelRows: TBookmarkList;
+  selectedRowId, getGroupId: integer;
 begin
-  //
-  
+  selectedRowId := sgrGroups.Row;
+  getGroupId := StrToInt(sgrGroups.Cells[0, selectedRowId]);
 
+  pgqDelete.SQL.Text := 'DELETE FROM tbl_groepen WHERE gro_id=:SelectedId';
+  pgqDelete.ParamByName('SelectedId').AsInteger := getGroupId;
+  pgqDelete.Execute;
+
+  RefreshGroupOverView;
 end;
 
 end.
