@@ -655,35 +655,35 @@ object Form2: TForm2
         OnClick = AdvSmoothButton2Click
         TMSStyle = 8
       end
-      object edtName: TEdit
+      object edtUserName: TEdit
         Left = 176
         Top = 56
         Width = 145
         Height = 23
         TabOrder = 0
       end
-      object edtStoreName: TEdit
+      object edtUserStoreName: TEdit
         Left = 176
         Top = 85
         Width = 145
         Height = 23
         TabOrder = 1
       end
-      object edtTelephone: TEdit
+      object edtUserTelephone: TEdit
         Left = 176
         Top = 143
         Width = 145
         Height = 23
         TabOrder = 3
       end
-      object edtUserName: TEdit
+      object edtUserNickName: TEdit
         Left = 176
         Top = 172
         Width = 145
         Height = 23
         TabOrder = 4
       end
-      object edtEmail: TEdit
+      object edtUserEmail: TEdit
         Left = 176
         Top = 114
         Width = 145
@@ -701,7 +701,7 @@ object Form2: TForm2
         Height = 15
         Caption = 'Label3'
       end
-      object DBAdvGrid1: TDBAdvGrid
+      object advShowGroups: TDBAdvGrid
         Left = 32
         Top = 44
         Width = 649
@@ -884,7 +884,7 @@ object Form2: TForm2
             PrintFont.Style = []
             Width = 12
           end>
-        DataSource = dscShowUsers
+        DataSource = dscShowGroups
         InvalidPicture.Data = {
           055449636F6E0000010001002828200000000000681A00001600000028000000
           2800000050000000010020000000000000190000000000000000000000000000
@@ -1107,7 +1107,7 @@ object Form2: TForm2
           22
           22)
       end
-      object AdvSmoothButton5: TAdvSmoothButton
+      object sbtnAddGroup: TAdvSmoothButton
         Left = 581
         Top = 3
         Width = 35
@@ -1139,10 +1139,10 @@ object Form2: TForm2
         ParentFont = False
         TabOrder = 1
         Version = '2.2.3.1'
-        OnClick = sbtnAddUserClick
+        OnClick = sbtnAddGroupClick
         TMSStyle = 8
       end
-      object AdvSmoothButton6: TAdvSmoothButton
+      object sbtnDeleteGroup: TAdvSmoothButton
         Left = 622
         Top = 3
         Width = 59
@@ -1183,25 +1183,11 @@ object Form2: TForm2
       object Label4: TLabel
         Left = 64
         Top = 96
-        Width = 66
+        Width = 64
         Height = 15
-        Caption = 'Winkelnaam'
+        Caption = 'Beschrijving'
       end
-      object Label7: TLabel
-        Left = 64
-        Top = 183
-        Width = 86
-        Height = 15
-        Caption = 'Gebruikersnaam'
-      end
-      object Label6: TLabel
-        Left = 64
-        Top = 154
-        Width = 91
-        Height = 15
-        Caption = 'Telefoonnummer'
-      end
-      object Label8: TLabel
+      object lblAddGroupError: TLabel
         Left = 62
         Top = 288
         Width = 28
@@ -1222,13 +1208,13 @@ object Form2: TForm2
         Caption = 'Naam'
       end
       object Label5: TLabel
-        Left = 64
-        Top = 125
+        Left = 416
+        Top = 144
         Width = 29
         Height = 15
         Caption = 'Email'
       end
-      object Edit1: TEdit
+      object edtGroupName: TEdit
         Left = 184
         Top = 64
         Width = 145
@@ -1239,22 +1225,15 @@ object Form2: TForm2
         Left = 184
         Top = 93
         Width = 145
-        Height = 23
+        Height = 71
         TabOrder = 1
       end
       object Edit3: TEdit
-        Left = 184
-        Top = 122
+        Left = 536
+        Top = 141
         Width = 145
         Height = 23
         TabOrder = 2
-      end
-      object Edit4: TEdit
-        Left = 184
-        Top = 151
-        Width = 145
-        Height = 23
-        TabOrder = 3
       end
       object AdvSmoothButton4: TAdvSmoothButton
         Left = 204
@@ -1286,17 +1265,10 @@ object Form2: TForm2
         Caption = 'Annuleren'
         Color = 16764551
         ParentFont = False
-        TabOrder = 4
+        TabOrder = 3
         Version = '2.2.3.1'
         OnClick = AdvSmoothButton2Click
         TMSStyle = 8
-      end
-      object Edit5: TEdit
-        Left = 184
-        Top = 180
-        Width = 145
-        Height = 23
-        TabOrder = 5
       end
       object AdvSmoothButton3: TAdvSmoothButton
         Left = 64
@@ -1328,7 +1300,7 @@ object Form2: TForm2
         Caption = 'Toevoegen'
         Color = 13472847
         ParentFont = False
-        TabOrder = 6
+        TabOrder = 4
         Version = '2.2.3.1'
         OnClick = AdvSmoothButton1Click
         TMSStyle = 8
@@ -1383,12 +1355,44 @@ object Form2: TForm2
   end
   object pgqCheckExistingUser: TPgQuery
     Connection = DataModule2.pgcDBconnection
-    Left = 491
-    Top = 290
+    Left = 723
+    Top = 210
   end
   object pgqAddUser: TPgQuery
     Connection = DataModule2.pgcDBconnection
-    Left = 491
-    Top = 234
+    Left = 715
+    Top = 162
+  end
+  object dscShowGroups: TDataSource
+    DataSet = pgqGetGroups
+    Left = 568
+    Top = 16
+  end
+  object pgqGetGroups: TPgQuery
+    Connection = DataModule2.pgcDBconnection
+    SQL.Strings = (
+      'SELECT * FROM tbl_groepen')
+    Left = 480
+    Top = 16
+    object pgqGetGroupsgro_id: TIntegerField
+      FieldName = 'gro_id'
+    end
+    object pgqGetGroupsgro_naam: TStringField
+      FieldName = 'gro_naam'
+      Required = True
+      Size = 75
+    end
+    object pgqGetGroupsgro_igenaar: TIntegerField
+      FieldName = 'gro_igenaar'
+      Required = True
+    end
+    object pgqGetGroupsgro_aangemaakt: TDateTimeField
+      FieldName = 'gro_aangemaakt'
+      Required = True
+    end
+    object pgqGetGroupsgro_del: TBooleanField
+      FieldName = 'gro_del'
+      Required = True
+    end
   end
 end

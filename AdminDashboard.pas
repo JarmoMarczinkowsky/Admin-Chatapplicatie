@@ -25,16 +25,16 @@ type
     advShowUsers: TDBAdvGrid;
     sbtnAddUser: TAdvSmoothButton;
     sbtnDeleteUser: TAdvSmoothButton;
-    edtName: TEdit;
+    edtUserName: TEdit;
     lblName: TLabel;
-    edtStoreName: TEdit;
+    edtUserStoreName: TEdit;
     lblStoreName: TLabel;
     Label1: TLabel;
-    edtEmail: TEdit;
+    edtUserEmail: TEdit;
     lblEmail: TLabel;
-    edtTelephone: TEdit;
+    edtUserTelephone: TEdit;
     lblTelephone: TLabel;
-    edtUserName: TEdit;
+    edtUserNickName: TEdit;
     lblNickname: TLabel;
     AdvSmoothButton1: TAdvSmoothButton;
     AdvSmoothButton2: TAdvSmoothButton;
@@ -45,15 +45,41 @@ type
     lblAddUserError: TLabel;
     pgqCheckExistingUser: TPgQuery;
     pgqAddUser: TPgQuery;
+    tbsGroupOverview: TTabSheet;
+    tbsAddGroup: TTabSheet;
+    edtGroupName: TEdit;
+    Label4: TLabel;
+    Edit2: TEdit;
+    Edit3: TEdit;
+    lblAddGroupError: TLabel;
+    Label2: TLabel;
+    AdvSmoothButton4: TAdvSmoothButton;
+    Label5: TLabel;
+    AdvSmoothButton3: TAdvSmoothButton;
+    Label9: TLabel;
+    advShowGroups: TDBAdvGrid;
+    sbtnAddGroup: TAdvSmoothButton;
+    sbtnDeleteGroup: TAdvSmoothButton;
+    dscShowGroups: TDataSource;
+    pgqGetGroups: TPgQuery;
+    pgqGetGroupsgro_id: TIntegerField;
+    pgqGetGroupsgro_naam: TStringField;
+    pgqGetGroupsgro_igenaar: TIntegerField;
+    pgqGetGroupsgro_aangemaakt: TDateTimeField;
+    pgqGetGroupsgro_del: TBooleanField;
 
     procedure FormShow(Sender: TObject);
     procedure sbtnAddUserClick(Sender: TObject);
     procedure AdvSmoothButton2Click(Sender: TObject);
     procedure AdvSmoothButton1Click(Sender: TObject);
+    procedure pcPagesChange(Sender: TObject);
+    procedure sbtnAddGroupClick(Sender: TObject);
   private
     { Private declarations }
     DBConnection : TPgConnection;
     DBLoggedInUser: TPgQuery;
+    procedure RefreshUserOverView;
+    procedure RefreshGroupOverView;
   public
     { Public declarations }
   end;
@@ -69,22 +95,24 @@ implementation
 procedure TForm2.AdvSmoothButton1Click(Sender: TObject);
 
 begin
-  if((Length(edtName.Text) > 0) AND
-  (Length(edtStoreName.Text) > 0) AND
-  (Length(edtEmail.Text) > 0) AND
-  (Length(edtTelephone.Text) > 0) AND
-  (Length(edtUserName.Text) > 0)) then
+  lblAddUserError.Caption := '';
+
+  if((Length(edtUserName.Text) > 0) AND
+  (Length(edtUserStoreName.Text) > 0) AND
+  (Length(edtUserEmail.Text) > 0) AND
+  (Length(edtUserTelephone.Text) > 0) AND
+  (Length(edtUserNickName.Text) > 0)) then
   begin
-    if(TRegEx.IsMatch(edtEmail.Text, '[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+')) then
+    if(TRegEx.IsMatch(edtUserEmail.Text, '[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+')) then
     begin
-      if(TRegEx.IsMatch(edtTelephone.Text, '^[0-9+\-]{10,}$')) then
+      if(TRegEx.IsMatch(edtUserTelephone.Text, '^[0-9+\-]{10,}$')) then
       begin
         pgqCheckExistingUser.SQL.Text := '';
         pgqCheckExistingUser.SQL.Add('SELECT * FROM tbl_gebruikers');
         pgqCheckExistingUser.SQL.Add('WHERE LOWER(gbr_email)=:CheckDuplicateEmail');
         pgqCheckExistingUser.SQL.Add('OR LOWER(gbr_nicknaam)=:CheckDuplicateUserName');
-        pgqCheckExistingUser.ParamByName('CheckDuplicateEmail').AsString := LowerCase(edtEmail.Text);
-        pgqCheckExistingUser.ParamByName('CheckDuplicateUserName').AsString := LowerCase(edtUserName.Text);
+        pgqCheckExistingUser.ParamByName('CheckDuplicateEmail').AsString := LowerCase(edtUserEmail.Text);
+        pgqCheckExistingUser.ParamByName('CheckDuplicateUserName').AsString := LowerCase(edtUserNickName.Text);
         pgqCheckExistingUser.Open;
 
         if(pgqCheckExistingUser.RecordCount = 0) then
@@ -93,11 +121,11 @@ begin
           pgqAddUser.SQL.Add('SELECT * FROM tbl_gebruikers');
           pgqAddUser.Open;
           pgqAddUser.Append;
-          pgqAddUser.FieldByName('gbr_naam').AsString := Trim(edtName.Text);
-          pgqAddUser.FieldByName('gbr_winkelnaam').AsString := Trim(edtStoreName.Text);
-          pgqAddUser.FieldByName('gbr_tel').AsString := Trim(edtTelephone.Text);
-          pgqAddUser.FieldByName('gbr_email').AsString := Trim(edtEmail.Text);
-          pgqAddUser.FieldByName('gbr_nicknaam').AsString := Trim(edtUserName.Text);
+          pgqAddUser.FieldByName('gbr_naam').AsString := Trim(edtUserName.Text);
+          pgqAddUser.FieldByName('gbr_winkelnaam').AsString := Trim(edtUserStoreName.Text);
+          pgqAddUser.FieldByName('gbr_tel').AsString := Trim(edtUserTelephone.Text);
+          pgqAddUser.FieldByName('gbr_email').AsString := Trim(edtUserEmail.Text);
+          pgqAddUser.FieldByName('gbr_nicknaam').AsString := Trim(edtUserNickName.Text);
           pgqAddUser.FieldByName('gbr_wachtwoord').AsString := 'Test123';
           pgqAddUser.Post;
         end
@@ -126,14 +154,44 @@ begin
   DBConnection := DataModule2.pgcDBconnection;
   DBLoggedInUser := DataModule2.pgqGetUser;
 
+  RefreshUserOverView;
+end;
+
+procedure TForm2.pcPagesChange(Sender: TObject);
+begin
+  if(pcPages.ActivePage = tbsUserOverview) then
+  begin
+    RefreshUserOverView;
+  end
+  else if(pcPages.ActivePage = tbsGroupOverview) then
+  begin
+    RefreshGroupOverView;
+  end;
+end;
+
+procedure TForm2.RefreshUserOverView;
+begin
   pgqGetUsers.SQL.Text := '';
   pgqGetUsers.SQL.Add('SELECT * FROM tbl_gebruikers');
   pgqGetUsers.Open;
 
   advShowUsers.Refresh;
 
-  pnlLeft.BringToFront;
-  pnlLeft.Visible := true;
+end;
+
+procedure TForm2.RefreshGroupOverView;
+begin
+  pgqGetGroups.SQL.Text := '';
+  pgqGetGroups.SQL.Add('SELECT * FROM tbl_groepen');
+  pgqGetGroups.Open;
+
+  advShowUsers.Refresh;
+end;
+
+procedure TForm2.sbtnAddGroupClick(Sender: TObject);
+begin
+  pcPages.ActivePage := tbsAddGroup;
+  lblAddGroupError.Caption := '';
 end;
 
 procedure TForm2.sbtnAddUserClick(Sender: TObject);
