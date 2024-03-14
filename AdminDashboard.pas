@@ -22,42 +22,9 @@ type
     pgqGetUsersgbr_email: TStringField;
     pgqGetUsersgbr_nicknaam: TStringField;
     pgqGetUsersgbr_wachtwoord: TStringField;
-    advShowUsers: TDBAdvGrid;
-    sbtnAddUser: TAdvSmoothButton;
-    sbtnDeleteUser: TAdvSmoothButton;
-    edtUserName: TEdit;
-    lblName: TLabel;
-    edtUserStoreName: TEdit;
-    lblStoreName: TLabel;
     Label1: TLabel;
-    edtUserEmail: TEdit;
-    lblEmail: TLabel;
-    edtUserTelephone: TEdit;
-    lblTelephone: TLabel;
-    edtUserNickName: TEdit;
-    lblNickname: TLabel;
-    AdvSmoothButton1: TAdvSmoothButton;
-    AdvSmoothButton2: TAdvSmoothButton;
-    pcPages: TPageControl;
-    tbsUserOverview: TTabSheet;
-    Label3: TLabel;
-    tbsAddUser: TTabSheet;
-    lblAddUserError: TLabel;
     pgqCheckExistingUser: TPgQuery;
     pgqAddUser: TPgQuery;
-    tbsGroupOverview: TTabSheet;
-    tbsAddGroup: TTabSheet;
-    edtGroupName: TEdit;
-    Label4: TLabel;
-    edtGroupDescription: TEdit;
-    lblAddGroupError: TLabel;
-    Label2: TLabel;
-    AdvSmoothButton4: TAdvSmoothButton;
-    AdvSmoothButton3: TAdvSmoothButton;
-    Label9: TLabel;
-    advShowGroups: TDBAdvGrid;
-    sbtnAddGroup: TAdvSmoothButton;
-    sbtnDeleteGroup: TAdvSmoothButton;
     dscShowGroups: TDataSource;
     pgqGetGroups: TPgQuery;
     pgqGetGroupsgro_id: TIntegerField;
@@ -65,26 +32,66 @@ type
     pgqGetGroupsgro_igenaar: TIntegerField;
     pgqGetGroupsgro_aangemaakt: TDateTimeField;
     pgqGetGroupsgro_del: TBooleanField;
-    AdvSmoothButton5: TAdvSmoothButton;
+    pgqAddGroupSearchUser: TPgQuery;
+    pcPages: TPageControl;
+    tbsUserOverview: TTabSheet;
+    Label3: TLabel;
+    advShowUsers: TDBAdvGrid;
+    sbtnAddUser: TAdvSmoothButton;
+    sbtnDeleteUser: TAdvSmoothButton;
+    tbsAddUser: TTabSheet;
+    lblTelephone: TLabel;
+    lblEmail: TLabel;
+    lblName: TLabel;
+    lblNickname: TLabel;
+    lblStoreName: TLabel;
+    lblAddUserError: TLabel;
+    AdvSmoothButton1: TAdvSmoothButton;
+    AdvSmoothButton2: TAdvSmoothButton;
+    edtUserName: TEdit;
+    edtUserStoreName: TEdit;
+    edtUserTelephone: TEdit;
+    edtUserNickName: TEdit;
+    edtUserEmail: TEdit;
+    tbsGroupOverview: TTabSheet;
+    Label9: TLabel;
+    advShowGroups: TDBAdvGrid;
+    sbtnGoToAddGroup: TAdvSmoothButton;
+    sbtnDeleteGroup: TAdvSmoothButton;
+    tbsAddGroup: TTabSheet;
+    Label4: TLabel;
+    lblAddGroupError: TLabel;
+    Label2: TLabel;
     Image1: TImage;
+    Label5: TLabel;
+    edtGroupName: TEdit;
+    edtGroupDescription: TEdit;
+    AdvSmoothButton4: TAdvSmoothButton;
+    sbtnAddGroup: TAdvSmoothButton;
+    AdvSmoothButton5: TAdvSmoothButton;
     slsbUser: TAdvSmoothListBox;
     edtAddGroupSearchUser: TEdit;
     sbtnAddUserToGroup: TAdvSmoothButton;
-    pgqAddGroupSearchUser: TPgQuery;
+    slsbGroupAddedUsers: TAdvSmoothListBox;
+    sbtnagSearchUser: TAdvSmoothButton;
+    cboxGroupOwner: TComboBox;
 
     procedure FormShow(Sender: TObject);
     procedure sbtnAddUserClick(Sender: TObject);
     procedure AdvSmoothButton2Click(Sender: TObject);
     procedure AdvSmoothButton1Click(Sender: TObject);
     procedure pcPagesChange(Sender: TObject);
-    procedure sbtnAddGroupClick(Sender: TObject);
+    procedure sbtnGoToAddGroupClick(Sender: TObject);
     procedure sbtnAddUserToGroupClick(Sender: TObject);
+    procedure sbtnagSearchUserClick(Sender: TObject);
+    procedure sbtnAddGroupClick(Sender: TObject);
   private
     { Private declarations }
     DBConnection : TPgConnection;
     DBLoggedInUser: TPgQuery;
     procedure RefreshUserOverView;
     procedure RefreshGroupOverView;
+    procedure AddItemToSearchListBox;
   public
     { Public declarations }
   end;
@@ -155,11 +162,30 @@ begin
 end;
 
 procedure TForm2.FormShow(Sender: TObject);
+var 
+  i: integer;
 begin
   DBConnection := DataModule2.pgcDBconnection;
   DBLoggedInUser := DataModule2.pgqGetUser;
 
+  slsbGroupAddedUsers.Items.Clear;
+
+  pcPages.ActivePage := tbsUserOverview;
+  cboxGroupOwner.Text := DataModule2.pgqGetUser.FieldByName('gbr_nicknaam').AsString;
+
   RefreshUserOverView;
+
+    slsbUser.Items.Clear;
+  pgqGetUsers.First;
+    
+  for i := 1 to pgqGetUsers.RecordCount do
+  begin
+    with slsbUser.Items.Add do
+    begin
+      Caption := pgqGetUsersgbr_naam.Text;
+      pgqGetUsers.Next;      
+    end;
+  end;
 end;
 
 procedure TForm2.pcPagesChange(Sender: TObject);
@@ -176,17 +202,17 @@ begin
   end
   else if (pcPages.ActivePage = tbsAddGroup) then
   begin
-    slsbUser.Items.Clear;
-    pgqGetUsers.First;
-    
-    for i := 1 to pgqGetUsers.RecordCount do
-    begin
-      with slsbUser.Items.Add do
-      begin
-        Caption := pgqGetUsersgbr_naam.Text;
-        pgqGetUsers.Next;      
-      end;
-    end;
+//    slsbUser.Items.Clear;
+//    pgqGetUsers.First;
+//    
+//    for i := 1 to pgqGetUsers.RecordCount do
+//    begin
+//      with slsbUser.Items.Add do
+//      begin
+//        Caption := pgqGetUsersgbr_naam.Text;
+//        pgqGetUsers.Next;      
+//      end;
+//    end;
 
   end;
 end;
@@ -210,10 +236,20 @@ begin
   advShowUsers.Refresh;
 end;
 
-procedure TForm2.sbtnAddGroupClick(Sender: TObject);
+procedure TForm2.sbtnGoToAddGroupClick(Sender: TObject);
+var
+  i: integer;
 begin
   pcPages.ActivePage := tbsAddGroup;
   lblAddGroupError.Caption := '';
+
+  
+end;
+
+procedure TForm2.sbtnAddGroupClick(Sender: TObject);
+begin
+//  if((Length(edtGroupName.Text) > 0) AND
+//  Length(edtGroupDescription.Text) > 0)
 end;
 
 procedure TForm2.sbtnAddUserClick(Sender: TObject);
@@ -224,6 +260,29 @@ begin
 end;
 
 procedure TForm2.sbtnAddUserToGroupClick(Sender: TObject);
+begin
+  AddItemToSearchListBox;
+end;
+
+procedure TForm2.AddItemToSearchListBox;
+var
+  i: integer;
+begin
+  for i := 1 to slsbUser.Items.Count do
+  begin
+    if(slsbUser.Items[i - 1].Selected) then
+    begin    
+      with slsbGroupAddedUsers.Items.Add do
+      begin
+        Caption := slsbUser.Items[i - 1].Caption;
+      end;
+
+      cboxGroupOwner.Items.Add(slsbUser.Items[i - 1].Caption);
+    end;
+  end;
+end;
+
+procedure TForm2.sbtnagSearchUserClick(Sender: TObject);
 var
   i: integer;
 begin
