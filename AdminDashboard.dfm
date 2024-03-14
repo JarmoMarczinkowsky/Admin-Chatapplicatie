@@ -48,6 +48,7 @@ object Form2: TForm2
     Height = 361
     ActivePage = tbsAddUser
     TabOrder = 2
+    OnChange = pcPagesChange
     object tbsUserOverview: TTabSheet
       Caption = 'User Overview'
       object Label3: TLabel
@@ -614,7 +615,7 @@ object Form2: TForm2
         Caption = 'Toevoegen'
         Color = 13472847
         ParentFont = False
-        TabOrder = 0
+        TabOrder = 5
         Version = '2.2.3.1'
         OnClick = AdvSmoothButton1Click
         TMSStyle = 8
@@ -649,7 +650,7 @@ object Form2: TForm2
         Caption = 'Annuleren'
         Color = 16764551
         ParentFont = False
-        TabOrder = 1
+        TabOrder = 6
         Version = '2.2.3.1'
         OnClick = AdvSmoothButton2Click
         TMSStyle = 8
@@ -659,35 +660,35 @@ object Form2: TForm2
         Top = 56
         Width = 145
         Height = 23
-        TabOrder = 2
+        TabOrder = 0
       end
       object edtStoreName: TEdit
         Left = 176
         Top = 85
         Width = 145
         Height = 23
-        TabOrder = 3
+        TabOrder = 1
       end
       object edtTelephone: TEdit
         Left = 176
         Top = 143
         Width = 145
         Height = 23
-        TabOrder = 4
+        TabOrder = 3
       end
       object edtUserName: TEdit
         Left = 176
         Top = 172
         Width = 145
         Height = 23
-        TabOrder = 5
+        TabOrder = 4
       end
       object edtEmail: TEdit
         Left = 176
         Top = 114
         Width = 145
         Height = 23
-        TabOrder = 6
+        TabOrder = 2
       end
     end
   end
