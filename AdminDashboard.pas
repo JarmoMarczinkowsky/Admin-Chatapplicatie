@@ -89,10 +89,11 @@ type
     Label11: TLabel;
     edtEditUserNickName: TEdit;
     AdvSmoothButton3: TAdvSmoothButton;
-    AdvSmoothButton6: TAdvSmoothButton;
+    sbtnEditUser: TAdvSmoothButton;
     lblEditUserError: TLabel;
     edtEditUserPassword: TEdit;
     Label12: TLabel;
+    sbtnGoToEditUser: TAdvSmoothButton;
 
     procedure FormShow(Sender: TObject);
     procedure sbtnAddUserClick(Sender: TObject);
@@ -105,6 +106,8 @@ type
     procedure sbtnAddGroupClick(Sender: TObject);
     procedure sbtnDeleteGroupClick(Sender: TObject);
     procedure sbtnDeleteUserClick(Sender: TObject);
+    procedure sbtnGoToEditUserClick(Sender: TObject);
+    procedure sbtnEditUserClick(Sender: TObject);
   private
     { Private declarations }
     DBConnection : TPgConnection;
@@ -196,10 +199,8 @@ begin
   RefreshUserOverView;
 
   RefreshGroupOverView;
-//
-//
-//  
-//  for j := 0 to High do
+
+  lblEditUserError.Caption := '';
     
 
   slsbUser.Items.Clear;
@@ -411,6 +412,49 @@ begin
 
   RefreshUserOverView;
 
+end;
+
+procedure TForm2.sbtnEditUserClick(Sender: TObject);
+begin
+  pgqCheckExistingUser.Edit;
+  pgqCheckExistingUser.FieldByName('gbr_naam').AsString := edtEditUserName.Text;
+  pgqCheckExistingUser.FieldByName('gbr_winkelnaam').AsString := edtEditStoreName.Text;
+  pgqCheckExistingUser.FieldByName('gbr_email').AsString := edtEditUserEmail.Text;
+  pgqCheckExistingUser.FieldByName('gbr_tel').AsString := edtEditUserTelephone.Text;
+  pgqCheckExistingUser.FieldByName('gbr_nicknaam').AsString := edtEditUserNickName.Text;
+
+  if(Length(edtEditUserPassword.Text) > 0) then 
+  begin
+    pgqCheckExistingUser.FieldByName('gbr_wachtwoord').AsString := edtEditUserPassword.Text;
+  end;
+
+  pgqCheckExistingUser.Post;
+
+  lblEditUserError.Caption := 'Gelukt';
+end;
+
+procedure TForm2.sbtnGoToEditUserClick(Sender: TObject);
+var 
+  selectedRowId, getUserId: integer;
+begin
+  selectedRowId := sgrUsers.Row;
+  getUserId := StrToInt(sgrUsers.Cells[0, selectedRowId]);
+
+  pgqCheckExistingUser.SQL.Text := '';
+  pgqCheckExistingUser.SQL.Add('SELECT * FROM tbl_gebruikers');
+  pgqCheckExistingUser.SQL.Add('WHERE gbr_id=:selectedId');
+  pgqCheckExistingUser.ParamByName('selectedId').AsInteger := getUserId;
+  pgqCheckExistingUser.Open;
+
+  edtEditUserName.Text := pgqCheckExistingUser.FieldByName('gbr_naam').AsString;
+  edtEditStoreName.Text := pgqCheckExistingUser.FieldByName('gbr_winkelnaam').AsString;
+  edtEditUserTelephone.Text := pgqCheckExistingUser.FieldByName('gbr_tel').AsString;
+  edtEditUserEmail.Text := pgqCheckExistingUser.FieldByName('gbr_email').AsString;
+  edtEditUserNickName.Text := pgqCheckExistingUser.FieldByName('gbr_nicknaam').AsString;
+
+  pcPages.ActivePage := tbsEditUser;
+
+    
 end;
 
 end.

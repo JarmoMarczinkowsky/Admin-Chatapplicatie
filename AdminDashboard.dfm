@@ -60,13 +60,13 @@ object Form2: TForm2
         Caption = 'Label3'
       end
       object sbtnAddUser: TAdvSmoothButton
-        Left = 581
+        Left = 492
         Top = 3
-        Width = 35
+        Width = 59
         Height = 35
         Appearance.Font.Charset = DEFAULT_CHARSET
         Appearance.Font.Color = clWindowText
-        Appearance.Font.Height = -12
+        Appearance.Font.Height = -16
         Appearance.Font.Name = 'Segoe UI'
         Appearance.Font.Style = [fsBold]
         Appearance.SimpleLayout = True
@@ -122,7 +122,7 @@ object Form2: TForm2
         Status.Appearance.Font.Name = 'Segoe UI'
         Status.Appearance.Font.Style = []
         Caption = 'Delete'
-        Color = 3023058
+        Color = 4210943
         ParentFont = False
         TabOrder = 1
         Version = '2.2.3.1'
@@ -135,6 +135,41 @@ object Form2: TForm2
         Width = 649
         Height = 375
         TabOrder = 2
+      end
+      object sbtnGoToEditUser: TAdvSmoothButton
+        Left = 557
+        Top = 3
+        Width = 59
+        Height = 35
+        Appearance.Font.Charset = DEFAULT_CHARSET
+        Appearance.Font.Color = clBlack
+        Appearance.Font.Height = -12
+        Appearance.Font.Name = 'Segoe UI'
+        Appearance.Font.Style = [fsBold]
+        Appearance.SimpleLayout = True
+        Appearance.Rounding = 5
+        Status.Caption = '0'
+        Status.Appearance.Fill.Color = clRed
+        Status.Appearance.Fill.ColorMirror = clNone
+        Status.Appearance.Fill.ColorMirrorTo = clNone
+        Status.Appearance.Fill.GradientType = gtSolid
+        Status.Appearance.Fill.GradientMirrorType = gtSolid
+        Status.Appearance.Fill.BorderColor = clGray
+        Status.Appearance.Fill.Rounding = 0
+        Status.Appearance.Fill.ShadowOffset = 0
+        Status.Appearance.Fill.Glow = gmNone
+        Status.Appearance.Font.Charset = DEFAULT_CHARSET
+        Status.Appearance.Font.Color = clWhite
+        Status.Appearance.Font.Height = -11
+        Status.Appearance.Font.Name = 'Segoe UI'
+        Status.Appearance.Font.Style = []
+        Caption = 'Edit'
+        Color = 15785659
+        ParentFont = False
+        TabOrder = 3
+        Version = '2.2.3.1'
+        OnClick = sbtnGoToEditUserClick
+        TMSStyle = 8
       end
     end
     object tbsAddUser: TTabSheet
@@ -387,7 +422,7 @@ object Form2: TForm2
         OnClick = AdvSmoothButton2Click
         TMSStyle = 8
       end
-      object AdvSmoothButton6: TAdvSmoothButton
+      object sbtnEditUser: TAdvSmoothButton
         Left = 56
         Top = 253
         Width = 125
@@ -419,7 +454,7 @@ object Form2: TForm2
         ParentFont = False
         TabOrder = 1
         Version = '2.2.3.1'
-        OnClick = AdvSmoothButton1Click
+        OnClick = sbtnEditUserClick
         TMSStyle = 8
       end
       object edtEditUserName: TEdit
@@ -2775,8 +2810,8 @@ object Form2: TForm2
   end
   object pgqCheckExistingUser: TPgQuery
     Connection = DataModule2.pgcDBconnection
-    Left = 699
-    Top = 66
+    Left = 715
+    Top = 42
   end
   object pgqAddUser: TPgQuery
     Connection = DataModule2.pgcDBconnection
