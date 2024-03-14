@@ -37,7 +37,6 @@ type
     pcPages: TPageControl;
     tbsUserOverview: TTabSheet;
     Label3: TLabel;
-    advShowUsers: TDBAdvGrid;
     sbtnAddUser: TAdvSmoothButton;
     sbtnDeleteUser: TAdvSmoothButton;
     tbsAddUser: TTabSheet;
@@ -56,7 +55,6 @@ type
     edtUserEmail: TEdit;
     tbsGroupOverview: TTabSheet;
     Label9: TLabel;
-    advShowGroups: TDBAdvGrid;
     sbtnGoToAddGroup: TAdvSmoothButton;
     sbtnDeleteGroup: TAdvSmoothButton;
     tbsAddGroup: TTabSheet;
@@ -79,6 +77,22 @@ type
     sgrGroups: TStringGrid;
     pgqDelete: TPgQuery;
     sgrUsers: TStringGrid;
+    tbsEditUser: TTabSheet;
+    Label6: TLabel;
+    edtEditUserName: TEdit;
+    edtEditStoreName: TEdit;
+    Label7: TLabel;
+    Label8: TLabel;
+    edtEditUserEmail: TEdit;
+    edtEditUserTelephone: TEdit;
+    Label10: TLabel;
+    Label11: TLabel;
+    edtEditUserNickName: TEdit;
+    AdvSmoothButton3: TAdvSmoothButton;
+    AdvSmoothButton6: TAdvSmoothButton;
+    lblEditUserError: TLabel;
+    edtEditUserPassword: TEdit;
+    Label12: TLabel;
 
     procedure FormShow(Sender: TObject);
     procedure sbtnAddUserClick(Sender: TObject);
@@ -270,12 +284,6 @@ procedure TForm2.RefreshGroupOverView;
 var
   i: integer;
 begin
-//  pgqGetGroups.SQL.Text := '';
-//  pgqGetGroups.SQL.Add('SELECT * FROM tbl_groepen');
-//  pgqGetGroups.Open;
-//
-//  advShowUsers.Refresh;
-
   pgqGetGroups.SQL.Text := 'SELECT * FROM tbl_groepen ORDER BY gro_id';
   pgqGetGroups.Open;
 
