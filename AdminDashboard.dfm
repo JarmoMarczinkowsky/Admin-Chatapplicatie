@@ -47,7 +47,7 @@ object Form2: TForm2
     Top = 72
     Width = 773
     Height = 475
-    ActivePage = tbsGroupOverview
+    ActivePage = tbsUserOverview
     TabOrder = 2
     OnChange = pcPagesChange
     object tbsUserOverview: TTabSheet
@@ -533,6 +533,13 @@ object Form2: TForm2
         TabOrder = 2
         Version = '2.2.3.1'
         TMSStyle = 8
+      end
+      object sgrUsers: TStringGrid
+        Left = 32
+        Top = 322
+        Width = 649
+        Height = 120
+        TabOrder = 3
       end
     end
     object tbsAddUser: TTabSheet

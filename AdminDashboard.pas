@@ -78,6 +78,7 @@ type
     cboxGroupOwner: TComboBox;
     sgrGroups: TStringGrid;
     pgqDelete: TPgQuery;
+    sgrUsers: TStringGrid;
 
     procedure FormShow(Sender: TObject);
     procedure sbtnAddUserClick(Sender: TObject);
@@ -229,12 +230,38 @@ begin
 end;
 
 procedure TForm2.RefreshUserOverView;
+var 
+  i: integer;
 begin
   pgqGetUsers.SQL.Text := '';
   pgqGetUsers.SQL.Add('SELECT * FROM tbl_gebruikers');
   pgqGetUsers.Open;
 
-  advShowUsers.Refresh;
+//  advShowUsers.Refresh;
+
+  sgrUsers.ColCount := 6;
+  sgrUsers.RowCount := pgqGetUsers.RecordCount + 1;
+
+  sgrUsers.Cells[0, 0] := 'Id';
+  sgrUsers.Cells[1, 0] := 'Naam';
+  sgrUsers.Cells[2, 0] := 'Winkelnaam';
+  sgrUsers.Cells[3, 0] := 'Telefoon';
+  sgrUsers.Cells[4, 0] := 'Email';
+  sgrUsers.Cells[5, 0] := 'Gebruikersnaam';
+
+  for i := 1 to pgqGetUsers.RecordCount do
+  begin
+    sgrUsers.Cells[0, i] := pgqGetUsers.FieldByName('gbr_id').AsString;
+    sgrUsers.Cells[1, i] := pgqGetUsers.FieldByName('gbr_naam').AsString;
+    sgrUsers.Cells[2, i] := pgqGetUsers.FieldByName('gbr_winkelnaam').AsString;
+    sgrUsers.Cells[3, i] := pgqGetUsers.FieldByName('gbr_tel').AsString;
+    sgrUsers.Cells[4, i] := pgqGetUsers.FieldByName('gbr_email').AsString;
+    sgrUsers.Cells[5, i] := pgqGetUsers.FieldByName('gbr_nicknaam').AsString;
+    sgrUsers.Cells[6, i] := pgqGetUsers.FieldByName('gbr_wachtwoord').AsString;
+
+    pgqGetUsers.Next;
+    
+  end;
 
 end;
 
