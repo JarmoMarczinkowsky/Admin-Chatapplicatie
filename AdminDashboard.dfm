@@ -722,7 +722,6 @@ object Form2: TForm2
         ActiveCellFont.Style = [fsBold]
         ActiveCellColor = 11565130
         ActiveCellColorTo = 11565130
-        AutoSize = True
         BorderColor = 11250603
         ControlLook.FixedGradientFrom = clWhite
         ControlLook.FixedGradientTo = clWhite
@@ -1175,7 +1174,15 @@ object Form2: TForm2
         ParentFont = False
         TabOrder = 2
         Version = '2.2.3.1'
+        OnClick = sbtnDeleteGroupClick
         TMSStyle = 8
+      end
+      object sgrGroups: TStringGrid
+        Left = 32
+        Top = 315
+        Width = 649
+        Height = 120
+        TabOrder = 3
       end
     end
     object tbsAddGroup: TTabSheet

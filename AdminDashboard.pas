@@ -7,7 +7,8 @@ uses
   System.SysUtils, System.Variants, System.Classes, System.RegularExpressions,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Graphics, AdvUtil, Vcl.Grids, AdvObj, BaseGrid,
   AdvGrid, DBAdvGrid, Vcl.ExtCtrls, Data.DB, MemDS, DBAccess, PgAccess,
-  AdvSmoothButton, Vcl.StdCtrls, Vcl.ComCtrls, DMdatabaseInfo, AdvSmoothListBox;
+  AdvSmoothButton, Vcl.StdCtrls, Vcl.ComCtrls, DMdatabaseInfo, AdvSmoothListBox,
+  Vcl.DBGrids;
 
 type
   TForm2 = class(TForm)
@@ -75,6 +76,7 @@ type
     slsbGroupAddedUsers: TAdvSmoothListBox;
     sbtnagSearchUser: TAdvSmoothButton;
     cboxGroupOwner: TComboBox;
+    sgrGroups: TStringGrid;
 
     procedure FormShow(Sender: TObject);
     procedure sbtnAddUserClick(Sender: TObject);
@@ -85,6 +87,7 @@ type
     procedure sbtnAddUserToGroupClick(Sender: TObject);
     procedure sbtnagSearchUserClick(Sender: TObject);
     procedure sbtnAddGroupClick(Sender: TObject);
+    procedure sbtnDeleteGroupClick(Sender: TObject);
   private
     { Private declarations }
     DBConnection : TPgConnection;
@@ -163,7 +166,7 @@ end;
 
 procedure TForm2.FormShow(Sender: TObject);
 var 
-  i: integer;
+  i, j: integer;
 begin
   DBConnection := DataModule2.pgcDBconnection;
   DBLoggedInUser := DataModule2.pgqGetUser;
@@ -175,7 +178,37 @@ begin
 
   RefreshUserOverView;
 
-    slsbUser.Items.Clear;
+  pgqGetGroups.SQL.Text := 'SELECT * FROM tbl_groepen';
+  pgqGetGroups.Open;
+
+  pgqGetGroups.First;
+
+  sgrGroups.ColCount := 5;
+  sgrGroups.RowCount := pgqGetGroups.RecordCount + 1;
+  
+  sgrGroups.Cells[0, 0] := 'Id';
+  sgrGroups.Cells[1, 0] := 'Naam';
+  sgrGroups.Cells[2, 0] := 'Eigenaar';
+  sgrGroups.Cells[3, 0] := 'Aangemaakt';
+  sgrGroups.Cells[4, 0] := 'Verwijderd';
+   
+  for i := 1 to pgqGetGroups.RecordCount do
+  begin
+    sgrGroups.Cells[0, i] := pgqGetGroups.FieldByName('gro_id').AsString;
+    sgrGroups.Cells[1, i] := pgqGetGroups.FieldByName('gro_naam').AsString;
+    sgrGroups.Cells[2, i] := pgqGetGroups.FieldByName('gro_igenaar').AsString;
+    sgrGroups.Cells[3, i] := pgqGetGroups.FieldByName('gro_aangemaakt').AsString;
+    sgrGroups.Cells[4, i] := pgqGetGroups.FieldByName('gro_del').AsString;
+
+    pgqGetGroups.Next;
+  end;
+//
+//
+//  
+//  for j := 0 to High do
+    
+
+  slsbUser.Items.Clear;
   pgqGetUsers.First;
     
   for i := 1 to pgqGetUsers.RecordCount do
@@ -249,7 +282,8 @@ end;
 procedure TForm2.sbtnAddGroupClick(Sender: TObject);
 begin
 //  if((Length(edtGroupName.Text) > 0) AND
-//  Length(edtGroupDescription.Text) > 0)
+  
+
 end;
 
 procedure TForm2.sbtnAddUserClick(Sender: TObject);
@@ -305,6 +339,16 @@ begin
       pgqAddGroupSearchUser.Next;
     end;
   end;
+end;
+
+procedure TForm2.sbtnDeleteGroupClick(Sender: TObject);
+var
+  i: integer;
+  getSelRows: TBookmarkList;
+begin
+  //
+  
+
 end;
 
 end.
