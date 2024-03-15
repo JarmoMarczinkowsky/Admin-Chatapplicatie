@@ -46,7 +46,7 @@ type
     lblStoreName: TLabel;
     lblAddUserError: TLabel;
     AdvSmoothButton1: TAdvSmoothButton;
-    AdvSmoothButton2: TAdvSmoothButton;
+    sbtnBackToUserOverview: TAdvSmoothButton;
     edtUserName: TEdit;
     edtUserStoreName: TEdit;
     edtUserTelephone: TEdit;
@@ -64,7 +64,7 @@ type
     Label5: TLabel;
     edtGroupName: TEdit;
     edtGroupDescription: TEdit;
-    AdvSmoothButton4: TAdvSmoothButton;
+    sbtnBackToGroupOverview: TAdvSmoothButton;
     sbtnAddGroup: TAdvSmoothButton;
     AdvSmoothButton5: TAdvSmoothButton;
     slsbUser: TAdvSmoothListBox;
@@ -100,11 +100,11 @@ type
     Label13: TLabel;
     tbsEditGroup: TTabSheet;
     AdvSmoothButton6: TAdvSmoothButton;
-    AdvSmoothButton7: TAdvSmoothButton;
-    ComboBox1: TComboBox;
+    sbtnEditGroupProfilePicture: TAdvSmoothButton;
+    cboxEditGroupOwner: TComboBox;
     Edit1: TEdit;
     Edit2: TEdit;
-    Edit3: TEdit;
+    edtEditGroupName: TEdit;
     Image2: TImage;
     Label14: TLabel;
     Label15: TLabel;
@@ -115,14 +115,15 @@ type
     AdvSmoothButton9: TAdvSmoothButton;
     AdvSmoothButton10: TAdvSmoothButton;
     AdvSmoothButton11: TAdvSmoothButton;
-    AdvSmoothListBox1: TAdvSmoothListBox;
-    AdvSmoothListBox2: TAdvSmoothListBox;
+    slsbEditGroupUsers: TAdvSmoothListBox;
+    slsbEditSearchUser: TAdvSmoothListBox;
     cbxGroupDeleted: TCheckBox;
     Label1: TLabel;
+    pgqCheckExistingGroup: TPgQuery;
 
     procedure FormShow(Sender: TObject);
     procedure sbtnAddUserClick(Sender: TObject);
-    procedure AdvSmoothButton2Click(Sender: TObject);
+    procedure sbtnBackToUserOverviewClick(Sender: TObject);
     procedure AdvSmoothButton1Click(Sender: TObject);
     procedure pcPagesChange(Sender: TObject);
     procedure sbtnGoToAddGroupClick(Sender: TObject);
@@ -136,6 +137,8 @@ type
     procedure sbtnRemoveUserFromGroupClick(Sender: TObject);
     procedure sgrGroupsDrawCell(Sender: TObject; ACol, ARow: LongInt;
       Rect: TRect; State: TGridDrawState);
+    procedure sbtnGoToEditGroupClick(Sender: TObject);
+    procedure sbtnBackToGroupOverviewClick(Sender: TObject);
   private
     { Private declarations }
     DBConnection : TPgConnection;
@@ -207,7 +210,12 @@ begin
   end;
 end;
 
-procedure TForm2.AdvSmoothButton2Click(Sender: TObject);
+procedure TForm2.sbtnBackToGroupOverviewClick(Sender: TObject);
+begin
+  pcPages.ActivePage := tbsGroupOverview;
+end;
+
+procedure TForm2.sbtnBackToUserOverviewClick(Sender: TObject);
 begin
   pcPages.ActivePage := tbsUserOverview;
 end;
@@ -232,6 +240,8 @@ begin
   lblEditUserError.Caption := '';
     
   slsbUser.Items.Clear;
+  slsbEditSearchUser.Items.Clear;
+
   pgqGetUsers.First;
     
   for i := 1 to pgqGetUsers.RecordCount do
@@ -239,8 +249,14 @@ begin
     with slsbUser.Items.Add do
     begin
       Caption := pgqGetUsersgbr_nicknaam.Text;
-      pgqGetUsers.Next;
     end;
+
+    with slsbEditSearchUser.Items.Add do
+    begin
+      Caption := pgqGetUsersgbr_nicknaam.Text;
+    end;
+
+    pgqGetUsers.Next;
   end;
 end;
 
@@ -521,8 +537,65 @@ begin
   lblEditUserError.Caption := 'Gelukt';
 end;
 
+procedure TForm2.sbtnGoToEditGroupClick(Sender: TObject);
+var
+  selectedRowId, getUserId, i: integer;
+  getSelectedGroup, getGroup, getSelectedGroupOwner : TPgQuery;
+begin
+  getSelectedGroup := TPgQuery.Create(nil);
+  getSelectedGroupOwner := TPgQuery.Create(nil);
+  getGroup := TPgQuery.Create(nil);
+  getSelectedGroup.Connection := DataModule2.pgcDBconnection;
+  getSelectedGroupOwner.Connection := DataModule2.pgcDBconnection;
+  getGroup.Connection := DataModule2.pgcDBconnection;
+
+  selectedRowId := sgrGroups.Row;
+  getUserId := StrToInt(sgrGroups.Cells[0, selectedRowId]);
+  slsbEditGroupUsers.Items.Clear;
+
+  //gets row with selected group
+  getSelectedGroup.SQL.Text := '';
+  getSelectedGroup.SQL.Add('SELECT * FROM tbl_groepleden');
+  getSelectedGroup.SQL.Add('WHERE grl_groep=:selectedGroup');
+  getSelectedGroup.ParamByName('selectedGroup').AsInteger := getUserId;
+  getSelectedGroup.Open;
+
+  getGroup.SQL.Text := 'SELECT * FROM tbl_groepen WHERE gro_id=:selectedGroup';
+  getGroup.ParamByName('selectedGroup').AsInteger := getUserId;
+  getGroup.Open;
+
+  edtEditGroupName.Text := getGroup.FieldByName('gro_naam').AsString;
+  cbxGroupDeleted.Checked := getGroup.FieldByName('gro_del').AsBoolean;
+
+  //tbl_gebruikers
+  getSelectedGroupOwner.SQL.Text := 'SELECT * FROM tbl_gebruikers WHERE gbr_id=:groupOwner';
+  getSelectedGroupOwner.ParamByName('groupOwner').AsInteger := getGroup.FieldByName('gro_igenaar').AsInteger;
+  getSelectedGroupOwner.Open;
+
+  cboxEditGroupOwner.Items.Add(getSelectedGroupOwner.FieldByName('gbr_nicknaam').AsString);
+  cboxEditGroupOwner.ItemIndex := 0;
+  getSelectedGroupOwner.Free;
+
+  //get every row with the selected group
+  for i := 1 to getSelectedGroup.RecordCount do
+  begin
+    with slsbEditGroupUsers.Items.Add do
+    begin
+      pgqCheckExistingUser.SQL.Text := 'SELECT * FROM tbl_gebruikers WHERE gbr_id=:currentUserId';
+      pgqCheckExistingUser.ParamByName('currentUserId').AsInteger := getSelectedGroup.FieldByName('grl_gebruiker').AsInteger;
+      pgqCheckExistingUser.Open;
+
+      Caption := pgqCheckExistingUser.FieldByName('gbr_nicknaam').AsString;
+    end;
+    getSelectedGroup.Next;
+  end;
+
+  getSelectedGroup.Free;
+  pcPages.ActivePage := tbsEditGroup;
+end;
+
 procedure TForm2.sbtnGoToEditUserClick(Sender: TObject);
-var 
+var
   selectedRowId, getUserId: integer;
 begin
   selectedRowId := sgrUsers.Row;

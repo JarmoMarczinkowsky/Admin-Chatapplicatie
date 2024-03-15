@@ -39,7 +39,7 @@ object Form2: TForm2
     Top = 72
     Width = 773
     Height = 475
-    ActivePage = tbsAddGroup
+    ActivePage = tbsEditGroup
     TabOrder = 2
     OnChange = pcPagesChange
     object tbsUserOverview: TTabSheet
@@ -250,7 +250,7 @@ object Form2: TForm2
         OnClick = AdvSmoothButton1Click
         TMSStyle = 8
       end
-      object AdvSmoothButton2: TAdvSmoothButton
+      object sbtnBackToUserOverview: TAdvSmoothButton
         Left = 196
         Top = 224
         Width = 125
@@ -282,7 +282,7 @@ object Form2: TForm2
         ParentFont = False
         TabOrder = 6
         Version = '2.2.3.1'
-        OnClick = AdvSmoothButton2Click
+        OnClick = sbtnBackToUserOverviewClick
         TMSStyle = 8
       end
       object edtUserName: TEdit
@@ -411,7 +411,7 @@ object Form2: TForm2
         ParentFont = False
         TabOrder = 0
         Version = '2.2.3.1'
-        OnClick = AdvSmoothButton2Click
+        OnClick = sbtnBackToUserOverviewClick
         TMSStyle = 8
       end
       object sbtnEditUser: TAdvSmoothButton
@@ -613,6 +613,7 @@ object Form2: TForm2
         ParentFont = False
         TabOrder = 3
         Version = '2.2.3.1'
+        OnClick = sbtnGoToEditGroupClick
         TMSStyle = 8
       end
     end
@@ -680,7 +681,7 @@ object Form2: TForm2
         Height = 23
         TabOrder = 1
       end
-      object AdvSmoothButton4: TAdvSmoothButton
+      object sbtnBackToGroupOverview: TAdvSmoothButton
         Left = 268
         Top = 368
         Width = 125
@@ -712,7 +713,7 @@ object Form2: TForm2
         ParentFont = False
         TabOrder = 2
         Version = '2.2.3.1'
-        OnClick = AdvSmoothButton2Click
+        OnClick = sbtnBackToGroupOverviewClick
         TMSStyle = 8
       end
       object sbtnAddGroup: TAdvSmoothButton
@@ -2884,9 +2885,9 @@ object Form2: TForm2
       object Label1: TLabel
         Left = 64
         Top = 154
-        Width = 45
+        Width = 55
         Height = 15
-        Caption = 'Eigenaar'
+        Caption = 'Verwijderd'
       end
       object AdvSmoothButton10: TAdvSmoothButton
         Left = 678
@@ -2984,10 +2985,10 @@ object Form2: TForm2
         ParentFont = False
         TabOrder = 2
         Version = '2.2.3.1'
-        OnClick = AdvSmoothButton2Click
+        OnClick = sbtnBackToGroupOverviewClick
         TMSStyle = 8
       end
-      object AdvSmoothButton7: TAdvSmoothButton
+      object sbtnEditGroupProfilePicture: TAdvSmoothButton
         Left = 184
         Top = 174
         Width = 119
@@ -3042,7 +3043,7 @@ object Form2: TForm2
         Status.Appearance.Font.Height = -11
         Status.Appearance.Font.Name = 'Segoe UI'
         Status.Appearance.Font.Style = []
-        Caption = 'Toevoegen'
+        Caption = 'Wijzigen'
         Color = 13472847
         ParentFont = False
         TabOrder = 4
@@ -3085,7 +3086,7 @@ object Form2: TForm2
         OnClick = sbtnAddUserToGroupClick
         TMSStyle = 8
       end
-      object AdvSmoothListBox1: TAdvSmoothListBox
+      object slsbEditGroupUsers: TAdvSmoothListBox
         Left = 472
         Top = 258
         Width = 200
@@ -4054,7 +4055,7 @@ object Form2: TForm2
         TabOrder = 6
         TMSStyle = 0
       end
-      object AdvSmoothListBox2: TAdvSmoothListBox
+      object slsbEditSearchUser: TAdvSmoothListBox
         Left = 472
         Top = 93
         Width = 200
@@ -5023,7 +5024,7 @@ object Form2: TForm2
         TabOrder = 7
         TMSStyle = 0
       end
-      object ComboBox1: TComboBox
+      object cboxEditGroupOwner: TComboBox
         Left = 184
         Top = 122
         Width = 200
@@ -5045,7 +5046,7 @@ object Form2: TForm2
         Height = 23
         TabOrder = 10
       end
-      object Edit3: TEdit
+      object edtEditGroupName: TEdit
         Left = 184
         Top = 64
         Width = 200
@@ -5168,5 +5169,10 @@ object Form2: TForm2
     Connection = DataModule2.pgcDBconnection
     Left = 587
     Top = 122
+  end
+  object pgqCheckExistingGroup: TPgQuery
+    Connection = DataModule2.pgcDBconnection
+    Left = 587
+    Top = 242
   end
 end
