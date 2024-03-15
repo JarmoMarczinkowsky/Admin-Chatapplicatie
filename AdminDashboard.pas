@@ -453,9 +453,15 @@ begin
   selectedRowId := sgrGroups.Row;
   getGroupId := StrToInt(sgrGroups.Cells[0, selectedRowId]);
 
-  pgqDelete.SQL.Text := 'DELETE FROM tbl_groepen WHERE gro_id=:SelectedId';
-  pgqDelete.ParamByName('SelectedId').AsInteger := getGroupId;
-  pgqDelete.Execute;
+  pgqDelete.SQL.Text := 'SELECT * FROM tbl_groepen WHERE gro_id=:selectedId';
+  pgqDelete.ParamByName('selectedId').AsInteger := getGroupId;
+  pgqDelete.Open;
+  pgqDelete.Edit;
+  pgqDelete.FieldByName('gro_del').AsBoolean := true;
+  pgqDelete.Post;
+//  pgqDelete.SQL.Text := 'DELETE FROM tbl_groepen WHERE gro_id=:SelectedId';
+//  pgqDelete.ParamByName('SelectedId').AsInteger := getGroupId;
+//  pgqDelete.Execute;
 
   RefreshGroupOverView;
 end;
