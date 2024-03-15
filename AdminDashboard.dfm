@@ -3016,7 +3016,7 @@ object Form2: TForm2
         Version = '2.2.3.1'
         TMSStyle = 8
       end
-      object AdvSmoothButton8: TAdvSmoothButton
+      object sbtnEditGroup: TAdvSmoothButton
         Left = 128
         Top = 368
         Width = 125
@@ -3048,7 +3048,7 @@ object Form2: TForm2
         ParentFont = False
         TabOrder = 4
         Version = '2.2.3.1'
-        OnClick = sbtnAddGroupClick
+        OnClick = sbtnEditGroupClick
         TMSStyle = 8
       end
       object AdvSmoothButton9: TAdvSmoothButton
@@ -5174,5 +5174,10 @@ object Form2: TForm2
     Connection = DataModule2.pgcDBconnection
     Left = 587
     Top = 242
+  end
+  object PgSQL1: TPgSQL
+    Connection = DataModule2.pgcDBconnection
+    Left = 475
+    Top = 394
   end
 end

@@ -111,7 +111,7 @@ type
     Label16: TLabel;
     Label17: TLabel;
     Label18: TLabel;
-    AdvSmoothButton8: TAdvSmoothButton;
+    sbtnEditGroup: TAdvSmoothButton;
     AdvSmoothButton9: TAdvSmoothButton;
     AdvSmoothButton10: TAdvSmoothButton;
     AdvSmoothButton11: TAdvSmoothButton;
@@ -120,6 +120,7 @@ type
     cbxGroupDeleted: TCheckBox;
     Label1: TLabel;
     pgqCheckExistingGroup: TPgQuery;
+    PgSQL1: TPgSQL;
 
     procedure FormShow(Sender: TObject);
     procedure sbtnAddUserClick(Sender: TObject);
@@ -139,10 +140,11 @@ type
       Rect: TRect; State: TGridDrawState);
     procedure sbtnGoToEditGroupClick(Sender: TObject);
     procedure sbtnBackToGroupOverviewClick(Sender: TObject);
+    procedure sbtnEditGroupClick(Sender: TObject);
   private
     { Private declarations }
     DBConnection : TPgConnection;
-    DBLoggedInUser: TPgQuery;
+    DBLoggedInUser, getGroup: TPgQuery;
     procedure RefreshUserOverView;
     procedure RefreshGroupOverView;
     procedure AddItemToSearchListBox;
@@ -451,8 +453,6 @@ begin
         cboxGroupOwner.Items.Add(slsbUser.Items[i - 1].Caption);
       end
       else lblAddGroupError.Caption := 'Gebruiker al in lijst';
-
-
     end;
   end;
 end;
@@ -518,6 +518,13 @@ begin
 
 end;
 
+procedure TForm2.sbtnEditGroupClick(Sender: TObject);
+begin
+  getGroup.Edit;
+  getGroup.FieldByName('gro_naam').AsString := edtEditGroupName.Text;
+  getGroup.Post;
+end;
+
 procedure TForm2.sbtnEditUserClick(Sender: TObject);
 begin
   pgqCheckExistingUser.Edit;
@@ -540,7 +547,7 @@ end;
 procedure TForm2.sbtnGoToEditGroupClick(Sender: TObject);
 var
   selectedRowId, getUserId, i: integer;
-  getSelectedGroup, getGroup, getSelectedGroupOwner : TPgQuery;
+  getSelectedGroup, getSelectedGroupOwner : TPgQuery;
 begin
   getSelectedGroup := TPgQuery.Create(nil);
   getSelectedGroupOwner := TPgQuery.Create(nil);
