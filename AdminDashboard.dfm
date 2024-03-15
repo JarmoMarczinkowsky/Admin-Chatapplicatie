@@ -2792,6 +2792,7 @@ object Form2: TForm2
         Top = 203
         Width = 200
         Height = 23
+        Style = csDropDownList
         TabOrder = 10
       end
       object sbtnRemoveUserFromGroup: TAdvSmoothButton
@@ -2928,5 +2929,15 @@ object Form2: TForm2
     Connection = DataModule2.pgcDBconnection
     Left = 611
     Top = 22
+  end
+  object pgqAddGroup: TPgQuery
+    Connection = DataModule2.pgcDBconnection
+    Left = 483
+    Top = 34
+  end
+  object pgqGroepsleden: TPgQuery
+    Connection = DataModule2.pgcDBconnection
+    Left = 587
+    Top = 122
   end
 end

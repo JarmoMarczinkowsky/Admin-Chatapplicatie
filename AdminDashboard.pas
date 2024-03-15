@@ -96,6 +96,8 @@ type
     sbtnGoToEditUser: TAdvSmoothButton;
     sbtnGoToEditGroup: TAdvSmoothButton;
     sbtnRemoveUserFromGroup: TAdvSmoothButton;
+    pgqAddGroup: TPgQuery;
+    pgqGroepsleden: TPgQuery;
 
     procedure FormShow(Sender: TObject);
     procedure sbtnAddUserClick(Sender: TObject);
@@ -208,7 +210,6 @@ begin
   lblAddGroupError.Caption := '';
   lblEditUserError.Caption := '';
     
-
   slsbUser.Items.Clear;
   pgqGetUsers.First;
     
@@ -216,7 +217,7 @@ begin
   begin
     with slsbUser.Items.Add do
     begin
-      Caption := pgqGetUsersgbr_naam.Text;
+      Caption := pgqGetUsersgbr_nicknaam.Text;
       pgqGetUsers.Next;
     end;
   end;
@@ -330,8 +331,54 @@ begin
 end;
 
 procedure TForm2.sbtnAddGroupClick(Sender: TObject);
+var
+  i, idLastCreatedGroup: integer;
 begin
-//  if((Length(edtGroupName.Text) > 0) AND
+  if((Length(edtGroupName.Text) > 0)) then
+  begin
+    //creates the group
+    pgqCheckExistingUser.Close;
+    pgqCheckExistingUser.SQL.Text := 'SELECT * FROM tbl_gebruikers WHERE gbr_nicknaam=:groupOwner';
+    pgqCheckExistingUser.ParamByName('groupOwner').AsString := cboxGroupOwner.Text;
+    pgqGetGroups.Options.ReturnParams := true;
+    pgqCheckExistingUser.Open;
+
+    pgqGetGroups.Append;
+    pgqGetGroups.FieldByName('gro_naam').AsString := Trim(edtGroupName.Text);
+    pgqGetGroups.FieldByName('gro_igenaar').AsInteger := StrToInt(Trim(pgqCheckExistingUser.FieldByName('gbr_id').AsString));
+    pgqGetGroups.FieldByName('gro_aangemaakt').AsDateTime := now;
+    pgqGetGroups.FieldByName('gro_del').AsBoolean := false;
+    pgqGetGroups.Post;
+    pgqGetGroups.Close;
+    pgqGetGroups.SQL.Text := 'SELECT * FROM tbl_groepen';
+    pgqGetGroups.Open;
+    pgqGetGroups.Last;
+    idLastCreatedGroup := pgqGetGroups.FieldByName('gro_id').AsInteger;
+    pgqGetGroups.Close;
+
+    //adds the users to the group
+    pgqGroepsleden.SQL.Text := 'SELECT * FROM tbl_groepleden';
+    pgqGroepsleden.Open;
+//    pgqGroepsleden.Append;
+    for I := 1 to slsbGroupAddedUsers.Items.Count do
+    begin
+      pgqCheckExistingUser.SQL.Text := '';
+      pgqCheckExistingUser.SQL.Add('SELECT gbr_id FROM tbl_gebruikers');
+      pgqCheckExistingUser.SQL.Add('WHERE LOWER(gbr_nicknaam)=:currentUser');
+      pgqCheckExistingUser.ParamByName('currentUser').AsString := LowerCase(Trim(slsbGroupAddedUsers.Items[i - 1].Caption));
+      pgqCheckExistingUser.Open;
+
+      pgqGroepsleden.Append;
+      pgqGroepsleden.FieldByName('grl_gebruiker').AsInteger := pgqCheckExistingUser.FieldByName('gbr_id').AsInteger;
+      pgqGroepsleden.FieldByName('grl_groep').AsInteger := idLastCreatedGroup; //placeholder
+      pgqGroepsleden.FieldByName('grl_aangemaakt').AsDateTime := now;
+      pgqGroepsleden.FieldByName('grl_del').AsBoolean := false;
+
+      pgqGroepsleden.Post;
+    end;
+
+
+  end;
 
 end;
 
@@ -384,6 +431,7 @@ begin
   pgqAddGroupSearchUser.SQL.Add('SELECT * FROM tbl_gebruikers');
   pgqAddGroupSearchUser.SQL.Add('WHERE LOWER(gbr_nicknaam)=:user');
   pgqAddGroupSearchUser.SQL.Add('OR LOWER(gbr_email)=:user');
+  pgqAddGroupSearchUser.SQL.Add('OR LOWER(gbr_naam)=:user');
   pgqAddGroupSearchUser.ParamByName('user').AsString := LowerCase(edtAddGroupSearchUser.Text);
   pgqAddGroupSearchUser.Open;
 
@@ -392,7 +440,7 @@ begin
   begin
     with slsbUser.Items.Add do
     begin
-      Caption := pgqAddGroupSearchUser.FieldByName('gbr_naam').AsString;
+      Caption := pgqAddGroupSearchUser.FieldByName('gbr_nicknaam').AsString;
       pgqAddGroupSearchUser.Next;
     end;
   end;
