@@ -23,7 +23,6 @@ type
     pgqGetUsersgbr_email: TStringField;
     pgqGetUsersgbr_nicknaam: TStringField;
     pgqGetUsersgbr_wachtwoord: TStringField;
-    Label1: TLabel;
     pgqCheckExistingUser: TPgQuery;
     pgqAddUser: TPgQuery;
     dscShowGroups: TDataSource;
@@ -98,6 +97,28 @@ type
     sbtnRemoveUserFromGroup: TAdvSmoothButton;
     pgqAddGroup: TPgQuery;
     pgqGroepsleden: TPgQuery;
+    Label13: TLabel;
+    tbsEditGroup: TTabSheet;
+    AdvSmoothButton6: TAdvSmoothButton;
+    AdvSmoothButton7: TAdvSmoothButton;
+    ComboBox1: TComboBox;
+    Edit1: TEdit;
+    Edit2: TEdit;
+    Edit3: TEdit;
+    Image2: TImage;
+    Label14: TLabel;
+    Label15: TLabel;
+    Label16: TLabel;
+    Label17: TLabel;
+    Label18: TLabel;
+    AdvSmoothButton8: TAdvSmoothButton;
+    AdvSmoothButton9: TAdvSmoothButton;
+    AdvSmoothButton10: TAdvSmoothButton;
+    AdvSmoothButton11: TAdvSmoothButton;
+    AdvSmoothListBox1: TAdvSmoothListBox;
+    AdvSmoothListBox2: TAdvSmoothListBox;
+    cbxGroupDeleted: TCheckBox;
+    Label1: TLabel;
 
     procedure FormShow(Sender: TObject);
     procedure sbtnAddUserClick(Sender: TObject);
