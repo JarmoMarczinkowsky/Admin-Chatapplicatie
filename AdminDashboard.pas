@@ -478,4 +478,24 @@ begin
   end;
 
 end;
+
+procedure TForm2.sgrGroupsDrawCell(Sender: TObject; ACol, ARow: LongInt;
+  Rect: TRect; State: TGridDrawState);
+var
+  AGrid : TStringGrid;
+begin
+  AGrid:=TStringGrid(Sender);
+
+  if gdFixed in State then //if is fixed use the clBtnFace color
+    AGrid.Canvas.Brush.Color := clBtnFace
+  else
+  if gdSelected in State then //if is selected use the clAqua color
+    AGrid.Canvas.Brush.Color := rgb(176, 226, 255)
+  else
+    AGrid.Canvas.Brush.Color := clWindow;
+
+  AGrid.Canvas.FillRect(Rect);
+  AGrid.Canvas.TextOut(Rect.Left + 2, Rect.Top + 2, AGrid.Cells[ACol, ARow]);
+end;
+
 end.
