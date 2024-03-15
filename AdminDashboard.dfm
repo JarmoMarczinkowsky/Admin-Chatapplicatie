@@ -27,7 +27,7 @@ object Form2: TForm2
     Align = alTop
     Caption = 'Panel1'
     TabOrder = 0
-    ExplicitWidth = 837
+    ExplicitWidth = 890
   end
   object pnlLeft: TPanel
     Left = 0
@@ -39,15 +39,14 @@ object Form2: TForm2
     Color = clSkyBlue
     ParentBackground = False
     TabOrder = 1
-    ExplicitTop = 65
-    ExplicitHeight = 382
+    ExplicitHeight = 488
   end
   object pcPages: TPageControl
     Left = 111
     Top = 72
     Width = 773
     Height = 475
-    ActivePage = tbsEditUser
+    ActivePage = tbsGroupOverview
     TabOrder = 2
     OnChange = pcPagesChange
     object tbsUserOverview: TTabSheet
@@ -512,9 +511,9 @@ object Form2: TForm2
         Caption = 'Label3'
       end
       object sbtnGoToAddGroup: TAdvSmoothButton
-        Left = 581
+        Left = 492
         Top = 3
-        Width = 35
+        Width = 59
         Height = 35
         Appearance.Font.Charset = DEFAULT_CHARSET
         Appearance.Font.Color = clWindowText
@@ -574,7 +573,7 @@ object Form2: TForm2
         Status.Appearance.Font.Name = 'Segoe UI'
         Status.Appearance.Font.Style = []
         Caption = 'Delete'
-        Color = 3023058
+        Color = 4210943
         ParentFont = False
         TabOrder = 1
         Version = '2.2.3.1'
@@ -587,6 +586,41 @@ object Form2: TForm2
         Width = 649
         Height = 375
         TabOrder = 2
+        OnDrawCell = sgrGroupsDrawCell
+      end
+      object sbtnGoToEditGroup: TAdvSmoothButton
+        Left = 557
+        Top = 3
+        Width = 59
+        Height = 35
+        Appearance.Font.Charset = DEFAULT_CHARSET
+        Appearance.Font.Color = clBlack
+        Appearance.Font.Height = -12
+        Appearance.Font.Name = 'Segoe UI'
+        Appearance.Font.Style = [fsBold]
+        Appearance.SimpleLayout = True
+        Appearance.Rounding = 5
+        Status.Caption = '0'
+        Status.Appearance.Fill.Color = clRed
+        Status.Appearance.Fill.ColorMirror = clNone
+        Status.Appearance.Fill.ColorMirrorTo = clNone
+        Status.Appearance.Fill.GradientType = gtSolid
+        Status.Appearance.Fill.GradientMirrorType = gtSolid
+        Status.Appearance.Fill.BorderColor = clGray
+        Status.Appearance.Fill.Rounding = 0
+        Status.Appearance.Fill.ShadowOffset = 0
+        Status.Appearance.Fill.Glow = gmNone
+        Status.Appearance.Font.Charset = DEFAULT_CHARSET
+        Status.Appearance.Font.Color = clWhite
+        Status.Appearance.Font.Height = -11
+        Status.Appearance.Font.Name = 'Segoe UI'
+        Status.Appearance.Font.Style = []
+        Caption = 'Edit'
+        Color = 15785659
+        ParentFont = False
+        TabOrder = 3
+        Version = '2.2.3.1'
+        TMSStyle = 8
       end
     end
     object tbsAddGroup: TTabSheet
@@ -2759,6 +2793,41 @@ object Form2: TForm2
         Width = 200
         Height = 23
         TabOrder = 10
+      end
+      object sbtnRemoveUserFromGroup: TAdvSmoothButton
+        Left = 678
+        Top = 258
+        Width = 67
+        Height = 23
+        Appearance.Font.Charset = DEFAULT_CHARSET
+        Appearance.Font.Color = clWindowText
+        Appearance.Font.Height = -12
+        Appearance.Font.Name = 'Segoe UI'
+        Appearance.Font.Style = [fsBold]
+        Appearance.SimpleLayout = True
+        Appearance.Rounding = 5
+        Status.Caption = '0'
+        Status.Appearance.Fill.Color = clRed
+        Status.Appearance.Fill.ColorMirror = clNone
+        Status.Appearance.Fill.ColorMirrorTo = clNone
+        Status.Appearance.Fill.GradientType = gtSolid
+        Status.Appearance.Fill.GradientMirrorType = gtSolid
+        Status.Appearance.Fill.BorderColor = clGray
+        Status.Appearance.Fill.Rounding = 0
+        Status.Appearance.Fill.ShadowOffset = 0
+        Status.Appearance.Fill.Glow = gmNone
+        Status.Appearance.Font.Charset = DEFAULT_CHARSET
+        Status.Appearance.Font.Color = clWhite
+        Status.Appearance.Font.Height = -11
+        Status.Appearance.Font.Name = 'Segoe UI'
+        Status.Appearance.Font.Style = []
+        Caption = '-'
+        Color = 4210943
+        ParentFont = False
+        TabOrder = 11
+        Version = '2.2.3.1'
+        OnClick = sbtnRemoveUserFromGroupClick
+        TMSStyle = 8
       end
     end
   end

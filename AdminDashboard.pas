@@ -94,6 +94,8 @@ type
     edtEditUserPassword: TEdit;
     Label12: TLabel;
     sbtnGoToEditUser: TAdvSmoothButton;
+    sbtnGoToEditGroup: TAdvSmoothButton;
+    sbtnRemoveUserFromGroup: TAdvSmoothButton;
 
     procedure FormShow(Sender: TObject);
     procedure sbtnAddUserClick(Sender: TObject);
@@ -108,6 +110,9 @@ type
     procedure sbtnDeleteUserClick(Sender: TObject);
     procedure sbtnGoToEditUserClick(Sender: TObject);
     procedure sbtnEditUserClick(Sender: TObject);
+    procedure sbtnRemoveUserFromGroupClick(Sender: TObject);
+    procedure sgrGroupsDrawCell(Sender: TObject; ACol, ARow: LongInt;
+      Rect: TRect; State: TGridDrawState);
   private
     { Private declarations }
     DBConnection : TPgConnection;
@@ -200,6 +205,7 @@ begin
 
   RefreshGroupOverView;
 
+  lblAddGroupError.Caption := '';
   lblEditUserError.Caption := '';
     
 
@@ -211,7 +217,7 @@ begin
     with slsbUser.Items.Add do
     begin
       Caption := pgqGetUsersgbr_naam.Text;
-      pgqGetUsers.Next;      
+      pgqGetUsers.Next;
     end;
   end;
 end;
@@ -457,4 +463,19 @@ begin
     
 end;
 
+procedure TForm2.sbtnRemoveUserFromGroupClick(Sender: TObject);
+var
+  indexDeletedUser: integer;
+  getText: string;
+begin
+  if(slsbGroupAddedUsers.Items.CountSelected > 0) then
+  begin
+    getText := slsbGroupAddedUsers.Items[slsbGroupAddedUsers.SelectedItemIndex].Caption;
+    indexDeletedUser := cboxGroupOwner.Items.IndexOf(getText);
+
+    slsbGroupAddedUsers.Items.Delete(slsbGroupAddedUsers.SelectedItemIndex);
+    cboxGroupOwner.Items.Delete(indexDeletedUser);
+  end;
+
+end;
 end.
