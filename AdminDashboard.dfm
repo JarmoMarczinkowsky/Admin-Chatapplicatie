@@ -39,7 +39,7 @@ object Form2: TForm2
     Top = 72
     Width = 773
     Height = 475
-    ActivePage = tbsEditGroup
+    ActivePage = tbsAddGroup
     TabOrder = 2
     OnChange = pcPagesChange
     object tbsUserOverview: TTabSheet
@@ -2918,7 +2918,7 @@ object Form2: TForm2
         OnClick = sbtnEditSearchUserClick
         TMSStyle = 8
       end
-      object AdvSmoothButton11: TAdvSmoothButton
+      object sbtnEditRemoveGroupUser: TAdvSmoothButton
         Left = 678
         Top = 258
         Width = 67
@@ -2950,7 +2950,7 @@ object Form2: TForm2
         ParentFont = False
         TabOrder = 1
         Version = '2.2.3.1'
-        OnClick = sbtnRemoveUserFromGroupClick
+        OnClick = sbtnEditRemoveGroupUserClick
         TMSStyle = 8
       end
       object AdvSmoothButton6: TAdvSmoothButton
@@ -5150,11 +5150,6 @@ object Form2: TForm2
       Required = True
     end
   end
-  object pgqAddGroupSearchUser: TPgQuery
-    Connection = DataModule2.pgcDBconnection
-    Left = 363
-    Top = 18
-  end
   object pgqDelete: TPgQuery
     Connection = DataModule2.pgcDBconnection
     Left = 611
@@ -5174,10 +5169,5 @@ object Form2: TForm2
     Connection = DataModule2.pgcDBconnection
     Left = 587
     Top = 242
-  end
-  object PgSQL1: TPgSQL
-    Connection = DataModule2.pgcDBconnection
-    Left = 475
-    Top = 394
   end
 end

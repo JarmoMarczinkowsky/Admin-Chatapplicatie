@@ -32,7 +32,6 @@ type
     pgqGetGroupsgro_igenaar: TIntegerField;
     pgqGetGroupsgro_aangemaakt: TDateTimeField;
     pgqGetGroupsgro_del: TBooleanField;
-    pgqAddGroupSearchUser: TPgQuery;
     pcPages: TPageControl;
     tbsUserOverview: TTabSheet;
     Label3: TLabel;
@@ -114,13 +113,12 @@ type
     sbtnEditGroup: TAdvSmoothButton;
     slsbEditAddUserToGroup: TAdvSmoothButton;
     sbtnEditSearchUser: TAdvSmoothButton;
-    AdvSmoothButton11: TAdvSmoothButton;
+    sbtnEditRemoveGroupUser: TAdvSmoothButton;
     slsbEditGroupUsers: TAdvSmoothListBox;
     slsbEditSearchUser: TAdvSmoothListBox;
     cbxGroupDeleted: TCheckBox;
     Label1: TLabel;
     pgqCheckExistingGroup: TPgQuery;
-    PgSQL1: TPgSQL;
 
     procedure FormShow(Sender: TObject);
     procedure sbtnAddUserClick(Sender: TObject);
@@ -143,6 +141,7 @@ type
     procedure sbtnEditGroupClick(Sender: TObject);
     procedure slsbEditAddUserToGroupClick(Sender: TObject);
     procedure sbtnEditSearchUserClick(Sender: TObject);
+    procedure sbtnEditRemoveGroupUserClick(Sender: TObject);
   private
     { Private declarations }
     DBConnection : TPgConnection;
@@ -151,6 +150,7 @@ type
     procedure RefreshGroupOverView;
     procedure AddItemToSearchListBox(commando: string);
     procedure GroupSearchUser(sender: string);
+    procedure RemoveUserFromGroup(command: string);
   public
     { Public declarations }
   end;
@@ -449,6 +449,8 @@ begin
   begin
     searchLB := slsbUser;
     addedUsersLB := slsbGroupAddedUsers;
+    //TODO: combobox fixen
+    //TODO: error fixen
   end
   else if (commando = 'edit') then
   begin
@@ -571,6 +573,11 @@ begin
   getGroup.Post;
 end;
 
+procedure TForm2.sbtnEditRemoveGroupUserClick(Sender: TObject);
+begin
+  RemoveUserFromGroup('edit');
+end;
+
 procedure TForm2.sbtnEditSearchUserClick(Sender: TObject);
 begin
   GroupSearchUser('edit');
@@ -677,17 +684,38 @@ begin
 end;
 
 procedure TForm2.sbtnRemoveUserFromGroupClick(Sender: TObject);
+begin
+  RemoveUserFromGroup('add');
+end;
+
+procedure TForm2.RemoveUserFromGroup(command: string);
 var
   indexDeletedUser: integer;
   getText: string;
+  searchLB, addedUsersLB: TAdvSmoothListBox;
+  ownerCBOX: TComboBox;
 begin
-  if(slsbGroupAddedUsers.Items.CountSelected > 0) then
+  if(command = 'add') then
   begin
-    getText := slsbGroupAddedUsers.Items[slsbGroupAddedUsers.SelectedItemIndex].Caption;
-    indexDeletedUser := cboxGroupOwner.Items.IndexOf(getText);
+    searchLB := slsbUser;
+    addedUsersLB := slsbGroupAddedUsers;
+    ownerCBOX := cboxGroupOwner;
+  end
+  else if (command = 'edit') then
+  begin
+    searchLB := slsbEditSearchUser;
+    addedUsersLB := slsbEditGroupUsers;
+    ownerCBOX := cboxEditGroupOwner;
+  end;
 
-    slsbGroupAddedUsers.Items.Delete(slsbGroupAddedUsers.SelectedItemIndex);
-    cboxGroupOwner.Items.Delete(indexDeletedUser);
+  if(addedUsersLB.Items.CountSelected > 0) then
+  begin
+    getText := addedUsersLB.Items[addedUsersLB.SelectedItemIndex].Caption;
+    indexDeletedUser := ownerCBOX.Items.IndexOf(getText);
+
+    addedUsersLB.Items.Delete(addedUsersLB.SelectedItemIndex);
+
+    if(indexDeletedUser <> -1) then ownerCBOX.Items.Delete(indexDeletedUser);
   end;
 
 end;
