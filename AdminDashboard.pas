@@ -332,7 +332,6 @@ end;
 procedure TForm2.sbtnAddGroupClick(Sender: TObject);
 begin
 //  if((Length(edtGroupName.Text) > 0) AND
-  
 
 end;
 
@@ -350,18 +349,26 @@ end;
 
 procedure TForm2.AddItemToSearchListBox;
 var
-  i: integer;
+  i, temp: integer;
+
 begin
   for i := 1 to slsbUser.Items.Count do
   begin
     if(slsbUser.Items[i - 1].Selected) then
-    begin    
-      with slsbGroupAddedUsers.Items.Add do
+    begin
+      temp := slsbGroupAddedUsers.Items.IndexOfCaption(slsbUser.Items[i-1].Caption);
+      if(temp = -1) then
       begin
-        Caption := slsbUser.Items[i - 1].Caption;
-      end;
+        with slsbGroupAddedUsers.Items.Add do
+        begin
+          Caption := slsbUser.Items[i - 1].Caption;
+        end;
 
-      cboxGroupOwner.Items.Add(slsbUser.Items[i - 1].Caption);
+        cboxGroupOwner.Items.Add(slsbUser.Items[i - 1].Caption);
+      end
+      else lblAddGroupError.Caption := 'Gebruiker al in lijst';
+
+
     end;
   end;
 end;

@@ -46,7 +46,7 @@ object Form2: TForm2
     Top = 72
     Width = 773
     Height = 475
-    ActivePage = tbsGroupOverview
+    ActivePage = tbsAddGroup
     TabOrder = 2
     OnChange = pcPagesChange
     object tbsUserOverview: TTabSheet
@@ -517,7 +517,7 @@ object Form2: TForm2
         Height = 35
         Appearance.Font.Charset = DEFAULT_CHARSET
         Appearance.Font.Color = clWindowText
-        Appearance.Font.Height = -12
+        Appearance.Font.Height = -16
         Appearance.Font.Name = 'Segoe UI'
         Appearance.Font.Style = [fsBold]
         Appearance.SimpleLayout = True
