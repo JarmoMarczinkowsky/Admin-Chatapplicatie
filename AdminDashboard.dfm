@@ -2869,7 +2869,7 @@ object Form2: TForm2
         Height = 15
         Caption = 'Eigenaar'
       end
-      object Label18: TLabel
+      object lblEditGroupError: TLabel
         Left = 62
         Top = 416
         Width = 28
@@ -2889,7 +2889,7 @@ object Form2: TForm2
         Height = 15
         Caption = 'Verwijderd'
       end
-      object AdvSmoothButton10: TAdvSmoothButton
+      object sbtnEditSearchUser: TAdvSmoothButton
         Left = 678
         Top = 64
         Width = 65
@@ -2915,7 +2915,7 @@ object Form2: TForm2
         Color = 15395562
         TabOrder = 0
         Version = '2.2.3.1'
-        OnClick = sbtnagSearchUserClick
+        OnClick = sbtnEditSearchUserClick
         TMSStyle = 8
       end
       object AdvSmoothButton11: TAdvSmoothButton
@@ -3051,7 +3051,7 @@ object Form2: TForm2
         OnClick = sbtnEditGroupClick
         TMSStyle = 8
       end
-      object AdvSmoothButton9: TAdvSmoothButton
+      object slsbEditAddUserToGroup: TAdvSmoothButton
         Left = 678
         Top = 93
         Width = 67
@@ -3083,7 +3083,7 @@ object Form2: TForm2
         ParentFont = False
         TabOrder = 5
         Version = '2.2.3.1'
-        OnClick = sbtnAddUserToGroupClick
+        OnClick = slsbEditAddUserToGroupClick
         TMSStyle = 8
       end
       object slsbEditGroupUsers: TAdvSmoothListBox
@@ -5032,7 +5032,7 @@ object Form2: TForm2
         Style = csDropDownList
         TabOrder = 8
       end
-      object Edit1: TEdit
+      object edtEditGroupSearch: TEdit
         Left = 472
         Top = 64
         Width = 200

@@ -102,7 +102,7 @@ type
     AdvSmoothButton6: TAdvSmoothButton;
     sbtnEditGroupProfilePicture: TAdvSmoothButton;
     cboxEditGroupOwner: TComboBox;
-    Edit1: TEdit;
+    edtEditGroupSearch: TEdit;
     Edit2: TEdit;
     edtEditGroupName: TEdit;
     Image2: TImage;
@@ -110,10 +110,10 @@ type
     Label15: TLabel;
     Label16: TLabel;
     Label17: TLabel;
-    Label18: TLabel;
+    lblEditGroupError: TLabel;
     sbtnEditGroup: TAdvSmoothButton;
-    AdvSmoothButton9: TAdvSmoothButton;
-    AdvSmoothButton10: TAdvSmoothButton;
+    slsbEditAddUserToGroup: TAdvSmoothButton;
+    sbtnEditSearchUser: TAdvSmoothButton;
     AdvSmoothButton11: TAdvSmoothButton;
     slsbEditGroupUsers: TAdvSmoothListBox;
     slsbEditSearchUser: TAdvSmoothListBox;
@@ -141,13 +141,16 @@ type
     procedure sbtnGoToEditGroupClick(Sender: TObject);
     procedure sbtnBackToGroupOverviewClick(Sender: TObject);
     procedure sbtnEditGroupClick(Sender: TObject);
+    procedure slsbEditAddUserToGroupClick(Sender: TObject);
+    procedure sbtnEditSearchUserClick(Sender: TObject);
   private
     { Private declarations }
     DBConnection : TPgConnection;
     DBLoggedInUser, getGroup: TPgQuery;
     procedure RefreshUserOverView;
     procedure RefreshGroupOverView;
-    procedure AddItemToSearchListBox;
+    procedure AddItemToSearchListBox(commando: string);
+    procedure GroupSearchUser(sender: string);
   public
     { Public declarations }
   end;
@@ -429,28 +432,43 @@ begin
 end;
 
 procedure TForm2.sbtnAddUserToGroupClick(Sender: TObject);
+var
+  chosenListBox: TAdvSmoothListBox;
+  senderName: TAdvSmoothButton;
 begin
-  AddItemToSearchListBox;
+  AddItemToSearchListBox('add');
 end;
 
-procedure TForm2.AddItemToSearchListBox;
+procedure TForm2.AddItemToSearchListBox(commando: string);
 var
   i, temp: integer;
-
+  searchLB, addedUsersLB: TAdvSmoothListBox;
 begin
-  for i := 1 to slsbUser.Items.Count do
+
+  if(commando = 'add') then
   begin
-    if(slsbUser.Items[i - 1].Selected) then
+    searchLB := slsbUser;
+    addedUsersLB := slsbGroupAddedUsers;
+  end
+  else if (commando = 'edit') then
+  begin
+    searchLB := slsbEditSearchUser;
+    addedUsersLB := slsbEditGroupUsers;
+  end;
+
+  for i := 1 to searchLB.Items.Count do
+  begin
+    if(searchLB.Items[i - 1].Selected) then
     begin
-      temp := slsbGroupAddedUsers.Items.IndexOfCaption(slsbUser.Items[i-1].Caption);
+      temp := addedUsersLB.Items.IndexOfCaption(searchLB.Items[i-1].Caption);
       if(temp = -1) then
       begin
-        with slsbGroupAddedUsers.Items.Add do
+        with addedUsersLB.Items.Add do
         begin
-          Caption := slsbUser.Items[i - 1].Caption;
+          Caption := searchLB.Items[i - 1].Caption;
         end;
 
-        cboxGroupOwner.Items.Add(slsbUser.Items[i - 1].Caption);
+        cboxGroupOwner.Items.Add(searchLB.Items[i - 1].Caption);
       end
       else lblAddGroupError.Caption := 'Gebruiker al in lijst';
     end;
@@ -463,24 +481,52 @@ var
 begin
   lblAddUserError.Caption := '';
 
-  slsbUser.Items.Clear;
-  pgqAddGroupSearchUser.SQL.Text := '';
-  pgqAddGroupSearchUser.SQL.Add('SELECT * FROM tbl_gebruikers');
-  pgqAddGroupSearchUser.SQL.Add('WHERE LOWER(gbr_nicknaam)=:user');
-  pgqAddGroupSearchUser.SQL.Add('OR LOWER(gbr_email)=:user');
-  pgqAddGroupSearchUser.SQL.Add('OR LOWER(gbr_naam)=:user');
-  pgqAddGroupSearchUser.ParamByName('user').AsString := LowerCase(edtAddGroupSearchUser.Text);
-  pgqAddGroupSearchUser.Open;
+  GroupSearchUser('add');
+end;
 
-  pgqAddGroupSearchUser.First;
-  for i := 1 to pgqAddGroupSearchUser.RecordCount do
+procedure TForm2.GroupSearchUser(sender: string);
+var
+  i: integer;
+  tempQuery: TPgQuery;
+  searchLB: TAdvSmoothListBox;
+  searchBar: TEdit;
+begin
+  if(sender = 'add') then
   begin
-    with slsbUser.Items.Add do
+    searchLB := slsbUser;
+    searchBar := edtAddGroupSearchUser;
+  end
+  else if (sender = 'edit') then
+  begin
+    searchLB := slsbEditSearchUser;
+    searchBar := edtEditGroupSearch;
+  end;
+
+  lblAddUserError.Caption := '';
+
+  tempQuery := TPgQuery.Create(nil);
+  tempQuery.Connection := DataModule2.pgcDBconnection;
+
+  searchLB.Items.Clear;
+  tempQuery.SQL.Text := '';
+  tempQuery.SQL.Add('SELECT * FROM tbl_gebruikers');
+  tempQuery.SQL.Add('WHERE LOWER(gbr_nicknaam)=:user');
+  tempQuery.SQL.Add('OR LOWER(gbr_email)=:user');
+  tempQuery.SQL.Add('OR LOWER(gbr_naam)=:user');
+  tempQuery.ParamByName('user').AsString := LowerCase(searchBar.Text);
+  tempQuery.Open;
+
+  tempQuery.First;
+  for i := 1 to tempQuery.RecordCount do
+  begin
+    with searchLB.Items.Add do
     begin
-      Caption := pgqAddGroupSearchUser.FieldByName('gbr_nicknaam').AsString;
-      pgqAddGroupSearchUser.Next;
+      Caption := tempQuery.FieldByName('gbr_nicknaam').AsString;
+      tempQuery.Next;
     end;
   end;
+
+  tempQuery.Free;
 end;
 
 procedure TForm2.sbtnDeleteGroupClick(Sender: TObject);
@@ -523,6 +569,11 @@ begin
   getGroup.Edit;
   getGroup.FieldByName('gro_naam').AsString := edtEditGroupName.Text;
   getGroup.Post;
+end;
+
+procedure TForm2.sbtnEditSearchUserClick(Sender: TObject);
+begin
+  GroupSearchUser('edit');
 end;
 
 procedure TForm2.sbtnEditUserClick(Sender: TObject);
@@ -658,6 +709,11 @@ begin
 
   AGrid.Canvas.FillRect(Rect);
   AGrid.Canvas.TextOut(Rect.Left + 2, Rect.Top + 2, AGrid.Cells[ACol, ARow]);
+end;
+
+procedure TForm2.slsbEditAddUserToGroupClick(Sender: TObject);
+begin
+  AddItemToSearchListBox('edit');
 end;
 
 end.
