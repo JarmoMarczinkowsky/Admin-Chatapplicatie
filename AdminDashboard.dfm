@@ -356,41 +356,6 @@ object Form2: TForm2
         OnClick = sbtnBackToUserOverviewClick
         TMSStyle = 8
       end
-      object AdvSmoothButton7: TAdvSmoothButton
-        Left = 616
-        Top = 105
-        Width = 125
-        Height = 27
-        Appearance.Font.Charset = DEFAULT_CHARSET
-        Appearance.Font.Color = clWhite
-        Appearance.Font.Height = -12
-        Appearance.Font.Name = 'Segoe UI'
-        Appearance.Font.Style = [fsBold]
-        Appearance.SimpleLayout = True
-        Appearance.Rounding = 5
-        Status.Caption = '0'
-        Status.Appearance.Fill.Color = clRed
-        Status.Appearance.Fill.ColorMirror = clNone
-        Status.Appearance.Fill.ColorMirrorTo = clNone
-        Status.Appearance.Fill.GradientType = gtSolid
-        Status.Appearance.Fill.GradientMirrorType = gtSolid
-        Status.Appearance.Fill.BorderColor = clGray
-        Status.Appearance.Fill.Rounding = 0
-        Status.Appearance.Fill.ShadowOffset = 0
-        Status.Appearance.Fill.Glow = gmNone
-        Status.Appearance.Font.Charset = DEFAULT_CHARSET
-        Status.Appearance.Font.Color = clWhite
-        Status.Appearance.Font.Height = -11
-        Status.Appearance.Font.Name = 'Segoe UI'
-        Status.Appearance.Font.Style = []
-        Caption = 'Terug'
-        Color = 12698049
-        ParentFont = False
-        TabOrder = 8
-        Version = '2.2.3.1'
-        OnClick = sbtnBackToUserOverviewClick
-        TMSStyle = 8
-      end
     end
     object tbsEditUser: TTabSheet
       Caption = 'Edit User'
@@ -562,6 +527,41 @@ object Form2: TForm2
         Height = 23
         PasswordChar = #8226
         TabOrder = 7
+      end
+      object sbtnBack: TAdvSmoothButton
+        Left = 637
+        Top = 3
+        Width = 125
+        Height = 27
+        Appearance.Font.Charset = DEFAULT_CHARSET
+        Appearance.Font.Color = clWhite
+        Appearance.Font.Height = -12
+        Appearance.Font.Name = 'Segoe UI'
+        Appearance.Font.Style = [fsBold]
+        Appearance.SimpleLayout = True
+        Appearance.Rounding = 5
+        Status.Caption = '0'
+        Status.Appearance.Fill.Color = clRed
+        Status.Appearance.Fill.ColorMirror = clNone
+        Status.Appearance.Fill.ColorMirrorTo = clNone
+        Status.Appearance.Fill.GradientType = gtSolid
+        Status.Appearance.Fill.GradientMirrorType = gtSolid
+        Status.Appearance.Fill.BorderColor = clGray
+        Status.Appearance.Fill.Rounding = 0
+        Status.Appearance.Fill.ShadowOffset = 0
+        Status.Appearance.Fill.Glow = gmNone
+        Status.Appearance.Font.Charset = DEFAULT_CHARSET
+        Status.Appearance.Font.Color = clWhite
+        Status.Appearance.Font.Height = -11
+        Status.Appearance.Font.Name = 'Segoe UI'
+        Status.Appearance.Font.Style = []
+        Caption = 'Terug'
+        Color = 12698049
+        ParentFont = False
+        TabOrder = 8
+        Version = '2.2.3.1'
+        OnClick = sbtnBackToUserOverviewClick
+        TMSStyle = 8
       end
     end
     object tbsGroupOverview: TTabSheet
@@ -2902,6 +2902,41 @@ object Form2: TForm2
         OnClick = sbtnRemoveUserFromGroupClick
         TMSStyle = 8
       end
+      object AdvSmoothButton7: TAdvSmoothButton
+        Left = 637
+        Top = 3
+        Width = 125
+        Height = 27
+        Appearance.Font.Charset = DEFAULT_CHARSET
+        Appearance.Font.Color = clWhite
+        Appearance.Font.Height = -12
+        Appearance.Font.Name = 'Segoe UI'
+        Appearance.Font.Style = [fsBold]
+        Appearance.SimpleLayout = True
+        Appearance.Rounding = 5
+        Status.Caption = '0'
+        Status.Appearance.Fill.Color = clRed
+        Status.Appearance.Fill.ColorMirror = clNone
+        Status.Appearance.Fill.ColorMirrorTo = clNone
+        Status.Appearance.Fill.GradientType = gtSolid
+        Status.Appearance.Fill.GradientMirrorType = gtSolid
+        Status.Appearance.Fill.BorderColor = clGray
+        Status.Appearance.Fill.Rounding = 0
+        Status.Appearance.Fill.ShadowOffset = 0
+        Status.Appearance.Fill.Glow = gmNone
+        Status.Appearance.Font.Charset = DEFAULT_CHARSET
+        Status.Appearance.Font.Color = clWhite
+        Status.Appearance.Font.Height = -11
+        Status.Appearance.Font.Name = 'Segoe UI'
+        Status.Appearance.Font.Style = []
+        Caption = 'Terug'
+        Color = 12698049
+        ParentFont = False
+        TabOrder = 12
+        Version = '2.2.3.1'
+        OnClick = sbtnBackToGroupOverviewClick
+        TMSStyle = 8
+      end
     end
     object tbsEditGroup: TTabSheet
       Caption = 'Edit Group'
@@ -5163,7 +5198,7 @@ object Form2: TForm2
         ParentFont = False
         TabOrder = 13
         Version = '2.2.3.1'
-        OnClick = sbtnBackToUserOverviewClick
+        OnClick = sbtnBackToGroupOverviewClick
         TMSStyle = 8
       end
     end

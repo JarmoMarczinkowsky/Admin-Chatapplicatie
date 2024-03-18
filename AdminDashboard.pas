@@ -127,6 +127,7 @@ type
     AdvSmoothButton2: TAdvSmoothButton;
     AdvSmoothButton4: TAdvSmoothButton;
     AdvSmoothButton7: TAdvSmoothButton;
+    sbtnBack: TAdvSmoothButton;
 
     procedure FormShow(Sender: TObject);
     procedure sbtnAddUserClick(Sender: TObject);
@@ -150,10 +151,12 @@ type
     procedure slsbEditAddUserToGroupClick(Sender: TObject);
     procedure sbtnEditSearchUserClick(Sender: TObject);
     procedure sbtnEditRemoveGroupUserClick(Sender: TObject);
+    procedure AdvSmoothButton4Click(Sender: TObject);
   private
     { Private declarations }
     DBConnection : TPgConnection;
     DBLoggedInUser, getGroup: TPgQuery;
+
     procedure RefreshUserOverView;
     procedure RefreshGroupOverView;
     procedure AddItemToSearchListBox(commando: string);
