@@ -39,7 +39,7 @@ object Form2: TForm2
     Top = 72
     Width = 773
     Height = 475
-    ActivePage = tbsGroupOverview
+    ActivePage = tbsAddGroup
     TabOrder = 2
     OnChange = pcPagesChange
     object tbsUserOverview: TTabSheet
@@ -5390,11 +5390,6 @@ object Form2: TForm2
     Connection = DataModule2.pgcDBconnection
     Left = 483
     Top = 34
-  end
-  object pgqGroepsleden: TPgQuery
-    Connection = DataModule2.pgcDBconnection
-    Left = 531
-    Top = 106
   end
   object pgqCheckExistingGroup: TPgQuery
     Connection = DataModule2.pgcDBconnection

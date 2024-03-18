@@ -95,7 +95,6 @@ type
     sbtnGoToEditGroup: TAdvSmoothButton;
     sbtnRemoveUserFromGroup: TAdvSmoothButton;
     pgqAddGroup: TPgQuery;
-    pgqGroepsleden: TPgQuery;
     Label13: TLabel;
     tbsEditGroup: TTabSheet;
     AdvSmoothButton6: TAdvSmoothButton;
@@ -387,7 +386,11 @@ end;
 procedure TForm2.sbtnAddGroupClick(Sender: TObject);
 var
   i, idLastCreatedGroup: integer;
+  pgqGroepsLeden: TPgQuery;
 begin
+  pgqGroepsLeden := TPgQuery.Create(nil);
+  pgqGroepsLeden.Connection := DataModule2.pgcDBconnection;
+
   if((Length(edtGroupName.Text) > 0)) then
   begin
     //creates the group
@@ -465,6 +468,7 @@ begin
     searchLB := slsbUser;
     addedUsersLB := slsbGroupAddedUsers;
     errorLBL := lblAddGroupError;
+    groupOwnerCBOX := cboxGroupOwner;
     //TODO: combobox fixen
     //TODO: error fixen
   end
@@ -472,7 +476,8 @@ begin
   begin
     searchLB := slsbEditSearchUser;
     addedUsersLB := slsbEditGroupUsers;
-    errorLBL := lblEditGroupError
+    errorLBL := lblEditGroupError;
+    groupOwnerCBOX := cboxEditGroupOwner
   end;
 
   for i := 1 to searchLB.Items.Count do
