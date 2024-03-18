@@ -39,7 +39,7 @@ object Form2: TForm2
     Top = 72
     Width = 773
     Height = 475
-    ActivePage = tbsEditUser
+    ActivePage = tbsUserOverview
     TabOrder = 2
     OnChange = pcPagesChange
     object tbsUserOverview: TTabSheet
@@ -127,6 +127,7 @@ object Form2: TForm2
         Width = 649
         Height = 375
         TabOrder = 2
+        OnDrawCell = sgrGroupsDrawCell
       end
       object sbtnGoToEditUser: TAdvSmoothButton
         Left = 557

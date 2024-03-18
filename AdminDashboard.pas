@@ -235,7 +235,10 @@ begin
   slsbGroupAddedUsers.Items.Clear;
 
   pcPages.ActivePage := tbsUserOverview;
-  cboxGroupOwner.Text := DataModule2.pgqGetUser.FieldByName('gbr_nicknaam').AsString;
+  cboxGroupOwner.Items.Add(DataModule2.pgqGetUser.FieldByName('gbr_nicknaam').AsString);
+  cboxGroupOwner.ItemIndex := 0;
+  cboxEditGroupOwner.Items.Add(DataModule2.pgqGetUser.FieldByName('gbr_nicknaam').AsString);
+  cboxEditGroupOwner.ItemIndex := 0;
 
   RefreshUserOverView;
 
@@ -443,12 +446,16 @@ procedure TForm2.AddItemToSearchListBox(commando: string);
 var
   i, temp: integer;
   searchLB, addedUsersLB: TAdvSmoothListBox;
+  errorLBL: TLabel;
+  groupOwnerCBOX: TComboBox;
+
 begin
 
   if(commando = 'add') then
   begin
     searchLB := slsbUser;
     addedUsersLB := slsbGroupAddedUsers;
+    errorLBL := lblAddGroupError;
     //TODO: combobox fixen
     //TODO: error fixen
   end
@@ -456,6 +463,7 @@ begin
   begin
     searchLB := slsbEditSearchUser;
     addedUsersLB := slsbEditGroupUsers;
+    errorLBL := lblEditGroupError
   end;
 
   for i := 1 to searchLB.Items.Count do
@@ -470,9 +478,9 @@ begin
           Caption := searchLB.Items[i - 1].Caption;
         end;
 
-        cboxGroupOwner.Items.Add(searchLB.Items[i - 1].Caption);
+        groupOwnerCBOX.Items.Add(searchLB.Items[i - 1].Caption);
       end
-      else lblAddGroupError.Caption := 'Gebruiker al in lijst';
+      else errorLBL.Caption := 'Gebruiker al in lijst';
     end;
   end;
 end;
