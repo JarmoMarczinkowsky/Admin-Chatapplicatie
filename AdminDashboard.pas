@@ -24,7 +24,6 @@ type
     pgqGetUsersgbr_nicknaam: TStringField;
     pgqGetUsersgbr_wachtwoord: TStringField;
     pgqCheckExistingUser: TPgQuery;
-    pgqAddUser: TPgQuery;
     dscShowGroups: TDataSource;
     pgqGetGroups: TPgQuery;
     pgqGetGroupsgro_id: TIntegerField;
@@ -94,7 +93,6 @@ type
     sbtnGoToEditUser: TAdvSmoothButton;
     sbtnGoToEditGroup: TAdvSmoothButton;
     sbtnRemoveUserFromGroup: TAdvSmoothButton;
-    pgqAddGroup: TPgQuery;
     Label13: TLabel;
     tbsEditGroup: TTabSheet;
     AdvSmoothButton6: TAdvSmoothButton;
@@ -151,7 +149,6 @@ type
     procedure slsbEditAddUserToGroupClick(Sender: TObject);
     procedure sbtnEditSearchUserClick(Sender: TObject);
     procedure sbtnEditRemoveGroupUserClick(Sender: TObject);
-    procedure AdvSmoothButton4Click(Sender: TObject);
   private
     { Private declarations }
     DBConnection : TPgConnection;
@@ -175,8 +172,12 @@ implementation
 {$R *.dfm}
 
 procedure TForm2.AdvSmoothButton1Click(Sender: TObject);
-
+var
+  pgqAddUser: TPgQuery;
 begin
+  pgqAddUser := TPgQuery.Create(nil);
+  pgqAddUser.Connection := DataModule2.pgcDBconnection;
+
   lblAddUserError.Caption := '';
 
   if((Length(edtUserName.Text) > 0) AND
@@ -216,7 +217,8 @@ begin
           lblAddUserError.Caption := 'Email of gebruikersnaam is al in gebruik';
         end;
       end
-      else lblAddUserError.Caption := 'Telefoonnummer is niet correct geformatteerd';
+      else lblAddUserError.Caption := 'Telefoonnummer is niet correct geformatteerd' + #13#10 +
+      'Formaat: 10 characters minimaal, alleen '+ #39 + '+' + #39 + ', ' + #39 + '-' + #39 + ' en cijfers 0-9 zijn toegestaan';
     end
     else lblAddUserError.Caption := 'Emailadres is niet correct geformatteerd';
   end
@@ -277,6 +279,11 @@ begin
 
     pgqGetUsers.Next;
   end;
+
+  lblAddUserError.Caption := '';
+  lblAddGroupError.Caption := '';
+  lblEditUserError.Caption := '';
+  lblEditGroupError.Caption := '';
 end;
 
 procedure TForm2.pcPagesChange(Sender: TObject);
@@ -447,6 +454,11 @@ var
   i: integer;
 begin
   pcPages.ActivePage := tbsAddUser;
+  edtUserName.Text := '';
+  edtUserStoreName.Text := '';
+  edtUserTelephone.Text := '';
+  edtUserNickName.Text := '';
+  edtUserEmail.Text := '';
 end;
 
 procedure TForm2.sbtnAddUserToGroupClick(Sender: TObject);
