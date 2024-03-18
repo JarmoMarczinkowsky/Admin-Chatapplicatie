@@ -39,7 +39,7 @@ object Form2: TForm2
     Top = 72
     Width = 773
     Height = 475
-    ActivePage = tbsAddGroup
+    ActivePage = tbsEditUser
     TabOrder = 2
     OnChange = pcPagesChange
     object tbsUserOverview: TTabSheet
@@ -251,7 +251,7 @@ object Form2: TForm2
         TMSStyle = 8
       end
       object sbtnBackToUserOverview: TAdvSmoothButton
-        Left = 196
+        Left = 187
         Top = 224
         Width = 125
         Height = 27
@@ -288,35 +288,35 @@ object Form2: TForm2
       object edtUserName: TEdit
         Left = 176
         Top = 56
-        Width = 145
+        Width = 200
         Height = 23
         TabOrder = 0
       end
       object edtUserStoreName: TEdit
         Left = 176
         Top = 85
-        Width = 145
+        Width = 200
         Height = 23
         TabOrder = 1
       end
       object edtUserTelephone: TEdit
         Left = 176
         Top = 143
-        Width = 145
+        Width = 200
         Height = 23
         TabOrder = 3
       end
       object edtUserNickName: TEdit
         Left = 176
         Top = 172
-        Width = 145
+        Width = 200
         Height = 23
         TabOrder = 4
       end
       object edtUserEmail: TEdit
         Left = 176
         Top = 114
-        Width = 145
+        Width = 200
         Height = 23
         TabOrder = 2
       end
@@ -380,7 +380,7 @@ object Form2: TForm2
         Caption = 'Wachtwoord'
       end
       object AdvSmoothButton3: TAdvSmoothButton
-        Left = 196
+        Left = 187
         Top = 253
         Width = 125
         Height = 27
@@ -452,42 +452,42 @@ object Form2: TForm2
       object edtEditUserName: TEdit
         Left = 176
         Top = 56
-        Width = 145
+        Width = 200
         Height = 23
         TabOrder = 2
       end
       object edtEditStoreName: TEdit
         Left = 176
         Top = 85
-        Width = 145
+        Width = 200
         Height = 23
         TabOrder = 3
       end
       object edtEditUserEmail: TEdit
         Left = 176
         Top = 114
-        Width = 145
+        Width = 200
         Height = 23
         TabOrder = 4
       end
       object edtEditUserTelephone: TEdit
         Left = 176
         Top = 143
-        Width = 145
+        Width = 200
         Height = 23
         TabOrder = 5
       end
       object edtEditUserNickName: TEdit
         Left = 176
         Top = 172
-        Width = 145
+        Width = 200
         Height = 23
         TabOrder = 6
       end
       object edtEditUserPassword: TEdit
         Left = 176
         Top = 201
-        Width = 145
+        Width = 200
         Height = 23
         PasswordChar = #8226
         TabOrder = 7
@@ -621,8 +621,8 @@ object Form2: TForm2
       Caption = 'Add Group'
       ImageIndex = 3
       object Label4: TLabel
-        Left = 64
-        Top = 96
+        Left = 56
+        Top = 88
         Width = 64
         Height = 15
         Caption = 'Beschrijving'
@@ -641,48 +641,48 @@ object Form2: TForm2
         ParentFont = False
       end
       object Label2: TLabel
-        Left = 64
-        Top = 67
+        Left = 56
+        Top = 59
         Width = 32
         Height = 15
         Caption = 'Naam'
       end
       object Image1: TImage
-        Left = 309
-        Top = 151
+        Left = 301
+        Top = 143
         Width = 75
         Height = 75
       end
       object Label5: TLabel
-        Left = 64
-        Top = 125
+        Left = 56
+        Top = 117
         Width = 45
         Height = 15
         Caption = 'Eigenaar'
       end
       object Label13: TLabel
-        Left = 64
-        Top = 154
+        Left = 56
+        Top = 146
         Width = 56
         Height = 15
         Caption = 'Profielfoto'
       end
       object edtGroupName: TEdit
-        Left = 184
-        Top = 64
+        Left = 176
+        Top = 56
         Width = 200
         Height = 23
         TabOrder = 0
       end
       object edtGroupDescription: TEdit
-        Left = 184
-        Top = 93
+        Left = 176
+        Top = 85
         Width = 200
         Height = 23
         TabOrder = 1
       end
       object sbtnBackToGroupOverview: TAdvSmoothButton
-        Left = 268
+        Left = 251
         Top = 368
         Width = 125
         Height = 27
@@ -717,7 +717,7 @@ object Form2: TForm2
         TMSStyle = 8
       end
       object sbtnAddGroup: TAdvSmoothButton
-        Left = 128
+        Left = 120
         Top = 368
         Width = 125
         Height = 27
@@ -752,8 +752,8 @@ object Form2: TForm2
         TMSStyle = 8
       end
       object AdvSmoothButton5: TAdvSmoothButton
-        Left = 184
-        Top = 151
+        Left = 176
+        Top = 143
         Width = 119
         Height = 27
         Appearance.SimpleLayout = True
@@ -781,9 +781,9 @@ object Form2: TForm2
       end
       object slsbUser: TAdvSmoothListBox
         Left = 472
-        Top = 93
+        Top = 85
         Width = 200
-        Height = 159
+        Height = 151
         Cursor = crDefault
         Fill.Color = clWhite
         Fill.ColorMirror = clNone
@@ -1750,14 +1750,14 @@ object Form2: TForm2
       end
       object edtAddGroupSearchUser: TEdit
         Left = 472
-        Top = 64
+        Top = 56
         Width = 200
         Height = 23
         TabOrder = 6
       end
       object sbtnAddUserToGroup: TAdvSmoothButton
         Left = 678
-        Top = 93
+        Top = 85
         Width = 67
         Height = 23
         Appearance.Font.Charset = DEFAULT_CHARSET
@@ -1792,9 +1792,9 @@ object Form2: TForm2
       end
       object slsbGroupAddedUsers: TAdvSmoothListBox
         Left = 472
-        Top = 258
+        Top = 242
         Width = 200
-        Height = 159
+        Height = 151
         Cursor = crDefault
         Fill.Color = clWhite
         Fill.ColorMirror = clNone
@@ -2761,7 +2761,7 @@ object Form2: TForm2
       end
       object sbtnagSearchUser: TAdvSmoothButton
         Left = 678
-        Top = 64
+        Top = 56
         Width = 65
         Height = 23
         Appearance.SimpleLayout = True
@@ -2789,8 +2789,8 @@ object Form2: TForm2
         TMSStyle = 8
       end
       object cboxGroupOwner: TComboBox
-        Left = 184
-        Top = 122
+        Left = 176
+        Top = 114
         Width = 200
         Height = 23
         Style = csDropDownList
@@ -2798,7 +2798,7 @@ object Form2: TForm2
       end
       object sbtnRemoveUserFromGroup: TAdvSmoothButton
         Left = 678
-        Top = 258
+        Top = 242
         Width = 67
         Height = 23
         Appearance.Font.Charset = DEFAULT_CHARSET
@@ -2836,35 +2836,35 @@ object Form2: TForm2
       Caption = 'Edit Group'
       ImageIndex = 5
       object Image2: TImage
-        Left = 309
-        Top = 174
+        Left = 301
+        Top = 166
         Width = 75
         Height = 75
       end
       object Label14: TLabel
-        Left = 64
-        Top = 183
+        Left = 56
+        Top = 175
         Width = 56
         Height = 15
         Caption = 'Profielfoto'
       end
       object Label15: TLabel
-        Left = 64
-        Top = 67
+        Left = 56
+        Top = 59
         Width = 32
         Height = 15
         Caption = 'Naam'
       end
       object Label16: TLabel
-        Left = 64
-        Top = 96
+        Left = 56
+        Top = 88
         Width = 64
         Height = 15
         Caption = 'Beschrijving'
       end
       object Label17: TLabel
-        Left = 64
-        Top = 125
+        Left = 56
+        Top = 117
         Width = 45
         Height = 15
         Caption = 'Eigenaar'
@@ -2883,15 +2883,15 @@ object Form2: TForm2
         ParentFont = False
       end
       object Label1: TLabel
-        Left = 64
-        Top = 154
+        Left = 56
+        Top = 146
         Width = 55
         Height = 15
         Caption = 'Verwijderd'
       end
       object sbtnEditSearchUser: TAdvSmoothButton
         Left = 678
-        Top = 64
+        Top = 56
         Width = 65
         Height = 23
         Appearance.SimpleLayout = True
@@ -2920,7 +2920,7 @@ object Form2: TForm2
       end
       object sbtnEditRemoveGroupUser: TAdvSmoothButton
         Left = 678
-        Top = 258
+        Top = 242
         Width = 67
         Height = 23
         Appearance.Font.Charset = DEFAULT_CHARSET
@@ -2954,7 +2954,7 @@ object Form2: TForm2
         TMSStyle = 8
       end
       object AdvSmoothButton6: TAdvSmoothButton
-        Left = 268
+        Left = 251
         Top = 368
         Width = 125
         Height = 27
@@ -2989,8 +2989,8 @@ object Form2: TForm2
         TMSStyle = 8
       end
       object sbtnEditGroupProfilePicture: TAdvSmoothButton
-        Left = 184
-        Top = 174
+        Left = 176
+        Top = 166
         Width = 119
         Height = 27
         Appearance.SimpleLayout = True
@@ -3017,7 +3017,7 @@ object Form2: TForm2
         TMSStyle = 8
       end
       object sbtnEditGroup: TAdvSmoothButton
-        Left = 128
+        Left = 120
         Top = 368
         Width = 125
         Height = 27
@@ -3053,7 +3053,7 @@ object Form2: TForm2
       end
       object slsbEditAddUserToGroup: TAdvSmoothButton
         Left = 678
-        Top = 93
+        Top = 85
         Width = 67
         Height = 23
         Appearance.Font.Charset = DEFAULT_CHARSET
@@ -3088,9 +3088,9 @@ object Form2: TForm2
       end
       object slsbEditGroupUsers: TAdvSmoothListBox
         Left = 472
-        Top = 258
+        Top = 242
         Width = 200
-        Height = 159
+        Height = 151
         Cursor = crDefault
         Fill.Color = clWhite
         Fill.ColorMirror = clNone
@@ -4057,9 +4057,9 @@ object Form2: TForm2
       end
       object slsbEditSearchUser: TAdvSmoothListBox
         Left = 472
-        Top = 93
+        Top = 85
         Width = 200
-        Height = 159
+        Height = 151
         Cursor = crDefault
         Fill.Color = clWhite
         Fill.ColorMirror = clNone
@@ -5025,8 +5025,8 @@ object Form2: TForm2
         TMSStyle = 0
       end
       object cboxEditGroupOwner: TComboBox
-        Left = 184
-        Top = 122
+        Left = 176
+        Top = 114
         Width = 200
         Height = 23
         Style = csDropDownList
@@ -5034,28 +5034,28 @@ object Form2: TForm2
       end
       object edtEditGroupSearch: TEdit
         Left = 472
-        Top = 64
+        Top = 56
         Width = 200
         Height = 23
         TabOrder = 9
       end
       object Edit2: TEdit
-        Left = 184
-        Top = 93
+        Left = 176
+        Top = 85
         Width = 200
         Height = 23
         TabOrder = 10
       end
       object edtEditGroupName: TEdit
-        Left = 184
-        Top = 64
+        Left = 176
+        Top = 56
         Width = 200
         Height = 23
         TabOrder = 11
       end
       object cbxGroupDeleted: TCheckBox
-        Left = 184
-        Top = 151
+        Left = 176
+        Top = 143
         Width = 97
         Height = 17
         TabOrder = 12
@@ -5163,7 +5163,7 @@ object Form2: TForm2
   object pgqGroepsleden: TPgQuery
     Connection = DataModule2.pgcDBconnection
     Left = 587
-    Top = 122
+    Top = 90
   end
   object pgqCheckExistingGroup: TPgQuery
     Connection = DataModule2.pgcDBconnection
