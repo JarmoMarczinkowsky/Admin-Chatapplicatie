@@ -8,7 +8,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Graphics, AdvUtil, Vcl.Grids, AdvObj, BaseGrid,
   AdvGrid, DBAdvGrid, Vcl.ExtCtrls, Data.DB, MemDS, DBAccess, PgAccess,
   AdvSmoothButton, Vcl.StdCtrls, Vcl.ComCtrls, DMdatabaseInfo, AdvSmoothListBox,
-  Vcl.DBGrids;
+  Vcl.DBGrids, Vcl.Mask, RzEdit;
 
 type
   TForm2 = class(TForm)
@@ -119,6 +119,15 @@ type
     cbxGroupDeleted: TCheckBox;
     Label1: TLabel;
     pgqCheckExistingGroup: TPgQuery;
+    tbsOptions: TTabSheet;
+    RzNumericEdit1: TRzNumericEdit;
+    Label18: TLabel;
+    sbtnCancelOptions: TAdvSmoothButton;
+    sbtnChangeOption: TAdvSmoothButton;
+    sbtnBackButton: TAdvSmoothButton;
+    AdvSmoothButton2: TAdvSmoothButton;
+    AdvSmoothButton4: TAdvSmoothButton;
+    AdvSmoothButton7: TAdvSmoothButton;
 
     procedure FormShow(Sender: TObject);
     procedure sbtnAddUserClick(Sender: TObject);
@@ -251,7 +260,7 @@ begin
   slsbEditSearchUser.Items.Clear;
 
   pgqGetUsers.First;
-    
+
   for i := 1 to pgqGetUsers.RecordCount do
   begin
     with slsbUser.Items.Add do

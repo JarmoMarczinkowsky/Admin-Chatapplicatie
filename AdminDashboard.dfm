@@ -39,7 +39,7 @@ object Form2: TForm2
     Top = 72
     Width = 773
     Height = 475
-    ActivePage = tbsUserOverview
+    ActivePage = tbsGroupOverview
     TabOrder = 2
     OnChange = pcPagesChange
     object tbsUserOverview: TTabSheet
@@ -320,6 +320,76 @@ object Form2: TForm2
         Width = 200
         Height = 23
         TabOrder = 2
+      end
+      object AdvSmoothButton4: TAdvSmoothButton
+        Left = 637
+        Top = 3
+        Width = 125
+        Height = 27
+        Appearance.Font.Charset = DEFAULT_CHARSET
+        Appearance.Font.Color = clWhite
+        Appearance.Font.Height = -12
+        Appearance.Font.Name = 'Segoe UI'
+        Appearance.Font.Style = [fsBold]
+        Appearance.SimpleLayout = True
+        Appearance.Rounding = 5
+        Status.Caption = '0'
+        Status.Appearance.Fill.Color = clRed
+        Status.Appearance.Fill.ColorMirror = clNone
+        Status.Appearance.Fill.ColorMirrorTo = clNone
+        Status.Appearance.Fill.GradientType = gtSolid
+        Status.Appearance.Fill.GradientMirrorType = gtSolid
+        Status.Appearance.Fill.BorderColor = clGray
+        Status.Appearance.Fill.Rounding = 0
+        Status.Appearance.Fill.ShadowOffset = 0
+        Status.Appearance.Fill.Glow = gmNone
+        Status.Appearance.Font.Charset = DEFAULT_CHARSET
+        Status.Appearance.Font.Color = clWhite
+        Status.Appearance.Font.Height = -11
+        Status.Appearance.Font.Name = 'Segoe UI'
+        Status.Appearance.Font.Style = []
+        Caption = 'Terug'
+        Color = 12698049
+        ParentFont = False
+        TabOrder = 7
+        Version = '2.2.3.1'
+        OnClick = sbtnBackToUserOverviewClick
+        TMSStyle = 8
+      end
+      object AdvSmoothButton7: TAdvSmoothButton
+        Left = 616
+        Top = 105
+        Width = 125
+        Height = 27
+        Appearance.Font.Charset = DEFAULT_CHARSET
+        Appearance.Font.Color = clWhite
+        Appearance.Font.Height = -12
+        Appearance.Font.Name = 'Segoe UI'
+        Appearance.Font.Style = [fsBold]
+        Appearance.SimpleLayout = True
+        Appearance.Rounding = 5
+        Status.Caption = '0'
+        Status.Appearance.Fill.Color = clRed
+        Status.Appearance.Fill.ColorMirror = clNone
+        Status.Appearance.Fill.ColorMirrorTo = clNone
+        Status.Appearance.Fill.GradientType = gtSolid
+        Status.Appearance.Fill.GradientMirrorType = gtSolid
+        Status.Appearance.Fill.BorderColor = clGray
+        Status.Appearance.Fill.Rounding = 0
+        Status.Appearance.Fill.ShadowOffset = 0
+        Status.Appearance.Fill.Glow = gmNone
+        Status.Appearance.Font.Charset = DEFAULT_CHARSET
+        Status.Appearance.Font.Color = clWhite
+        Status.Appearance.Font.Height = -11
+        Status.Appearance.Font.Name = 'Segoe UI'
+        Status.Appearance.Font.Style = []
+        Caption = 'Terug'
+        Color = 12698049
+        ParentFont = False
+        TabOrder = 8
+        Version = '2.2.3.1'
+        OnClick = sbtnBackToUserOverviewClick
+        TMSStyle = 8
       end
     end
     object tbsEditUser: TTabSheet
@@ -5061,6 +5131,166 @@ object Form2: TForm2
         Height = 17
         TabOrder = 12
       end
+      object AdvSmoothButton2: TAdvSmoothButton
+        Left = 637
+        Top = 3
+        Width = 125
+        Height = 27
+        Appearance.Font.Charset = DEFAULT_CHARSET
+        Appearance.Font.Color = clWhite
+        Appearance.Font.Height = -12
+        Appearance.Font.Name = 'Segoe UI'
+        Appearance.Font.Style = [fsBold]
+        Appearance.SimpleLayout = True
+        Appearance.Rounding = 5
+        Status.Caption = '0'
+        Status.Appearance.Fill.Color = clRed
+        Status.Appearance.Fill.ColorMirror = clNone
+        Status.Appearance.Fill.ColorMirrorTo = clNone
+        Status.Appearance.Fill.GradientType = gtSolid
+        Status.Appearance.Fill.GradientMirrorType = gtSolid
+        Status.Appearance.Fill.BorderColor = clGray
+        Status.Appearance.Fill.Rounding = 0
+        Status.Appearance.Fill.ShadowOffset = 0
+        Status.Appearance.Fill.Glow = gmNone
+        Status.Appearance.Font.Charset = DEFAULT_CHARSET
+        Status.Appearance.Font.Color = clWhite
+        Status.Appearance.Font.Height = -11
+        Status.Appearance.Font.Name = 'Segoe UI'
+        Status.Appearance.Font.Style = []
+        Caption = 'Terug'
+        Color = 12698049
+        ParentFont = False
+        TabOrder = 13
+        Version = '2.2.3.1'
+        OnClick = sbtnBackToUserOverviewClick
+        TMSStyle = 8
+      end
+    end
+    object tbsOptions: TTabSheet
+      Caption = 'tbsOptions'
+      ImageIndex = 6
+      object Label18: TLabel
+        Left = 56
+        Top = 59
+        Width = 109
+        Height = 15
+        Caption = 'Secondes per refresh'
+      end
+      object RzNumericEdit1: TRzNumericEdit
+        Left = 184
+        Top = 56
+        Width = 193
+        Height = 23
+        Alignment = taLeftJustify
+        TabOrder = 0
+        DisplayFormat = ',0;(,0)'
+      end
+      object sbtnCancelOptions: TAdvSmoothButton
+        Left = 195
+        Top = 232
+        Width = 125
+        Height = 27
+        Appearance.Font.Charset = DEFAULT_CHARSET
+        Appearance.Font.Color = clWhite
+        Appearance.Font.Height = -12
+        Appearance.Font.Name = 'Segoe UI'
+        Appearance.Font.Style = [fsBold]
+        Appearance.SimpleLayout = True
+        Appearance.Rounding = 5
+        Status.Caption = '0'
+        Status.Appearance.Fill.Color = clRed
+        Status.Appearance.Fill.ColorMirror = clNone
+        Status.Appearance.Fill.ColorMirrorTo = clNone
+        Status.Appearance.Fill.GradientType = gtSolid
+        Status.Appearance.Fill.GradientMirrorType = gtSolid
+        Status.Appearance.Fill.BorderColor = clGray
+        Status.Appearance.Fill.Rounding = 0
+        Status.Appearance.Fill.ShadowOffset = 0
+        Status.Appearance.Fill.Glow = gmNone
+        Status.Appearance.Font.Charset = DEFAULT_CHARSET
+        Status.Appearance.Font.Color = clWhite
+        Status.Appearance.Font.Height = -11
+        Status.Appearance.Font.Name = 'Segoe UI'
+        Status.Appearance.Font.Style = []
+        Caption = 'Annuleren'
+        Color = 16764551
+        ParentFont = False
+        TabOrder = 1
+        Version = '2.2.3.1'
+        OnClick = sbtnBackToUserOverviewClick
+        TMSStyle = 8
+      end
+      object sbtnChangeOption: TAdvSmoothButton
+        Left = 64
+        Top = 232
+        Width = 125
+        Height = 27
+        Appearance.Font.Charset = DEFAULT_CHARSET
+        Appearance.Font.Color = clWhite
+        Appearance.Font.Height = -12
+        Appearance.Font.Name = 'Segoe UI'
+        Appearance.Font.Style = [fsBold]
+        Appearance.SimpleLayout = True
+        Appearance.Rounding = 5
+        Status.Caption = '0'
+        Status.Appearance.Fill.Color = clRed
+        Status.Appearance.Fill.ColorMirror = clNone
+        Status.Appearance.Fill.ColorMirrorTo = clNone
+        Status.Appearance.Fill.GradientType = gtSolid
+        Status.Appearance.Fill.GradientMirrorType = gtSolid
+        Status.Appearance.Fill.BorderColor = clGray
+        Status.Appearance.Fill.Rounding = 0
+        Status.Appearance.Fill.ShadowOffset = 0
+        Status.Appearance.Fill.Glow = gmNone
+        Status.Appearance.Font.Charset = DEFAULT_CHARSET
+        Status.Appearance.Font.Color = clWhite
+        Status.Appearance.Font.Height = -11
+        Status.Appearance.Font.Name = 'Segoe UI'
+        Status.Appearance.Font.Style = []
+        Caption = 'Toevoegen'
+        Color = 13472847
+        ParentFont = False
+        TabOrder = 2
+        Version = '2.2.3.1'
+        OnClick = AdvSmoothButton1Click
+        TMSStyle = 8
+      end
+      object sbtnBackButton: TAdvSmoothButton
+        Left = 637
+        Top = 3
+        Width = 125
+        Height = 27
+        Appearance.Font.Charset = DEFAULT_CHARSET
+        Appearance.Font.Color = clWhite
+        Appearance.Font.Height = -12
+        Appearance.Font.Name = 'Segoe UI'
+        Appearance.Font.Style = [fsBold]
+        Appearance.SimpleLayout = True
+        Appearance.Rounding = 5
+        Status.Caption = '0'
+        Status.Appearance.Fill.Color = clRed
+        Status.Appearance.Fill.ColorMirror = clNone
+        Status.Appearance.Fill.ColorMirrorTo = clNone
+        Status.Appearance.Fill.GradientType = gtSolid
+        Status.Appearance.Fill.GradientMirrorType = gtSolid
+        Status.Appearance.Fill.BorderColor = clGray
+        Status.Appearance.Fill.Rounding = 0
+        Status.Appearance.Fill.ShadowOffset = 0
+        Status.Appearance.Fill.Glow = gmNone
+        Status.Appearance.Font.Charset = DEFAULT_CHARSET
+        Status.Appearance.Font.Color = clWhite
+        Status.Appearance.Font.Height = -11
+        Status.Appearance.Font.Name = 'Segoe UI'
+        Status.Appearance.Font.Style = []
+        Caption = 'Terug'
+        Color = 12698049
+        ParentFont = False
+        TabOrder = 3
+        Version = '2.2.3.1'
+        OnClick = sbtnBackToUserOverviewClick
+        TMSStyle = 8
+      end
     end
   end
   object dscShowUsers: TDataSource
@@ -5163,8 +5393,8 @@ object Form2: TForm2
   end
   object pgqGroepsleden: TPgQuery
     Connection = DataModule2.pgcDBconnection
-    Left = 587
-    Top = 90
+    Left = 531
+    Top = 106
   end
   object pgqCheckExistingGroup: TPgQuery
     Connection = DataModule2.pgcDBconnection
