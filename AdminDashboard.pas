@@ -489,7 +489,7 @@ procedure TForm2.sbtnagSearchUserClick(Sender: TObject);
 var
   i: integer;
 begin
-  lblAddUserError.Caption := '';
+  lblAddGroupError.Caption := '';
 
   GroupSearchUser('add');
 end;
@@ -511,6 +511,7 @@ begin
     searchLB := slsbEditSearchUser;
     searchBar := edtEditGroupSearch;
   end;
+  //TODO: Fix empty search not showing every user
 
   lblAddUserError.Caption := '';
 
@@ -520,10 +521,15 @@ begin
   searchLB.Items.Clear;
   tempQuery.SQL.Text := '';
   tempQuery.SQL.Add('SELECT * FROM tbl_gebruikers');
-  tempQuery.SQL.Add('WHERE LOWER(gbr_nicknaam) LIKE :user');
-  tempQuery.SQL.Add('OR LOWER(gbr_email)=:user');
-  tempQuery.SQL.Add('OR LOWER(gbr_naam)=:user');
-  tempQuery.ParamByName('user').AsString := #37 + LowerCase(searchBar.Text) + #37;
+  if(Length(searchBar.Text) > 0) then
+  begin
+    tempQuery.SQL.Add('WHERE LOWER(gbr_nicknaam) LIKE :user');
+    tempQuery.SQL.Add('OR LOWER(gbr_email)=:user');
+    tempQuery.SQL.Add('OR LOWER(gbr_naam)=:user');
+    tempQuery.SQL.Add('ORDER BY gbr_nicknaam');
+    tempQuery.ParamByName('user').AsString := #37 + LowerCase(searchBar.Text) + #37;
+  end
+  else tempQuery.SQL.Add('ORDER BY gbr_nicknaam');
   tempQuery.Open;
 
   tempQuery.First;

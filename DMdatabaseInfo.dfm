@@ -1,7 +1,7 @@
 object DataModule2: TDataModule2
   OnDestroy = DataModuleDestroy
-  Height = 750
-  Width = 1000
+  Height = 614
+  Width = 930
   PixelsPerInch = 120
   object pgcDBconnection: TPgConnection
     Username = 'stage2'
@@ -9,13 +9,13 @@ object DataModule2: TDataModule2
     LoginPrompt = False
     Database = 'rchat'
     Connected = True
-    Left = 120
-    Top = 120
+    Left = 64
+    Top = 40
     EncryptedPassword = 'CDFFACFF8BFF9EFF98FF9AFFD5FF'
   end
-  object pgqGetUser: TPgQuery
+  object pgqGetLoggedInUser: TPgQuery
     Connection = pgcDBconnection
-    Left = 200
-    Top = 208
+    Left = 64
+    Top = 120
   end
 end
