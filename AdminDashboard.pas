@@ -115,7 +115,6 @@ type
     slsbEditSearchUser: TAdvSmoothListBox;
     cbxGroupDeleted: TCheckBox;
     Label1: TLabel;
-    pgqCheckExistingGroup: TPgQuery;
     tbsOptions: TTabSheet;
     RzNumericEdit1: TRzNumericEdit;
     Label18: TLabel;

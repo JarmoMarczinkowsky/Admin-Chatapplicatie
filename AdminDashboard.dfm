@@ -39,7 +39,7 @@ object Form2: TForm2
     Top = 72
     Width = 773
     Height = 475
-    ActivePage = tbsUserOverview
+    ActivePage = tbsGroupOverview
     TabOrder = 2
     OnChange = pcPagesChange
     object tbsUserOverview: TTabSheet
@@ -57,7 +57,7 @@ object Form2: TForm2
         Width = 59
         Height = 35
         Appearance.Font.Charset = DEFAULT_CHARSET
-        Appearance.Font.Color = clWindowText
+        Appearance.Font.Color = clBlack
         Appearance.Font.Height = -16
         Appearance.Font.Name = 'Segoe UI'
         Appearance.Font.Style = [fsBold]
@@ -92,7 +92,7 @@ object Form2: TForm2
         Width = 59
         Height = 35
         Appearance.Font.Charset = DEFAULT_CHARSET
-        Appearance.Font.Color = clWhite
+        Appearance.Font.Color = clBlack
         Appearance.Font.Height = -12
         Appearance.Font.Name = 'Segoe UI'
         Appearance.Font.Style = [fsBold]
@@ -615,7 +615,7 @@ object Form2: TForm2
         Width = 59
         Height = 35
         Appearance.Font.Charset = DEFAULT_CHARSET
-        Appearance.Font.Color = clWhite
+        Appearance.Font.Color = clBlack
         Appearance.Font.Height = -12
         Appearance.Font.Name = 'Segoe UI'
         Appearance.Font.Style = [fsBold]
@@ -5415,10 +5415,5 @@ object Form2: TForm2
     Connection = DataModule2.pgcDBconnection
     Left = 611
     Top = 22
-  end
-  object pgqCheckExistingGroup: TPgQuery
-    Connection = DataModule2.pgcDBconnection
-    Left = 587
-    Top = 242
   end
 end
