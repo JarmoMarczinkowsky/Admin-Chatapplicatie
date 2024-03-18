@@ -13,7 +13,6 @@ uses
 type
   TForm2 = class(TForm)
     Panel1: TPanel;
-    pnlLeft: TPanel;
     dscShowUsers: TDataSource;
     pgqGetUsers: TPgQuery;
     pgqGetUsersgbr_id: TIntegerField;
@@ -152,6 +151,8 @@ type
     procedure AdvSmoothMegaMenu1MenuSubItemClick(Sender: TObject;
       Menu: TAdvSmoothMegaMenu; MenuItem: TAdvSmoothMegaMenuItem;
       Item: TGDIPMenuSectionItem; Text: string);
+    procedure AdvSmoothMegaMenu1MenuItemClick(Sender: TObject;
+      ItemIndex: Integer);
   private
     { Private declarations }
     DBConnection : TPgConnection;
@@ -232,6 +233,15 @@ begin
   begin
     lblAddUserError.Caption := 'Vul alle velden in';
   end;
+end;
+
+procedure TForm2.AdvSmoothMegaMenu1MenuItemClick(Sender: TObject;
+  ItemIndex: Integer);
+begin
+  if(ItemIndex = 0) then pcPages.ActivePage := tbsUserOverview
+  else if (ItemIndex = 1) then pcPages.ActivePage := tbsGroupOverview
+  else if (ItemIndex = 2) then pcPages.ActivePage := tbsOptions;
+       
 end;
 
 procedure TForm2.AdvSmoothMegaMenu1MenuSubItemClick(Sender: TObject;
