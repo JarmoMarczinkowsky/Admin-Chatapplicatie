@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages,
-  System.SysUtils, System.Variants, System.Classes, System.RegularExpressions,
+  System.SysUtils, System.Variants, System.Classes, System.RegularExpressions, System.Hash,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Graphics, AdvUtil, Vcl.Grids, AdvObj, BaseGrid,
   AdvGrid, DBAdvGrid, Vcl.ExtCtrls, Data.DB, MemDS, DBAccess, PgAccess,
   AdvSmoothButton, Vcl.StdCtrls, Vcl.ComCtrls, DMdatabaseInfo, AdvSmoothListBox,
@@ -158,6 +158,8 @@ type
     procedure AddItemToSearchListBox(commando: string);
     procedure GroupSearchUser(sender: string);
     procedure RemoveUserFromGroup(command: string);
+
+    function HashString(const Input: string): string;
   public
     { Public declarations }
   end;
@@ -173,6 +175,7 @@ implementation
 procedure TForm2.AdvSmoothButton1Click(Sender: TObject);
 var
   pgqAddUser: TPgQuery;
+  testHash : string;
 begin
   pgqAddUser := TPgQuery.Create(nil);
   pgqAddUser.Connection := DataModule2.pgcDBconnection;
@@ -208,7 +211,7 @@ begin
           pgqAddUser.FieldByName('gbr_tel').AsString := Trim(edtUserTelephone.Text);
           pgqAddUser.FieldByName('gbr_email').AsString := Trim(edtUserEmail.Text);
           pgqAddUser.FieldByName('gbr_nicknaam').AsString := Trim(edtUserNickName.Text);
-          pgqAddUser.FieldByName('gbr_wachtwoord').AsString := 'Test123';
+          pgqAddUser.FieldByName('gbr_wachtwoord').AsString := HashString('Test123');
           pgqAddUser.Post;
         end
         else
@@ -784,6 +787,11 @@ end;
 procedure TForm2.slsbEditAddUserToGroupClick(Sender: TObject);
 begin
   AddItemToSearchListBox('edit');
+end;
+
+Function TForm2.HashString(const Input: string): string;
+begin
+  Result := THashSHA2.GetHashString(Input, THashSHA2.TSHA2Version.SHA256);
 end;
 
 end.

@@ -39,7 +39,7 @@ object Form2: TForm2
     Top = 72
     Width = 773
     Height = 475
-    ActivePage = tbsGroupOverview
+    ActivePage = tbsAddUser
     TabOrder = 2
     OnChange = pcPagesChange
     object tbsUserOverview: TTabSheet
@@ -5203,7 +5203,7 @@ object Form2: TForm2
       end
     end
     object tbsOptions: TTabSheet
-      Caption = 'tbsOptions'
+      Caption = 'Options'
       ImageIndex = 6
       object Label18: TLabel
         Left = 56
@@ -5377,19 +5377,19 @@ object Form2: TForm2
   object pgqCheckExistingUser: TPgQuery
     Connection = DataModule2.pgcDBconnection
     Left = 715
-    Top = 42
+    Top = 18
   end
   object dscShowGroups: TDataSource
     DataSet = pgqGetGroups
-    Left = 48
-    Top = 224
+    Left = 304
+    Top = 16
   end
   object pgqGetGroups: TPgQuery
     Connection = DataModule2.pgcDBconnection
     SQL.Strings = (
       'SELECT * FROM tbl_groepen')
-    Left = 48
-    Top = 168
+    Left = 232
+    Top = 16
     object pgqGetGroupsgro_id: TIntegerField
       FieldName = 'gro_id'
     end
@@ -5413,7 +5413,7 @@ object Form2: TForm2
   end
   object pgqDelete: TPgQuery
     Connection = DataModule2.pgcDBconnection
-    Left = 611
-    Top = 22
+    Left = 619
+    Top = 14
   end
 end

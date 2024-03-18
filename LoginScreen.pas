@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  StrUtils,
+  StrUtils, System.Hash,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, AdvSmoothButton, Data.DB,
   DBAccess, PgAccess, MemDS, Vcl.ExtCtrls, Vcl.Imaging.pngimage;
 
@@ -59,7 +59,7 @@ begin
 
     DataModule2.pgqGetLoggedInUser.SQL.Add('AND gbr_wachtwoord=:password');
     DataModule2.pgqGetLoggedInUser.ParamByName('user').AsString := Trim(LowerCase(edtUser.Text));
-    DataModule2.pgqGetLoggedInUser.ParamByName('password').AsString := edtPassword.Text;
+    DataModule2.pgqGetLoggedInUser.ParamByName('password').AsString := THashSHA2.GetHashString(edtPassword.Text, SHA256);
     DataModule2.pgqGetLoggedInUser.Open;
 
     if(DataModule2.pgqGetLoggedInUser.RecordCount > 0) then
