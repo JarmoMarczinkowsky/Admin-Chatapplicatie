@@ -512,10 +512,10 @@ begin
   searchLB.Items.Clear;
   tempQuery.SQL.Text := '';
   tempQuery.SQL.Add('SELECT * FROM tbl_gebruikers');
-  tempQuery.SQL.Add('WHERE LOWER(gbr_nicknaam)=:user');
+  tempQuery.SQL.Add('WHERE LOWER(gbr_nicknaam) LIKE :user');
   tempQuery.SQL.Add('OR LOWER(gbr_email)=:user');
   tempQuery.SQL.Add('OR LOWER(gbr_naam)=:user');
-  tempQuery.ParamByName('user').AsString := LowerCase(searchBar.Text);
+  tempQuery.ParamByName('user').AsString := #37 + LowerCase(searchBar.Text) + #37;
   tempQuery.Open;
 
   tempQuery.First;
