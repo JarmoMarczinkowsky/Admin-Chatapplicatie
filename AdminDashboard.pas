@@ -8,7 +8,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Graphics, AdvUtil, Vcl.Grids, AdvObj, BaseGrid,
   AdvGrid, DBAdvGrid, Vcl.ExtCtrls, Data.DB, MemDS, DBAccess, PgAccess,
   AdvSmoothButton, Vcl.StdCtrls, Vcl.ComCtrls, DMdatabaseInfo, AdvSmoothListBox,
-  Vcl.DBGrids, Vcl.Mask, RzEdit;
+  Vcl.DBGrids, Vcl.Mask, RzEdit, GDIPMenu, AdvSmoothMegaMenu;
 
 type
   TForm2 = class(TForm)
@@ -125,6 +125,7 @@ type
     AdvSmoothButton4: TAdvSmoothButton;
     AdvSmoothButton7: TAdvSmoothButton;
     sbtnBack: TAdvSmoothButton;
+    AdvSmoothMegaMenu1: TAdvSmoothMegaMenu;
 
     procedure FormShow(Sender: TObject);
     procedure sbtnAddUserClick(Sender: TObject);
@@ -148,6 +149,9 @@ type
     procedure slsbEditAddUserToGroupClick(Sender: TObject);
     procedure sbtnEditSearchUserClick(Sender: TObject);
     procedure sbtnEditRemoveGroupUserClick(Sender: TObject);
+    procedure AdvSmoothMegaMenu1MenuSubItemClick(Sender: TObject;
+      Menu: TAdvSmoothMegaMenu; MenuItem: TAdvSmoothMegaMenuItem;
+      Item: TGDIPMenuSectionItem; Text: string);
   private
     { Private declarations }
     DBConnection : TPgConnection;
@@ -230,6 +234,19 @@ begin
   end;
 end;
 
+procedure TForm2.AdvSmoothMegaMenu1MenuSubItemClick(Sender: TObject;
+  Menu: TAdvSmoothMegaMenu; MenuItem: TAdvSmoothMegaMenuItem;
+  Item: TGDIPMenuSectionItem; Text: string);
+begin
+  if (Text = 'Overzicht gebruikers') then pcPages.ActivePage := tbsUserOverview
+  else if (Text = 'Gebruiker aanmaken') then pcPages.ActivePage := tbsAddUser
+  else if (Text = 'Overzicht groepen') then pcPages.ActivePage := tbsGroupOverview
+  else if (Text = 'Groep aanmaken') then pcPages.ActivePage := tbsAddGroup;
+       
+
+
+end;
+
 procedure TForm2.sbtnBackToGroupOverviewClick(Sender: TObject);
 begin
   pcPages.ActivePage := tbsGroupOverview;
@@ -286,6 +303,8 @@ begin
   lblAddGroupError.Caption := '';
   lblEditUserError.Caption := '';
   lblEditGroupError.Caption := '';
+
+
 end;
 
 procedure TForm2.pcPagesChange(Sender: TObject);
