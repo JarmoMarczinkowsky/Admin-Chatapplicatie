@@ -8,7 +8,7 @@ uses
 type
   TDataModule2 = class(TDataModule)
     pgcDBconnection: TPgConnection;
-    pgqGetUser: TPgQuery;
+    pgqGetLoggedInUser: TPgQuery;
     procedure DataModuleDestroy(Sender: TObject);
   private
     { Private declarations }
@@ -28,7 +28,7 @@ implementation
 
 procedure TDataModule2.DataModuleDestroy(Sender: TObject);
 begin
-  pgqGetUser.Free;
+  pgqGetLoggedInUser.Free;
   pgcDBconnection.Free;
 end;
 

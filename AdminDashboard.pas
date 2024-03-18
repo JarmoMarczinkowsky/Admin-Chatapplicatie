@@ -230,14 +230,14 @@ var
   i, j: integer;
 begin
   DBConnection := DataModule2.pgcDBconnection;
-  DBLoggedInUser := DataModule2.pgqGetUser;
+  DBLoggedInUser := DataModule2.pgqGetLoggedInUser;
 
   slsbGroupAddedUsers.Items.Clear;
 
   pcPages.ActivePage := tbsUserOverview;
-  cboxGroupOwner.Items.Add(DataModule2.pgqGetUser.FieldByName('gbr_nicknaam').AsString);
+  cboxGroupOwner.Items.Add(DataModule2.pgqGetLoggedInUser.FieldByName('gbr_nicknaam').AsString);
   cboxGroupOwner.ItemIndex := 0;
-  cboxEditGroupOwner.Items.Add(DataModule2.pgqGetUser.FieldByName('gbr_nicknaam').AsString);
+  cboxEditGroupOwner.Items.Add(DataModule2.pgqGetLoggedInUser.FieldByName('gbr_nicknaam').AsString);
   cboxEditGroupOwner.ItemIndex := 0;
 
   RefreshUserOverView;

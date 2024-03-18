@@ -45,24 +45,24 @@ begin
   if((Length(edtUser.Text) > 0) AND (Length(edtPassword.Text) > 0)) then
   begin
 
-    DataModule2.pgqGetUser.SQL.Text := '';
-    DataModule2.pgqGetUser.SQL.Add('SELECT * FROM tbl_gebruikers');
+    DataModule2.pgqGetLoggedInUser.SQL.Text := '';
+    DataModule2.pgqGetLoggedInUser.SQL.Add('SELECT * FROM tbl_gebruikers');
 
     if(ContainsText(edtUser.Text, '@')) then
     begin
-      DataModule2.pgqGetUser.SQL.Add('WHERE LOWER(gbr_email)=:user');
+      DataModule2.pgqGetLoggedInUser.SQL.Add('WHERE LOWER(gbr_email)=:user');
     end
     else
     begin
-      DataModule2.pgqGetUser.SQL.Add('WHERE LOWER(gbr_nicknaam)=:user');
+      DataModule2.pgqGetLoggedInUser.SQL.Add('WHERE LOWER(gbr_nicknaam)=:user');
     end;
 
-    DataModule2.pgqGetUser.SQL.Add('AND gbr_wachtwoord=:password');
-    DataModule2.pgqGetUser.ParamByName('user').AsString := Trim(LowerCase(edtUser.Text));
-    DataModule2.pgqGetUser.ParamByName('password').AsString := edtPassword.Text;
-    DataModule2.pgqGetUser.Open;
+    DataModule2.pgqGetLoggedInUser.SQL.Add('AND gbr_wachtwoord=:password');
+    DataModule2.pgqGetLoggedInUser.ParamByName('user').AsString := Trim(LowerCase(edtUser.Text));
+    DataModule2.pgqGetLoggedInUser.ParamByName('password').AsString := edtPassword.Text;
+    DataModule2.pgqGetLoggedInUser.Open;
 
-    if(DataModule2.pgqGetUser.RecordCount > 0) then
+    if(DataModule2.pgqGetLoggedInUser.RecordCount > 0) then
     begin
       Form2.Show;
     end
