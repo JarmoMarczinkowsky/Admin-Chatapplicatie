@@ -93,11 +93,11 @@ type
     sbtnRemoveUserFromGroup: TAdvSmoothButton;
     Label13: TLabel;
     tbsEditGroup: TTabSheet;
-    AdvSmoothButton6: TAdvSmoothButton;
+    sbtnEditGroupCancel: TAdvSmoothButton;
     sbtnEditGroupProfilePicture: TAdvSmoothButton;
     cboxEditGroupOwner: TComboBox;
     edtEditGroupSearch: TEdit;
-    Edit2: TEdit;
+    edtEditGroupDescription: TEdit;
     edtEditGroupName: TEdit;
     Image2: TImage;
     Label14: TLabel;
@@ -125,6 +125,8 @@ type
     sbtnBack: TAdvSmoothButton;
     AdvSmoothMegaMenu1: TAdvSmoothMegaMenu;
     AdvSmoothPanel1: TAdvSmoothPanel;
+    pgqGetGroupsgro_profielfoto: TBlobField;
+    pgqGetGroupsgro_beschrijving: TMemoField;
 
     procedure FormShow(Sender: TObject);
     procedure sbtnAddUserClick(Sender: TObject);
@@ -157,7 +159,7 @@ type
     { Private declarations }
     DBConnection : TPgConnection;
     DBLoggedInUser, getGroup: TPgQuery;
-    RemovedUsersList, AddUsersList: TStringList;
+    RemovedUsersList: TStringList;
 
     procedure RefreshUserOverView;
     procedure RefreshGroupOverView;
@@ -266,7 +268,7 @@ begin
     RemovedUsersList.Clear;
   end;
 
-  AddUsersList.Clear;
+  RefreshGroupOverView;
   pcPages.ActivePage := tbsGroupOverview;
 end;
 
@@ -324,9 +326,6 @@ begin
 
   RemovedUsersList := TStringList.Create;
   RemovedUsersList.Duplicates := dupIgnore;
-
-  AddUsersList := TStringList.Create;
-  AddUsersList.Duplicates := dupIgnore;
 end;
 
 procedure TForm2.pcPagesChange(Sender: TObject);
@@ -403,7 +402,7 @@ begin
 
   pgqGetGroups.First;
 
-  sgrGroups.ColCount := 5;
+  sgrGroups.ColCount := 6;
   sgrGroups.RowCount := pgqGetGroups.RecordCount + 1;
   
   sgrGroups.Cells[0, 0] := 'Id';
@@ -411,6 +410,7 @@ begin
   sgrGroups.Cells[2, 0] := 'Eigenaar';
   sgrGroups.Cells[3, 0] := 'Aangemaakt';
   sgrGroups.Cells[4, 0] := 'Verwijderd';
+  sgrGroups.Cells[5, 0] := 'Beschrijving';
    
   for i := 1 to pgqGetGroups.RecordCount do
   begin
@@ -419,6 +419,9 @@ begin
     sgrGroups.Cells[2, i] := pgqGetGroups.FieldByName('gro_igenaar').AsString;
     sgrGroups.Cells[3, i] := pgqGetGroups.FieldByName('gro_aangemaakt').AsString;
     sgrGroups.Cells[4, i] := pgqGetGroups.FieldByName('gro_del').AsString;
+//    sgrGroups.Cells[5, i] := pgqGetGroups.FieldByName('gro_beschrijving').AsString;
+    sgrGroups.Cells[5, i] := pgqGetGroups.FieldByName('gro_beschrijving').AsString;
+
 
     pgqGetGroups.Next;
   end;
@@ -458,6 +461,7 @@ begin
     pgqGetGroups.FieldByName('gro_igenaar').AsInteger := StrToInt(Trim(pgqCheckExistingUser.FieldByName('gbr_id').AsString));
     pgqGetGroups.FieldByName('gro_aangemaakt').AsDateTime := now;
     pgqGetGroups.FieldByName('gro_del').AsBoolean := false;
+    pgqGetGroups.FieldByName('gro_beschrijving').AsString := Trim(edtGroupDescription.Text);
     pgqGetGroups.Post;
     pgqGetGroups.Close;
     pgqGetGroups.SQL.Text := 'SELECT * FROM tbl_groepen';
@@ -593,8 +597,6 @@ begin
     addedUsersLB := slsbGroupAddedUsers;
     errorLBL := lblAddGroupError;
     groupOwnerCBOX := cboxGroupOwner;
-    //TODO: combobox fixen
-    //TODO: error fixen
   end
   else if (commando = 'edit') then
   begin
@@ -624,7 +626,6 @@ begin
 
           if(editDuplicateLocation > -1) then
           begin
-    //        RemovedUsersList.Delete(editDuplicateLocation);
             RemovedUsersList.Delete(editDuplicateLocation);
           end;
         end;
@@ -770,10 +771,13 @@ begin
 
   getGroup.Edit;
   getGroup.FieldByName('gro_naam').AsString := edtEditGroupName.Text;
+  getGroup.FieldByName('gro_beschrijving').AsString := edtEditGroupDescription.Text;
   getGroup.Post;
 
   RemovedUsersList.Clear;
 
+  RefreshGroupOverView;
+  pcPages.ActivePage := tbsGroupOverview;
 
 end;
 
@@ -834,6 +838,7 @@ begin
   getGroup.Open;
 
   edtEditGroupName.Text := getGroup.FieldByName('gro_naam').AsString;
+  edtEditGroupDescription.Text := getGroup.FieldByName('gro_beschrijving').AsString;
   cbxGroupDeleted.Checked := getGroup.FieldByName('gro_del').AsBoolean;
 
   //tbl_gebruikers

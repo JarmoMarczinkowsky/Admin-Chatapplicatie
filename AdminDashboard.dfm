@@ -22,7 +22,6 @@ object Form2: TForm2
     OnChange = pcPagesChange
     object tbsUserOverview: TTabSheet
       Caption = 'User Overview'
-      TabVisible = False
       object Label3: TLabel
         Left = 32
         Top = 23
@@ -699,20 +698,20 @@ object Form2: TForm2
       end
       object Image1: TImage
         Left = 301
-        Top = 143
+        Top = 220
         Width = 75
         Height = 75
       end
       object Label5: TLabel
         Left = 56
-        Top = 117
+        Top = 194
         Width = 45
         Height = 15
         Caption = 'Eigenaar'
       end
       object Label13: TLabel
         Left = 56
-        Top = 146
+        Top = 223
         Width = 56
         Height = 15
         Caption = 'Profielfoto'
@@ -728,7 +727,8 @@ object Form2: TForm2
         Left = 176
         Top = 85
         Width = 200
-        Height = 23
+        Height = 100
+        AutoSize = False
         TabOrder = 1
       end
       object sbtnBackToGroupOverview: TAdvSmoothButton
@@ -803,7 +803,7 @@ object Form2: TForm2
       end
       object AdvSmoothButton5: TAdvSmoothButton
         Left = 176
-        Top = 143
+        Top = 220
         Width = 119
         Height = 27
         Appearance.SimpleLayout = True
@@ -2840,7 +2840,7 @@ object Form2: TForm2
       end
       object cboxGroupOwner: TComboBox
         Left = 176
-        Top = 114
+        Top = 191
         Width = 200
         Height = 23
         Style = csDropDownList
@@ -2922,13 +2922,13 @@ object Form2: TForm2
       ImageIndex = 5
       object Image2: TImage
         Left = 301
-        Top = 166
+        Top = 243
         Width = 75
         Height = 75
       end
       object Label14: TLabel
         Left = 56
-        Top = 175
+        Top = 252
         Width = 56
         Height = 15
         Caption = 'Profielfoto'
@@ -2949,7 +2949,7 @@ object Form2: TForm2
       end
       object Label17: TLabel
         Left = 56
-        Top = 117
+        Top = 194
         Width = 45
         Height = 15
         Caption = 'Eigenaar'
@@ -2969,7 +2969,7 @@ object Form2: TForm2
       end
       object Label1: TLabel
         Left = 56
-        Top = 146
+        Top = 223
         Width = 55
         Height = 15
         Caption = 'Verwijderd'
@@ -3038,7 +3038,7 @@ object Form2: TForm2
         OnClick = sbtnEditRemoveGroupUserClick
         TMSStyle = 8
       end
-      object AdvSmoothButton6: TAdvSmoothButton
+      object sbtnEditGroupCancel: TAdvSmoothButton
         Left = 251
         Top = 368
         Width = 125
@@ -3075,7 +3075,7 @@ object Form2: TForm2
       end
       object sbtnEditGroupProfilePicture: TAdvSmoothButton
         Left = 176
-        Top = 166
+        Top = 243
         Width = 119
         Height = 27
         Appearance.SimpleLayout = True
@@ -5111,7 +5111,7 @@ object Form2: TForm2
       end
       object cboxEditGroupOwner: TComboBox
         Left = 176
-        Top = 114
+        Top = 191
         Width = 200
         Height = 23
         Style = csDropDownList
@@ -5124,11 +5124,12 @@ object Form2: TForm2
         Height = 23
         TabOrder = 9
       end
-      object Edit2: TEdit
+      object edtEditGroupDescription: TEdit
         Left = 176
         Top = 85
         Width = 200
-        Height = 23
+        Height = 100
+        AutoSize = False
         TabOrder = 10
       end
       object edtEditGroupName: TEdit
@@ -5140,7 +5141,7 @@ object Form2: TForm2
       end
       object cbxGroupDeleted: TCheckBox
         Left = 176
-        Top = 143
+        Top = 220
         Width = 97
         Height = 17
         TabOrder = 12
@@ -5535,7 +5536,7 @@ object Form2: TForm2
     ItemAppearance.MenuItemSeparatorFill.ShadowOffset = 0
     ItemAppearance.MenuItemSeparatorFill.Glow = gmNone
     ItemAppearance.Margin.Left = 0
-    ItemAppearance.Margin.Top = 69
+    ItemAppearance.Margin.Top = 72
     ItemAppearance.Margin.Bottom = 0
     ItemAppearance.Margin.Right = 0
     MenuItems = <
@@ -6127,6 +6128,13 @@ object Form2: TForm2
     object pgqGetGroupsgro_del: TBooleanField
       FieldName = 'gro_del'
       Required = True
+    end
+    object pgqGetGroupsgro_profielfoto: TBlobField
+      FieldName = 'gro_profielfoto'
+    end
+    object pgqGetGroupsgro_beschrijving: TMemoField
+      FieldName = 'gro_beschrijving'
+      BlobType = ftMemo
     end
   end
   object pgqDelete: TPgQuery
