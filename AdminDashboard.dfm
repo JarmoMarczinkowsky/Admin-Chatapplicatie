@@ -17,7 +17,7 @@ object Form2: TForm2
     Top = 65
     Width = 792
     Height = 469
-    ActivePage = tbsEditGroup
+    ActivePage = tbsAddUser
     TabOrder = 0
     OnChange = pcPagesChange
     object tbsUserOverview: TTabSheet
@@ -183,7 +183,7 @@ object Form2: TForm2
       end
       object lblAddUserError: TLabel
         Left = 56
-        Top = 280
+        Top = 360
         Width = 28
         Height = 15
         Caption = 'Error'
@@ -194,9 +194,23 @@ object Form2: TForm2
         Font.Style = [fsBold]
         ParentFont = False
       end
+      object imgAddUserProfilePicture: TImage
+        Left = 301
+        Top = 201
+        Width = 75
+        Height = 75
+        Stretch = True
+      end
+      object Label19: TLabel
+        Left = 56
+        Top = 204
+        Width = 56
+        Height = 15
+        Caption = 'Profielfoto'
+      end
       object AdvSmoothButton1: TAdvSmoothButton
         Left = 56
-        Top = 224
+        Top = 304
         Width = 125
         Height = 27
         Appearance.Font.Charset = DEFAULT_CHARSET
@@ -231,7 +245,7 @@ object Form2: TForm2
       end
       object sbtnBackToUserOverview: TAdvSmoothButton
         Left = 187
-        Top = 224
+        Top = 304
         Width = 125
         Height = 27
         Appearance.Font.Charset = DEFAULT_CHARSET
@@ -334,6 +348,35 @@ object Form2: TForm2
         OnClick = sbtnBackToUserOverviewClick
         TMSStyle = 8
       end
+      object sbtnAddUserProfilePicture: TAdvSmoothButton
+        Left = 176
+        Top = 201
+        Width = 119
+        Height = 27
+        Appearance.SimpleLayout = True
+        Appearance.Rounding = 5
+        Status.Caption = '0'
+        Status.Appearance.Fill.Color = clRed
+        Status.Appearance.Fill.ColorMirror = clNone
+        Status.Appearance.Fill.ColorMirrorTo = clNone
+        Status.Appearance.Fill.GradientType = gtSolid
+        Status.Appearance.Fill.GradientMirrorType = gtSolid
+        Status.Appearance.Fill.BorderColor = clGray
+        Status.Appearance.Fill.Rounding = 0
+        Status.Appearance.Fill.ShadowOffset = 0
+        Status.Appearance.Fill.Glow = gmNone
+        Status.Appearance.Font.Charset = DEFAULT_CHARSET
+        Status.Appearance.Font.Color = clWhite
+        Status.Appearance.Font.Height = -11
+        Status.Appearance.Font.Name = 'Segoe UI'
+        Status.Appearance.Font.Style = []
+        Caption = 'Upload bestand'
+        Color = 15395562
+        TabOrder = 8
+        Version = '2.2.3.1'
+        OnClick = sbtnAddUserProfilePictureClick
+        TMSStyle = 8
+      end
     end
     object tbsEditUser: TTabSheet
       Caption = 'Edit User'
@@ -354,7 +397,7 @@ object Form2: TForm2
       end
       object lblEditUserError: TLabel
         Left = 56
-        Top = 312
+        Top = 392
         Width = 28
         Height = 15
         Caption = 'Error'
@@ -393,9 +436,22 @@ object Form2: TForm2
         Height = 15
         Caption = 'Wachtwoord'
       end
+      object Image3: TImage
+        Left = 301
+        Top = 230
+        Width = 75
+        Height = 75
+      end
+      object Label20: TLabel
+        Left = 56
+        Top = 233
+        Width = 56
+        Height = 15
+        Caption = 'Profielfoto'
+      end
       object AdvSmoothButton3: TAdvSmoothButton
         Left = 187
-        Top = 253
+        Top = 333
         Width = 125
         Height = 27
         Appearance.Font.Charset = DEFAULT_CHARSET
@@ -430,7 +486,7 @@ object Form2: TForm2
       end
       object sbtnEditUser: TAdvSmoothButton
         Left = 56
-        Top = 253
+        Top = 333
         Width = 125
         Height = 27
         Appearance.Font.Charset = DEFAULT_CHARSET
@@ -539,6 +595,34 @@ object Form2: TForm2
         TabOrder = 8
         Version = '2.2.3.1'
         OnClick = sbtnBackToUserOverviewClick
+        TMSStyle = 8
+      end
+      object AdvSmoothButton6: TAdvSmoothButton
+        Left = 176
+        Top = 230
+        Width = 119
+        Height = 27
+        Appearance.SimpleLayout = True
+        Appearance.Rounding = 5
+        Status.Caption = '0'
+        Status.Appearance.Fill.Color = clRed
+        Status.Appearance.Fill.ColorMirror = clNone
+        Status.Appearance.Fill.ColorMirrorTo = clNone
+        Status.Appearance.Fill.GradientType = gtSolid
+        Status.Appearance.Fill.GradientMirrorType = gtSolid
+        Status.Appearance.Fill.BorderColor = clGray
+        Status.Appearance.Fill.Rounding = 0
+        Status.Appearance.Fill.ShadowOffset = 0
+        Status.Appearance.Fill.Glow = gmNone
+        Status.Appearance.Font.Charset = DEFAULT_CHARSET
+        Status.Appearance.Font.Color = clWhite
+        Status.Appearance.Font.Height = -11
+        Status.Appearance.Font.Name = 'Segoe UI'
+        Status.Appearance.Font.Style = []
+        Caption = 'Upload bestand'
+        Color = 15395562
+        TabOrder = 9
+        Version = '2.2.3.1'
         TMSStyle = 8
       end
     end
@@ -696,7 +780,7 @@ object Form2: TForm2
         Height = 15
         Caption = 'Naam'
       end
-      object Image1: TImage
+      object imgEditGroupProfile: TImage
         Left = 301
         Top = 220
         Width = 75
@@ -801,7 +885,7 @@ object Form2: TForm2
         OnClick = sbtnAddGroupClick
         TMSStyle = 8
       end
-      object AdvSmoothButton5: TAdvSmoothButton
+      object sbtnEditGroupUploadProfile: TAdvSmoothButton
         Left = 176
         Top = 220
         Width = 119
@@ -6141,5 +6225,9 @@ object Form2: TForm2
     Connection = DataModule2.pgcDBconnection
     Left = 35
     Top = 470
+  end
+  object OpenDialog1: TOpenDialog
+    Left = 80
+    Top = 224
   end
 end

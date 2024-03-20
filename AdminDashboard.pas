@@ -56,13 +56,13 @@ type
     Label4: TLabel;
     lblAddGroupError: TLabel;
     Label2: TLabel;
-    Image1: TImage;
+    imgEditGroupProfile: TImage;
     Label5: TLabel;
     edtGroupName: TEdit;
     edtGroupDescription: TEdit;
     sbtnBackToGroupOverview: TAdvSmoothButton;
     sbtnAddGroup: TAdvSmoothButton;
-    AdvSmoothButton5: TAdvSmoothButton;
+    sbtnEditGroupUploadProfile: TAdvSmoothButton;
     slsbUser: TAdvSmoothListBox;
     edtAddGroupSearchUser: TEdit;
     sbtnAddUserToGroup: TAdvSmoothButton;
@@ -127,6 +127,13 @@ type
     AdvSmoothPanel1: TAdvSmoothPanel;
     pgqGetGroupsgro_profielfoto: TBlobField;
     pgqGetGroupsgro_beschrijving: TMemoField;
+    imgAddUserProfilePicture: TImage;
+    sbtnAddUserProfilePicture: TAdvSmoothButton;
+    Label19: TLabel;
+    Label20: TLabel;
+    AdvSmoothButton6: TAdvSmoothButton;
+    Image3: TImage;
+    OpenDialog1: TOpenDialog;
 
     procedure FormShow(Sender: TObject);
     procedure sbtnAddUserClick(Sender: TObject);
@@ -155,6 +162,7 @@ type
       Item: TGDIPMenuSectionItem; Text: string);
     procedure AdvSmoothMegaMenu1MenuItemClick(Sender: TObject;
       ItemIndex: Integer);
+    procedure sbtnAddUserProfilePictureClick(Sender: TObject);
   private
     { Private declarations }
     DBConnection : TPgConnection;
@@ -185,6 +193,10 @@ procedure TForm2.AdvSmoothButton1Click(Sender: TObject);
 var
   pgqAddUser: TPgQuery;
   testHash : string;
+  AStream : TMemoryStream;
+
+//  stream: TMemoryStream;
+//  niceBytes: TBytes;
 begin
   pgqAddUser := TPgQuery.Create(nil);
   pgqAddUser.Connection := DataModule2.pgcDBconnection;
@@ -211,17 +223,37 @@ begin
 
         if(pgqCheckExistingUser.RecordCount = 0) then
         begin
+
+
+//          pgqAddUser.SQL.Text := '';
+//          pgqAddUser.SQL.Add('SELECT * FROM tbl_gebruikers');
+//          pgqAddUser.Open;
+//          pgqAddUser.Append;
+//          pgqAddUser.FieldByName('gbr_naam').AsString := Trim(edtUserName.Text);
+//          pgqAddUser.FieldByName('gbr_winkelnaam').AsString := Trim(edtUserStoreName.Text);
+//          pgqAddUser.FieldByName('gbr_tel').AsString := Trim(edtUserTelephone.Text);
+//          pgqAddUser.FieldByName('gbr_email').AsString := Trim(edtUserEmail.Text);
+//          pgqAddUser.FieldByName('gbr_nicknaam').AsString := Trim(edtUserNickName.Text);
+//          pgqAddUser.FieldByName('gbr_wachtwoord').AsString := HashString('Test123');
+
           pgqAddUser.SQL.Text := '';
-          pgqAddUser.SQL.Add('SELECT * FROM tbl_gebruikers');
-          pgqAddUser.Open;
-          pgqAddUser.Append;
-          pgqAddUser.FieldByName('gbr_naam').AsString := Trim(edtUserName.Text);
-          pgqAddUser.FieldByName('gbr_winkelnaam').AsString := Trim(edtUserStoreName.Text);
-          pgqAddUser.FieldByName('gbr_tel').AsString := Trim(edtUserTelephone.Text);
-          pgqAddUser.FieldByName('gbr_email').AsString := Trim(edtUserEmail.Text);
-          pgqAddUser.FieldByName('gbr_nicknaam').AsString := Trim(edtUserNickName.Text);
-          pgqAddUser.FieldByName('gbr_wachtwoord').AsString := HashString('Test123');
-          pgqAddUser.Post;
+          pgqAddUser.SQL.Add('INSERT INTO tbl_gebruikers(gbr_naam, gbr_winkelnaam, gbr_tel, gbr_email, gbr_nicknaam, gbr_wachtwoord, gbr_profielfoto)');
+          pgqAddUser.SQL.Add('VALUES (:userName, :userStoreName, :userTel, :userEmail, :userNickname, :userPassword, :userProfilePicture)');
+          pgqAddUser.ParamByName('userName').AsString := Trim(edtUserName.Text);
+          pgqAddUser.ParamByName('userStoreName').AsString := Trim(edtUserStoreName.Text);
+          pgqAddUser.ParamByName('userTel').AsString := Trim(edtUserTelephone.Text);
+          pgqAddUser.ParamByName('userEmail').AsString := Trim(edtUserEmail.Text);
+          pgqAddUser.ParamByName('userNickname').AsString := Trim(edtUserNickName.Text);
+          pgqAddUser.ParamByName('userPassword').AsString := HashString('Test123');
+
+          AStream := TMemoryStream.Create;
+          imgAddUserProfilePicture.Picture.SaveToStream(AStream);
+          pgqAddUser.ParamByName('userProfilePicture').LoadFromStream(AStream, ftGraphic);
+
+          pgqAddUser.Execute;
+          AStream.Free;
+
+//          pgqAddUser.Post;
         end
         else
         begin
@@ -572,6 +604,19 @@ begin
   edtUserTelephone.Text := '';
   edtUserNickName.Text := '';
   edtUserEmail.Text := '';
+end;
+
+procedure TForm2.sbtnAddUserProfilePictureClick(Sender: TObject);
+begin
+  with TOpenDialog.Create(self) do
+  try
+    Caption := 'Open afbeelding';
+    Options := [TOpenOption.ofPathMustExist, TOpenOption.ofPathMustExist];
+    if (Execute) then imgAddUserProfilePicture.Picture.LoadFromFile(FileName);
+
+  finally
+    Free;
+  end;
 end;
 
 procedure TForm2.sbtnAddUserToGroupClick(Sender: TObject);
