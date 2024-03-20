@@ -8,11 +8,10 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Graphics, AdvUtil, Vcl.Grids, AdvObj, BaseGrid,
   AdvGrid, DBAdvGrid, Vcl.ExtCtrls, Data.DB, MemDS, DBAccess, PgAccess,
   AdvSmoothButton, Vcl.StdCtrls, Vcl.ComCtrls, DMdatabaseInfo, AdvSmoothListBox,
-  Vcl.DBGrids, Vcl.Mask, RzEdit, GDIPMenu, AdvSmoothMegaMenu;
+  Vcl.DBGrids, Vcl.Mask, RzEdit, GDIPMenu, AdvSmoothMegaMenu, AdvSmoothPanel;
 
 type
   TForm2 = class(TForm)
-    Panel1: TPanel;
     dscShowUsers: TDataSource;
     pgqGetUsers: TPgQuery;
     pgqGetUsersgbr_id: TIntegerField;
@@ -125,6 +124,7 @@ type
     AdvSmoothButton7: TAdvSmoothButton;
     sbtnBack: TAdvSmoothButton;
     AdvSmoothMegaMenu1: TAdvSmoothMegaMenu;
+    AdvSmoothPanel1: TAdvSmoothPanel;
 
     procedure FormShow(Sender: TObject);
     procedure sbtnAddUserClick(Sender: TObject);
@@ -157,6 +157,7 @@ type
     { Private declarations }
     DBConnection : TPgConnection;
     DBLoggedInUser, getGroup: TPgQuery;
+    RemovedUsersList: TStringList;
 
     procedure RefreshUserOverView;
     procedure RefreshGroupOverView;
@@ -241,7 +242,7 @@ begin
   if(ItemIndex = 0) then pcPages.ActivePage := tbsUserOverview
   else if (ItemIndex = 1) then pcPages.ActivePage := tbsGroupOverview
   else if (ItemIndex = 2) then pcPages.ActivePage := tbsOptions;
-       
+
 end;
 
 procedure TForm2.AdvSmoothMegaMenu1MenuSubItemClick(Sender: TObject;
@@ -259,6 +260,11 @@ end;
 
 procedure TForm2.sbtnBackToGroupOverviewClick(Sender: TObject);
 begin
+  if(pcPages.ActivePage = tbsEditGroup) then
+  begin
+    RemovedUsersList.Clear;
+  end;
+
   pcPages.ActivePage := tbsGroupOverview;
 end;
 
@@ -313,6 +319,9 @@ begin
   lblAddGroupError.Caption := '';
   lblEditUserError.Caption := '';
   lblEditGroupError.Caption := '';
+
+  RemovedUsersList := TStringList.Create;
+  RemovedUsersList.Duplicates := dupIgnore;
 
 
 end;
@@ -502,7 +511,7 @@ end;
 
 procedure TForm2.AddItemToSearchListBox(commando: string);
 var
-  i, temp: integer;
+  i, temp, editDuplicateLocation: integer;
   searchLB, addedUsersLB: TAdvSmoothListBox;
   errorLBL: TLabel;
   groupOwnerCBOX: TComboBox;
@@ -528,7 +537,7 @@ begin
 
   for i := 1 to searchLB.Items.Count do
   begin
-    if(searchLB.Items[i - 1].Selected) then
+    if(searchLB.Items[i - 1].Selected) then //if its selected...
     begin
       temp := addedUsersLB.Items.IndexOfCaption(searchLB.Items[i-1].Caption);
       if(temp = -1) then
@@ -539,6 +548,18 @@ begin
         end;
 
         groupOwnerCBOX.Items.Add(searchLB.Items[i - 1].Caption);
+
+        if(commando = 'edit') then
+        begin
+          editDuplicateLocation := RemovedUsersList.IndexOf(searchLB.Items[i - 1].Caption);
+
+          if(editDuplicateLocation > -1) then
+          begin
+    //        RemovedUsersList.Delete(editDuplicateLocation);
+            RemovedUsersList.Delete(editDuplicateLocation);
+          end;
+        end;
+        
       end
       else errorLBL.Caption := 'Gebruiker al in lijst';
     end;
@@ -641,10 +662,48 @@ begin
 end;
 
 procedure TForm2.sbtnEditGroupClick(Sender: TObject);
+var
+  pgqEditGroupMember, pgqGetDeletedUserId: TPgQuery;
+  groupId, i: integer;
 begin
+  pgqEditGroupMember := TPgQuery.Create(nil);
+  pgqGetDeletedUserId := TPgQuery.Create(nil);
+  pgqEditGroupMember.Connection := DataModule2.pgcDBconnection;
+  pgqGetDeletedUserId.Connection := DataModule2.pgcDBconnection;
+
+  groupId := getGroup.FieldByName('gro_id').AsInteger;
+
+  for i := 1 to RemovedUsersList.Count do
+  begin
+    pgqGetDeletedUserId.SQL.Text := '';
+    pgqGetDeletedUserId.SQL.Add('SELECT * FROM tbl_gebruikers');
+    pgqGetDeletedUserId.SQL.Add('WHERE gbr_nicknaam = :currentUser');
+    pgqGetDeletedUserId.ParamByName('currentUser').AsString := RemovedUsersList[i - 1];
+    pgqGetDeletedUserId.Open;
+
+    pgqEditGroupMember.SQL.Text := '';
+    pgqEditGroupMember.SQL.Add('SELECT * FROM tbl_groepleden');
+    pgqEditGroupMember.SQL.Add('WHERE grl_groep = :selectedGroup');
+    pgqEditGroupMember.SQL.Add('AND grl_gebruiker = :currentUser');
+    pgqEditGroupMember.ParamByName('selectedGroup').AsInteger := groupId;
+    pgqEditGroupMember.ParamByName('currentUser').AsInteger := pgqGetDeletedUserId.FieldByName('gbr_id').AsInteger;
+    pgqEditGroupMember.Open;
+
+    pgqEditGroupMember.Edit;
+    pgqEditGroupMember.FieldByName('grl_del').AsBoolean := True;
+    pgqEditGroupMember.Post;
+
+    pgqGetDeletedUserId.Free;
+    pgqEditGroupMember.Free;
+  end;
+
   getGroup.Edit;
   getGroup.FieldByName('gro_naam').AsString := edtEditGroupName.Text;
   getGroup.Post;
+
+  RemovedUsersList.Clear;
+
+
 end;
 
 procedure TForm2.sbtnEditRemoveGroupUserClick(Sender: TObject);
@@ -764,7 +823,7 @@ end;
 
 procedure TForm2.RemoveUserFromGroup(command: string);
 var
-  indexDeletedUser: integer;
+  indexDeletedUser, editDuplicateLocation: integer;
   getText: string;
   searchLB, addedUsersLB: TAdvSmoothListBox;
   ownerCBOX: TComboBox;
@@ -787,11 +846,21 @@ begin
     getText := addedUsersLB.Items[addedUsersLB.SelectedItemIndex].Caption;
     indexDeletedUser := ownerCBOX.Items.IndexOf(getText);
 
-    addedUsersLB.Items.Delete(addedUsersLB.SelectedItemIndex);
+    if(command = 'edit') then
+    begin
+      editDuplicateLocation := RemovedUsersList.IndexOf(getText);
 
-    if(indexDeletedUser <> -1) then ownerCBOX.Items.Delete(indexDeletedUser);
+      if(editDuplicateLocation = -1) then
+      begin
+//        RemovedUsersList.Delete(editDuplicateLocation);
+        RemovedUsersList.Add(getText);
+      end;
+    end;
   end;
 
+  addedUsersLB.Items.Delete(addedUsersLB.SelectedItemIndex);
+
+  if(indexDeletedUser <> -1) then ownerCBOX.Items.Delete(indexDeletedUser);
 end;
 
 procedure TForm2.sgrGroupsDrawCell(Sender: TObject; ACol, ARow: LongInt;

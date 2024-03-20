@@ -2,8 +2,8 @@ object Form2: TForm2
   Left = 0
   Top = 0
   Caption = 'Form2'
-  ClientHeight = 555
-  ClientWidth = 1028
+  ClientHeight = 549
+  ClientWidth = 939
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -12,23 +12,13 @@ object Form2: TForm2
   Font.Style = []
   OnShow = FormShow
   TextHeight = 15
-  object Panel1: TPanel
-    Left = 0
-    Top = 0
-    Width = 1028
-    Height = 59
-    Align = alTop
-    Caption = 'Panel1'
-    TabOrder = 0
-    ExplicitTop = 7
-  end
   object pcPages: TPageControl
-    Left = 167
-    Top = 72
-    Width = 773
-    Height = 475
-    ActivePage = tbsAddUser
-    TabOrder = 1
+    Left = 151
+    Top = 65
+    Width = 792
+    Height = 469
+    ActivePage = tbsEditGroup
+    TabOrder = 0
     OnChange = pcPagesChange
     object tbsUserOverview: TTabSheet
       Caption = 'User Overview'
@@ -5319,9 +5309,9 @@ object Form2: TForm2
   end
   object AdvSmoothMegaMenu1: TAdvSmoothMegaMenu
     Left = 0
-    Top = 59
+    Top = 0
     Width = 153
-    Height = 496
+    Height = 549
     DefaultMenuContentFill.Color = clWhite
     DefaultMenuContentFill.ColorTo = clNone
     DefaultMenuContentFill.ColorMirror = clNone
@@ -5545,7 +5535,7 @@ object Form2: TForm2
     ItemAppearance.MenuItemSeparatorFill.ShadowOffset = 0
     ItemAppearance.MenuItemSeparatorFill.Glow = gmNone
     ItemAppearance.Margin.Left = 0
-    ItemAppearance.Margin.Top = 36
+    ItemAppearance.Margin.Top = 69
     ItemAppearance.Margin.Bottom = 0
     ItemAppearance.Margin.Right = 0
     MenuItems = <
@@ -6019,21 +6009,54 @@ object Form2: TForm2
     OnMenuItemClick = AdvSmoothMegaMenu1MenuItemClick
     Version = '1.5.1.4'
     Align = alLeft
-    ExplicitLeft = 8
-    ExplicitTop = 51
+    ExplicitHeight = 541
+    TMSStyle = 0
+  end
+  object AdvSmoothPanel1: TAdvSmoothPanel
+    Left = 151
+    Top = -3
+    Width = 792
+    Height = 62
+    Cursor = crDefault
+    Caption.HTMLFont.Charset = DEFAULT_CHARSET
+    Caption.HTMLFont.Color = clWindowText
+    Caption.HTMLFont.Height = -15
+    Caption.HTMLFont.Name = 'Tahoma'
+    Caption.HTMLFont.Style = []
+    Caption.Font.Charset = DEFAULT_CHARSET
+    Caption.Font.Color = clWindowText
+    Caption.Font.Height = -16
+    Caption.Font.Name = 'Tahoma'
+    Caption.Font.Style = []
+    Caption.ColorStart = 4474440
+    Caption.ColorEnd = 4474440
+    Caption.LineColor = 12895944
+    Fill.Color = 13472847
+    Fill.ColorTo = clNone
+    Fill.ColorMirror = clNone
+    Fill.ColorMirrorTo = clNone
+    Fill.GradientType = gtVertical
+    Fill.GradientMirrorType = gtSolid
+    Fill.BorderColor = clNone
+    Fill.Rounding = 0
+    Fill.ShadowOffset = 0
+    Fill.Glow = gmNone
+    Version = '1.7.1.6'
+    Align = alCustom
+    TabOrder = 2
     TMSStyle = 0
   end
   object dscShowUsers: TDataSource
     DataSet = pgqGetUsers
-    Left = 112
-    Top = 16
+    Left = 96
+    Top = 280
   end
   object pgqGetUsers: TPgQuery
     Connection = DataModule2.pgcDBconnection
     SQL.Strings = (
       'SELECT * FROM tbl_gebruikers')
-    Left = 56
-    Top = 16
+    Left = 40
+    Top = 288
     object pgqGetUsersgbr_id: TIntegerField
       FieldName = 'gbr_id'
     end
@@ -6071,20 +6094,20 @@ object Form2: TForm2
   end
   object pgqCheckExistingUser: TPgQuery
     Connection = DataModule2.pgcDBconnection
-    Left = 715
-    Top = 18
+    Left = 91
+    Top = 482
   end
   object dscShowGroups: TDataSource
     DataSet = pgqGetGroups
-    Left = 304
-    Top = 16
+    Left = 88
+    Top = 392
   end
   object pgqGetGroups: TPgQuery
     Connection = DataModule2.pgcDBconnection
     SQL.Strings = (
       'SELECT * FROM tbl_groepen')
-    Left = 232
-    Top = 16
+    Left = 32
+    Top = 392
     object pgqGetGroupsgro_id: TIntegerField
       FieldName = 'gro_id'
     end
@@ -6108,7 +6131,7 @@ object Form2: TForm2
   end
   object pgqDelete: TPgQuery
     Connection = DataModule2.pgcDBconnection
-    Left = 619
-    Top = 14
+    Left = 35
+    Top = 470
   end
 end
