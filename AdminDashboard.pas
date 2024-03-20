@@ -157,13 +157,14 @@ type
     { Private declarations }
     DBConnection : TPgConnection;
     DBLoggedInUser, getGroup: TPgQuery;
-    RemovedUsersList: TStringList;
+    RemovedUsersList, AddUsersList: TStringList;
 
     procedure RefreshUserOverView;
     procedure RefreshGroupOverView;
     procedure AddItemToSearchListBox(commando: string);
     procedure GroupSearchUser(sender: string);
     procedure RemoveUserFromGroup(command: string);
+    procedure AddUserToGroup(command: string; selectedGroupId: integer);
 
     function HashString(const Input: string): string;
   public
@@ -265,6 +266,7 @@ begin
     RemovedUsersList.Clear;
   end;
 
+  AddUsersList.Clear;
   pcPages.ActivePage := tbsGroupOverview;
 end;
 
@@ -323,7 +325,8 @@ begin
   RemovedUsersList := TStringList.Create;
   RemovedUsersList.Duplicates := dupIgnore;
 
-
+  AddUsersList := TStringList.Create;
+  AddUsersList.Duplicates := dupIgnore;
 end;
 
 procedure TForm2.pcPagesChange(Sender: TObject);
@@ -436,10 +439,10 @@ end;
 procedure TForm2.sbtnAddGroupClick(Sender: TObject);
 var
   i, idLastCreatedGroup: integer;
-  pgqGroepsLeden: TPgQuery;
+//  pgqGroepsLeden: TPgQuery;
 begin
-  pgqGroepsLeden := TPgQuery.Create(nil);
-  pgqGroepsLeden.Connection := DataModule2.pgcDBconnection;
+//  pgqGroepsLeden := TPgQuery.Create(nil);
+//  pgqGroepsLeden.Connection := DataModule2.pgcDBconnection;
 
   if((Length(edtGroupName.Text) > 0)) then
   begin
@@ -463,28 +466,94 @@ begin
     idLastCreatedGroup := pgqGetGroups.FieldByName('gro_id').AsInteger;
     pgqGetGroups.Close;
 
+    AddUserToGroup('add', idLastCreatedGroup);
+
     //adds the users to the group
-    pgqGroepsleden.SQL.Text := 'SELECT * FROM tbl_groepleden';
-    pgqGroepsleden.Open;
-//    pgqGroepsleden.Append;
-    for I := 1 to slsbGroupAddedUsers.Items.Count do
+//    pgqGroepsleden.SQL.Text := 'SELECT * FROM tbl_groepleden';
+//    pgqGroepsleden.Open;
+////    pgqGroepsleden.Append;
+//    for I := 1 to slsbGroupAddedUsers.Items.Count do
+//    begin
+//      pgqCheckExistingUser.SQL.Text := '';
+//      pgqCheckExistingUser.SQL.Add('SELECT gbr_id FROM tbl_gebruikers');
+//      pgqCheckExistingUser.SQL.Add('WHERE LOWER(gbr_nicknaam)=:currentUser');
+//      pgqCheckExistingUser.ParamByName('currentUser').AsString := LowerCase(Trim(slsbGroupAddedUsers.Items[i - 1].Caption));
+//      pgqCheckExistingUser.Open;
+//
+//      pgqGroepsleden.Append;
+//      pgqGroepsleden.FieldByName('grl_gebruiker').AsInteger := pgqCheckExistingUser.FieldByName('gbr_id').AsInteger;
+//      pgqGroepsleden.FieldByName('grl_groep').AsInteger := idLastCreatedGroup; //placeholder
+//      pgqGroepsleden.FieldByName('grl_aangemaakt').AsDateTime := now;
+//      pgqGroepsleden.FieldByName('grl_del').AsBoolean := false;
+//
+//      pgqGroepsleden.Post;
+//    end;
+
+
+
+  end;
+
+end;
+
+procedure TForm2.AddUserToGroup(command: string; selectedGroupId: integer);
+var
+  pgqGroepsLeden, pgqCheckDuplicateUser: TPgQuery;
+  i: integer;
+  addedUserLB: TAdvSmoothListBox;
+  userIsDuplicate: boolean;
+begin
+  pgqGroepsLeden := TPgQuery.Create(nil);
+  pgqCheckDuplicateUser := TPgQuery.Create(nil);
+
+  pgqGroepsLeden.Connection := DataModule2.pgcDBconnection;
+  pgqCheckDuplicateUser.Connection := DataModule2.pgcDBconnection;
+
+  userIsDuplicate := false;
+
+  if(command = 'add') then
+  begin
+    addedUserLB := slsbGroupAddedUsers;
+
+  end
+  else if (command = 'edit') then
+  begin
+    addedUserLB := slsbEditGroupUsers;
+
+  end;
+
+  pgqGroepsleden.SQL.Text := 'SELECT * FROM tbl_groepleden';
+  pgqGroepsleden.Open;
+  for I := 1 to addedUserLB.Items.Count do
+  begin
+    pgqCheckExistingUser.SQL.Text := '';
+    pgqCheckExistingUser.SQL.Add('SELECT gbr_id FROM tbl_gebruikers');
+    pgqCheckExistingUser.SQL.Add('WHERE LOWER(gbr_nicknaam)=:currentUser');
+    pgqCheckExistingUser.ParamByName('currentUser').AsString := LowerCase(Trim(addedUserLB.Items[i - 1].Caption));
+    pgqCheckExistingUser.Open;
+
+    if(command = 'edit') then
     begin
-      pgqCheckExistingUser.SQL.Text := '';
-      pgqCheckExistingUser.SQL.Add('SELECT gbr_id FROM tbl_gebruikers');
-      pgqCheckExistingUser.SQL.Add('WHERE LOWER(gbr_nicknaam)=:currentUser');
-      pgqCheckExistingUser.ParamByName('currentUser').AsString := LowerCase(Trim(slsbGroupAddedUsers.Items[i - 1].Caption));
-      pgqCheckExistingUser.Open;
+      pgqCheckDuplicateUser.SQL.Text := '';
+      pgqCheckDuplicateUser.SQL.Add('SELECT * FROM tbl_groepleden');
+      pgqCheckDuplicateUser.SQL.Add('WHERE grl_groep = :currentGroup');
+      pgqCheckDuplicateUser.SQL.Add('AND grl_gebruiker = :currentUser');
+      pgqCheckDuplicateUser.ParamByName('currentGroup').AsInteger := selectedGroupId;
+      pgqCheckDuplicateUser.ParamByName('currentUser').AsInteger := pgqCheckExistingUser.FieldByName('gbr_id').AsInteger;
+      pgqCheckDuplicateUser.Open;
 
-      pgqGroepsleden.Append;
-      pgqGroepsleden.FieldByName('grl_gebruiker').AsInteger := pgqCheckExistingUser.FieldByName('gbr_id').AsInteger;
-      pgqGroepsleden.FieldByName('grl_groep').AsInteger := idLastCreatedGroup; //placeholder
-      pgqGroepsleden.FieldByName('grl_aangemaakt').AsDateTime := now;
-      pgqGroepsleden.FieldByName('grl_del').AsBoolean := false;
-
-      pgqGroepsleden.Post;
+      if(pgqCheckDuplicateUser.RecordCount > 0) then userIsDuplicate := true
+      else userIsDuplicate := false;
     end;
 
-
+    if(userIsDuplicate = false) then
+    begin
+      pgqGroepsleden.Append;
+      pgqGroepsleden.FieldByName('grl_gebruiker').AsInteger := pgqCheckExistingUser.FieldByName('gbr_id').AsInteger;
+      pgqGroepsleden.FieldByName('grl_groep').AsInteger := selectedGroupId;
+      pgqGroepsleden.FieldByName('grl_aangemaakt').AsDateTime := now;
+      pgqGroepsleden.FieldByName('grl_del').AsBoolean := false;
+      pgqGroepsleden.Post;
+    end;
   end;
 
 end;
@@ -695,6 +764,8 @@ begin
 
     pgqGetDeletedUserId.Free;
     pgqEditGroupMember.Free;
+
+    AddUserToGroup('edit', groupId);
   end;
 
   getGroup.Edit;
@@ -789,6 +860,7 @@ begin
   end;
 
   getSelectedGroup.Free;
+
   pcPages.ActivePage := tbsEditGroup;
 end;
 
