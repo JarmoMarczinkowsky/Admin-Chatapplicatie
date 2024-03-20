@@ -132,7 +132,7 @@ type
     Label19: TLabel;
     Label20: TLabel;
     AdvSmoothButton6: TAdvSmoothButton;
-    Image3: TImage;
+    imgEditProfilePicture: TImage;
     OpenDialog1: TOpenDialog;
 
     procedure FormShow(Sender: TObject);
@@ -917,6 +917,7 @@ end;
 procedure TForm2.sbtnGoToEditUserClick(Sender: TObject);
 var
   selectedRowId, getUserId: integer;
+  stream: TStream;
 begin
   selectedRowId := sgrUsers.Row;
   getUserId := StrToInt(sgrUsers.Cells[0, selectedRowId]);
@@ -932,6 +933,12 @@ begin
   edtEditUserTelephone.Text := pgqCheckExistingUser.FieldByName('gbr_tel').AsString;
   edtEditUserEmail.Text := pgqCheckExistingUser.FieldByName('gbr_email').AsString;
   edtEditUserNickName.Text := pgqCheckExistingUser.FieldByName('gbr_nicknaam').AsString;
+
+  stream := pgqCheckExistingUser.CreateBlobStream(pgqCheckExistingUser.FieldByName('gbr_profielfoto'), bmRead);
+  imgEditProfilePicture.Picture.LoadFromStream(stream);
+//  imgEditProfilePicture.Picture
+
+
 
   pcPages.ActivePage := tbsEditUser;
 

@@ -17,7 +17,7 @@ object Form2: TForm2
     Top = 65
     Width = 792
     Height = 469
-    ActivePage = tbsAddUser
+    ActivePage = tbsEditUser
     TabOrder = 0
     OnChange = pcPagesChange
     object tbsUserOverview: TTabSheet
@@ -436,11 +436,12 @@ object Form2: TForm2
         Height = 15
         Caption = 'Wachtwoord'
       end
-      object Image3: TImage
+      object imgEditProfilePicture: TImage
         Left = 301
         Top = 230
         Width = 75
         Height = 75
+        Stretch = True
       end
       object Label20: TLabel
         Left = 56
