@@ -113,6 +113,7 @@ type
     imgEditProfilePicture: TImage;
     sbtnRefreshGroup: TAdvSmoothButton;
     sbtnRefreshUser: TAdvSmoothButton;
+    sbtnLogOut: TAdvSmoothButton;
 
     procedure FormShow(Sender: TObject);
     procedure sbtnAddUserClick(Sender: TObject);
@@ -147,6 +148,7 @@ type
     procedure sbtnEditGroupProfilePictureClick(Sender: TObject);
     procedure sbtnRefreshGroupClick(Sender: TObject);
     procedure sbtnRefreshUserClick(Sender: TObject);
+    procedure sbtnLogOutClick(Sender: TObject);
   private
     { Private declarations }
     DBConnection : TPgConnection;
@@ -1003,6 +1005,11 @@ begin
   pcPages.ActivePage := tbsEditUser;
 
     
+end;
+
+procedure TForm2.sbtnLogOutClick(Sender: TObject);
+begin
+  Self.Close;
 end;
 
 procedure TForm2.sbtnRefreshGroupClick(Sender: TObject);
