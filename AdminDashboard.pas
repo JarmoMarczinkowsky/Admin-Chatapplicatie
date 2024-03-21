@@ -14,7 +14,6 @@ type
   TForm2 = class(TForm)
     pcPages: TPageControl;
     tbsUserOverview: TTabSheet;
-    Label3: TLabel;
     sbtnAddUser: TAdvSmoothButton;
     sbtnDeleteUser: TAdvSmoothButton;
     tbsAddUser: TTabSheet;
@@ -114,6 +113,8 @@ type
     sbtnRefreshGroup: TAdvSmoothButton;
     sbtnRefreshUser: TAdvSmoothButton;
     sbtnLogOut: TAdvSmoothButton;
+    lblUserOverviewAmount: TLabel;
+    lblGroupOverviewAmount: TLabel;
 
     procedure FormShow(Sender: TObject);
     procedure sbtnAddUserClick(Sender: TObject);
@@ -246,6 +247,16 @@ begin
           pgqAddUser.Post;
           AStream.Free;
 
+          lblAddUserError.Font.Color := clGreen;
+          lblAddUserError.Caption := Format('Gebruiker $s succesvol toegevoegd', [Trim(edtUserNickName.Text)]);
+
+          edtUserName.Text := '';
+          edtUserStoreName.Text := '';
+          edtUserTelephone.Text := '';
+          edtUserNickName.Text := '';
+          edtUserEmail.Text := '';
+          imgAddUserProfilePicture.Picture.Destroy;
+
 //          pgqAddUser.Post;
         end
         else
@@ -323,6 +334,8 @@ begin
 
   RefreshGroupOverView;
 
+  lblAddGroupError.Caption := '';
+  lblEditUserError.Caption := '';
   lblAddGroupError.Caption := '';
   lblEditUserError.Caption := '';
     
@@ -418,6 +431,8 @@ begin
 
   end;
 
+  lblUserOverviewAmount.Caption := Format('%d gebruikers gevonden', [DataModule2.pgqGetUsers.RecordCount]);
+
 end;
 
 procedure TForm2.RefreshGroupOverView;
@@ -452,7 +467,8 @@ begin
     DataModule2.pgqGetGroups.Next;
   end;
 
-  
+  lblGroupOverviewAmount.Caption := Format('%d groepen gevonden', [DataModule2.pgqGetGroups.RecordCount]);
+
 end;
 
 procedure TForm2.sbtnGoToAddGroupClick(Sender: TObject);
@@ -474,6 +490,8 @@ var
 begin
 //  pgqGroepsLeden := TPgQuery.Create(nil);
 //  pgqGroepsLeden.Connection := DataModule2.pgcDBconnection;
+  lblAddGroupError.Font.Color := RGB(220, 20, 60);
+  lblAddGroupError.Caption := '';
 
   if((Length(edtGroupName.Text) > 0)) then
   begin
@@ -802,6 +820,9 @@ begin
   pgqEditGroupMember.Connection := DataModule2.pgcDBconnection;
   pgqGetDeletedUserId.Connection := DataModule2.pgcDBconnection;
 
+  lblEditGroupError.Caption := '';
+  lblEditGroupError.Font.Color := RGB(220, 20, 60);
+
   groupId := getGroup.FieldByName('gro_id').AsInteger;
 
   for i := 1 to RemovedUsersList.Count do
@@ -876,6 +897,9 @@ var
   BlobField: TBlobField;
   AStream: TMemoryStream;
 begin
+  lblEditUserError.Font.Color := RGB(220, 20, 60);
+  lblEditUserError.Caption := '';
+
   DataModule2.pgqCheckExistingUser.Edit;
   DataModule2.pgqCheckExistingUser.FieldByName('gbr_naam').AsString := edtEditUserName.Text;
   DataModule2.pgqCheckExistingUser.FieldByName('gbr_winkelnaam').AsString := edtEditStoreName.Text;
