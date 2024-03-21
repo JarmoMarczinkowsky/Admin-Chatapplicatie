@@ -6202,8 +6202,8 @@ object Form2: TForm2
   end
   object dscShowUsers: TDataSource
     DataSet = pgqGetUsers
-    Left = 96
-    Top = 280
+    Left = 104
+    Top = 312
   end
   object pgqGetUsers: TPgQuery
     Connection = DataModule2.pgcDBconnection
@@ -6289,14 +6289,5 @@ object Form2: TForm2
       FieldName = 'gro_beschrijving'
       BlobType = ftMemo
     end
-  end
-  object pgqDelete: TPgQuery
-    Connection = DataModule2.pgcDBconnection
-    Left = 35
-    Top = 470
-  end
-  object OpenDialog1: TOpenDialog
-    Left = 80
-    Top = 224
   end
 end

@@ -69,7 +69,6 @@ type
     sbtnagSearchUser: TAdvSmoothButton;
     cboxGroupOwner: TComboBox;
     sgrGroups: TStringGrid;
-    pgqDelete: TPgQuery;
     sgrUsers: TStringGrid;
     tbsEditUser: TTabSheet;
     Label6: TLabel;
@@ -132,7 +131,6 @@ type
     Label20: TLabel;
     sbtnEditUserProfilePicture: TAdvSmoothButton;
     imgEditProfilePicture: TImage;
-    OpenDialog1: TOpenDialog;
     sbtnRefreshGroup: TAdvSmoothButton;
     sbtnRefreshUser: TAdvSmoothButton;
 
@@ -781,12 +779,12 @@ begin
   selectedRowId := sgrGroups.Row;
   getGroupId := StrToInt(sgrGroups.Cells[0, selectedRowId]);
 
-  pgqDelete.SQL.Text := 'SELECT * FROM tbl_groepen WHERE gro_id=:selectedId';
-  pgqDelete.ParamByName('selectedId').AsInteger := getGroupId;
-  pgqDelete.Open;
-  pgqDelete.Edit;
-  pgqDelete.FieldByName('gro_del').AsBoolean := true;
-  pgqDelete.Post;
+  DataModule2.pgqDelete.SQL.Text := 'SELECT * FROM tbl_groepen WHERE gro_id=:selectedId';
+  DataModule2.pgqDelete.ParamByName('selectedId').AsInteger := getGroupId;
+  DataModule2.pgqDelete.Open;
+  DataModule2.pgqDelete.Edit;
+  DataModule2.pgqDelete.FieldByName('gro_del').AsBoolean := true;
+  DataModule2.pgqDelete.Post;
 //  pgqDelete.SQL.Text := 'DELETE FROM tbl_groepen WHERE gro_id=:SelectedId';
 //  pgqDelete.ParamByName('SelectedId').AsInteger := getGroupId;
 //  pgqDelete.Execute;
@@ -801,9 +799,9 @@ begin
   selectedRowId := sgrUsers.Row;
   getUserId := StrToInt(sgrUsers.Cells[0, selectedRowId]);
 
-  pgqDelete.SQL.Text := 'DELETE FROM tbl_gebruikers WHERE gbr_id=:SelectedId';
-  pgqDelete.ParamByName('SelectedId').AsInteger := getUserId;
-  pgqDelete.Execute;
+  DataModule2.pgqDelete.SQL.Text := 'DELETE FROM tbl_gebruikers WHERE gbr_id=:SelectedId';
+  DataModule2.pgqDelete.ParamByName('SelectedId').AsInteger := getUserId;
+  DataModule2.pgqDelete.Execute;
 
   RefreshUserOverView;
 

@@ -9,6 +9,7 @@ type
   TDataModule2 = class(TDataModule)
     pgcDBconnection: TPgConnection;
     pgqGetLoggedInUser: TPgQuery;
+    pgqDelete: TPgQuery;
     procedure DataModuleDestroy(Sender: TObject);
   private
     { Private declarations }

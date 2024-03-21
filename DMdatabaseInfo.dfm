@@ -18,4 +18,9 @@ object DataModule2: TDataModule2
     Left = 64
     Top = 120
   end
+  object pgqDelete: TPgQuery
+    Connection = pgcDBconnection
+    Left = 67
+    Top = 214
+  end
 end
