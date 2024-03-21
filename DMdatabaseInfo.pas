@@ -10,6 +10,14 @@ type
     pgcDBconnection: TPgConnection;
     pgqGetLoggedInUser: TPgQuery;
     pgqDelete: TPgQuery;
+    pgqGetUsers: TPgQuery;
+    pgqGetUsersgbr_id: TIntegerField;
+    pgqGetUsersgbr_naam: TStringField;
+    pgqGetUsersgbr_winkelnaam: TStringField;
+    pgqGetUsersgbr_tel: TStringField;
+    pgqGetUsersgbr_email: TStringField;
+    pgqGetUsersgbr_nicknaam: TStringField;
+    pgqGetUsersgbr_wachtwoord: TStringField;
     procedure DataModuleDestroy(Sender: TObject);
   private
     { Private declarations }

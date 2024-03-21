@@ -23,4 +23,45 @@ object DataModule2: TDataModule2
     Left = 67
     Top = 214
   end
+  object pgqGetUsers: TPgQuery
+    Connection = pgcDBconnection
+    SQL.Strings = (
+      'SELECT * FROM tbl_gebruikers')
+    Left = 64
+    Top = 304
+    object pgqGetUsersgbr_id: TIntegerField
+      FieldName = 'gbr_id'
+    end
+    object pgqGetUsersgbr_naam: TStringField
+      FieldName = 'gbr_naam'
+      Required = True
+      Size = 35
+    end
+    object pgqGetUsersgbr_winkelnaam: TStringField
+      FieldName = 'gbr_winkelnaam'
+      Required = True
+      Size = 75
+    end
+    object pgqGetUsersgbr_tel: TStringField
+      FieldName = 'gbr_tel'
+      Required = True
+      Size = 15
+    end
+    object pgqGetUsersgbr_email: TStringField
+      FieldName = 'gbr_email'
+      Required = True
+      Size = 75
+    end
+    object pgqGetUsersgbr_nicknaam: TStringField
+      FieldName = 'gbr_nicknaam'
+      Required = True
+      Size = 50
+    end
+    object pgqGetUsersgbr_wachtwoord: TStringField
+      FieldName = 'gbr_wachtwoord'
+      Required = True
+      FixedChar = True
+      Size = 65
+    end
+  end
 end

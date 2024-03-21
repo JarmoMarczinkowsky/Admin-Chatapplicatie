@@ -6200,11 +6200,6 @@ object Form2: TForm2
     TabOrder = 2
     TMSStyle = 0
   end
-  object dscShowUsers: TDataSource
-    DataSet = DataModule2.pgqGetUsers
-    Left = 104
-    Top = 312
-  end
   object pgqCheckExistingUser: TPgQuery
     Connection = DataModule2.pgcDBconnection
     Left = 91

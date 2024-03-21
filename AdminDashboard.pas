@@ -12,7 +12,6 @@ uses
 
 type
   TForm2 = class(TForm)
-    dscShowUsers: TDataSource;
     pgqCheckExistingUser: TPgQuery;
     dscShowGroups: TDataSource;
     pgqGetGroups: TPgQuery;
@@ -423,7 +422,7 @@ begin
     sgrUsers.Cells[6, i] := DataModule2.pgqGetUsers.FieldByName('gbr_wachtwoord').AsString;
 
     DataModule2.pgqGetUsers.Next;
-    
+
   end;
 
 end;
