@@ -170,7 +170,7 @@ object Form2: TForm2
         Status.Appearance.Font.Name = 'Segoe UI'
         Status.Appearance.Font.Style = []
         Caption = 'Refresh'
-        Color = 7518971
+        Color = clSandybrown
         ParentFont = False
         TabOrder = 4
         Version = '2.2.3.1'
@@ -807,7 +807,7 @@ object Form2: TForm2
         Status.Appearance.Font.Name = 'Segoe UI'
         Status.Appearance.Font.Style = []
         Caption = 'Refresh'
-        Color = 7518971
+        Color = clSandybrown
         ParentFont = False
         TabOrder = 4
         Version = '2.2.3.1'
