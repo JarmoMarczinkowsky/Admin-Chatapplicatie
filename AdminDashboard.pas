@@ -105,7 +105,6 @@ type
     AdvSmoothButton7: TAdvSmoothButton;
     sbtnBack: TAdvSmoothButton;
     AdvSmoothMegaMenu1: TAdvSmoothMegaMenu;
-    AdvSmoothPanel1: TAdvSmoothPanel;
     imgAddUserProfilePicture: TImage;
     sbtnAddUserProfilePicture: TAdvSmoothButton;
     Label19: TLabel;
@@ -279,7 +278,9 @@ begin
   if (Text = 'Overzicht gebruikers') then pcPages.ActivePage := tbsUserOverview
   else if (Text = 'Gebruiker aanmaken') then pcPages.ActivePage := tbsAddUser
   else if (Text = 'Overzicht groepen') then pcPages.ActivePage := tbsGroupOverview
-  else if (Text = 'Groep aanmaken') then pcPages.ActivePage := tbsAddGroup;
+  else if (Text = 'Groep aanmaken') then pcPages.ActivePage := tbsAddGroup
+  else if (Text = 'Uitloggen') then Self.Close;
+
        
 
 
@@ -993,9 +994,9 @@ begin
   edtEditUserEmail.Text := DataModule2.pgqCheckExistingUser.FieldByName('gbr_email').AsString;
   edtEditUserNickName.Text := DataModule2.pgqCheckExistingUser.FieldByName('gbr_nicknaam').AsString;
 
+  //loads image from database to TImage
   stream := DataModule2.pgqCheckExistingUser.CreateBlobStream(DataModule2.pgqCheckExistingUser.FieldByName('gbr_profielfoto'), bmRead);
   imgEditProfilePicture.Picture.LoadFromStream(stream);
-//  imgEditProfilePicture.Picture
 
 
 

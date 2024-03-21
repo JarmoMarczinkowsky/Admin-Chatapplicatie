@@ -14,17 +14,29 @@ object Form1: TForm1
   TextHeight = 15
   object Label1: TLabel
     Left = 175
-    Top = 275
-    Width = 87
-    Height = 15
+    Top = 277
+    Width = 82
+    Height = 13
     Caption = 'Username/Email'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    ParentFont = False
   end
   object Label2: TLabel
     Left = 175
-    Top = 328
-    Width = 68
-    Height = 15
+    Top = 330
+    Width = 67
+    Height = 13
     Caption = 'Wachtwoord'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    ParentFont = False
   end
   object lblError: TLabel
     Left = 100
