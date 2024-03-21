@@ -6206,42 +6206,7 @@ object Form2: TForm2
     Top = 482
   end
   object dscShowGroups: TDataSource
-    DataSet = pgqGetGroups
     Left = 88
     Top = 392
-  end
-  object pgqGetGroups: TPgQuery
-    Connection = DataModule2.pgcDBconnection
-    SQL.Strings = (
-      'SELECT * FROM tbl_groepen')
-    Left = 32
-    Top = 392
-    object pgqGetGroupsgro_id: TIntegerField
-      FieldName = 'gro_id'
-    end
-    object pgqGetGroupsgro_naam: TStringField
-      FieldName = 'gro_naam'
-      Required = True
-      Size = 75
-    end
-    object pgqGetGroupsgro_igenaar: TIntegerField
-      FieldName = 'gro_igenaar'
-      Required = True
-    end
-    object pgqGetGroupsgro_aangemaakt: TDateTimeField
-      FieldName = 'gro_aangemaakt'
-      Required = True
-    end
-    object pgqGetGroupsgro_del: TBooleanField
-      FieldName = 'gro_del'
-      Required = True
-    end
-    object pgqGetGroupsgro_profielfoto: TBlobField
-      FieldName = 'gro_profielfoto'
-    end
-    object pgqGetGroupsgro_beschrijving: TMemoField
-      FieldName = 'gro_beschrijving'
-      BlobType = ftMemo
-    end
   end
 end

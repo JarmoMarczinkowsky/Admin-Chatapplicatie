@@ -14,12 +14,6 @@ type
   TForm2 = class(TForm)
     pgqCheckExistingUser: TPgQuery;
     dscShowGroups: TDataSource;
-    pgqGetGroups: TPgQuery;
-    pgqGetGroupsgro_id: TIntegerField;
-    pgqGetGroupsgro_naam: TStringField;
-    pgqGetGroupsgro_igenaar: TIntegerField;
-    pgqGetGroupsgro_aangemaakt: TDateTimeField;
-    pgqGetGroupsgro_del: TBooleanField;
     pcPages: TPageControl;
     tbsUserOverview: TTabSheet;
     Label3: TLabel;
@@ -114,8 +108,6 @@ type
     sbtnBack: TAdvSmoothButton;
     AdvSmoothMegaMenu1: TAdvSmoothMegaMenu;
     AdvSmoothPanel1: TAdvSmoothPanel;
-    pgqGetGroupsgro_profielfoto: TBlobField;
-    pgqGetGroupsgro_beschrijving: TMemoField;
     imgAddUserProfilePicture: TImage;
     sbtnAddUserProfilePicture: TAdvSmoothButton;
     Label19: TLabel;
@@ -431,13 +423,13 @@ procedure TForm2.RefreshGroupOverView;
 var
   i: integer;
 begin
-  pgqGetGroups.SQL.Text := 'SELECT * FROM tbl_groepen ORDER BY gro_id';
-  pgqGetGroups.Open;
+  DataModule2.pgqGetGroups.SQL.Text := 'SELECT * FROM tbl_groepen ORDER BY gro_id';
+  DataModule2.pgqGetGroups.Open;
 
-  pgqGetGroups.First;
+  DataModule2.pgqGetGroups.First;
 
   sgrGroups.ColCount := 6;
-  sgrGroups.RowCount := pgqGetGroups.RecordCount + 1;
+  sgrGroups.RowCount := DataModule2.pgqGetGroups.RecordCount + 1;
   
   sgrGroups.Cells[0, 0] := 'Id';
   sgrGroups.Cells[1, 0] := 'Naam';
@@ -446,18 +438,17 @@ begin
   sgrGroups.Cells[4, 0] := 'Verwijderd';
   sgrGroups.Cells[5, 0] := 'Beschrijving';
    
-  for i := 1 to pgqGetGroups.RecordCount do
+  for i := 1 to DataModule2.pgqGetGroups.RecordCount do
   begin
-    sgrGroups.Cells[0, i] := pgqGetGroups.FieldByName('gro_id').AsString;
-    sgrGroups.Cells[1, i] := pgqGetGroups.FieldByName('gro_naam').AsString;
-    sgrGroups.Cells[2, i] := pgqGetGroups.FieldByName('gro_igenaar').AsString;
-    sgrGroups.Cells[3, i] := pgqGetGroups.FieldByName('gro_aangemaakt').AsString;
-    sgrGroups.Cells[4, i] := pgqGetGroups.FieldByName('gro_del').AsString;
-//    sgrGroups.Cells[5, i] := pgqGetGroups.FieldByName('gro_beschrijving').AsString;
-    sgrGroups.Cells[5, i] := pgqGetGroups.FieldByName('gro_beschrijving').AsString;
+    sgrGroups.Cells[0, i] := DataModule2.pgqGetGroups.FieldByName('gro_id').AsString;
+    sgrGroups.Cells[1, i] := DataModule2.pgqGetGroups.FieldByName('gro_naam').AsString;
+    sgrGroups.Cells[2, i] := DataModule2.pgqGetGroups.FieldByName('gro_igenaar').AsString;
+    sgrGroups.Cells[3, i] := DataModule2.pgqGetGroups.FieldByName('gro_aangemaakt').AsString;
+    sgrGroups.Cells[4, i] := DataModule2.pgqGetGroups.FieldByName('gro_del').AsString;
+    sgrGroups.Cells[5, i] := DataModule2.pgqGetGroups.FieldByName('gro_beschrijving').AsString;
 
 
-    pgqGetGroups.Next;
+    DataModule2.pgqGetGroups.Next;
   end;
 
   
@@ -489,27 +480,27 @@ begin
     pgqCheckExistingUser.Close;
     pgqCheckExistingUser.SQL.Text := 'SELECT * FROM tbl_gebruikers WHERE gbr_nicknaam=:groupOwner';
     pgqCheckExistingUser.ParamByName('groupOwner').AsString := cboxGroupOwner.Text;
-    pgqGetGroups.Options.ReturnParams := true;
+    DataModule2.pgqGetGroups.Options.ReturnParams := true;
     pgqCheckExistingUser.Open;
 
-    pgqGetGroups.Append;
-    pgqGetGroups.FieldByName('gro_naam').AsString := Trim(edtGroupName.Text);
-    pgqGetGroups.FieldByName('gro_igenaar').AsInteger := StrToInt(Trim(pgqCheckExistingUser.FieldByName('gbr_id').AsString));
-    pgqGetGroups.FieldByName('gro_aangemaakt').AsDateTime := now;
-    pgqGetGroups.FieldByName('gro_del').AsBoolean := false;
-    pgqGetGroups.FieldByName('gro_beschrijving').AsString := Trim(edtGroupDescription.Text);
+    DataModule2.pgqGetGroups.Append;
+    DataModule2.pgqGetGroups.FieldByName('gro_naam').AsString := Trim(edtGroupName.Text);
+    DataModule2.pgqGetGroups.FieldByName('gro_igenaar').AsInteger := StrToInt(Trim(pgqCheckExistingUser.FieldByName('gbr_id').AsString));
+    DataModule2.pgqGetGroups.FieldByName('gro_aangemaakt').AsDateTime := now;
+    DataModule2.pgqGetGroups.FieldByName('gro_del').AsBoolean := false;
+    DataModule2.pgqGetGroups.FieldByName('gro_beschrijving').AsString := Trim(edtGroupDescription.Text);
     AStream := TMemoryStream.Create;
     imgAddGroupProfile.Picture.SaveToStream(AStream);
-    BlobField := pgqGetGroups.FieldByName('gro_profielfoto') as TBlobField;
+    BlobField := DataModule2.pgqGetGroups.FieldByName('gro_profielfoto') as TBlobField;
     BlobField.LoadFromStream(AStream);
-    pgqGetGroups.Post;
+    DataModule2.pgqGetGroups.Post;
 
-    pgqGetGroups.Close;
-    pgqGetGroups.SQL.Text := 'SELECT * FROM tbl_groepen';
-    pgqGetGroups.Open;
-    pgqGetGroups.Last;
-    idLastCreatedGroup := pgqGetGroups.FieldByName('gro_id').AsInteger;
-    pgqGetGroups.Close;
+    DataModule2.pgqGetGroups.Close;
+    DataModule2.pgqGetGroups.SQL.Text := 'SELECT * FROM tbl_groepen';
+    DataModule2.pgqGetGroups.Open;
+    DataModule2.pgqGetGroups.Last;
+    idLastCreatedGroup := DataModule2.pgqGetGroups.FieldByName('gro_id').AsInteger;
+    DataModule2.pgqGetGroups.Close;
 
     AddUserToGroup('add', idLastCreatedGroup);
 

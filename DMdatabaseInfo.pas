@@ -18,6 +18,14 @@ type
     pgqGetUsersgbr_email: TStringField;
     pgqGetUsersgbr_nicknaam: TStringField;
     pgqGetUsersgbr_wachtwoord: TStringField;
+    pgqGetGroups: TPgQuery;
+    pgqGetGroupsgro_id: TIntegerField;
+    pgqGetGroupsgro_naam: TStringField;
+    pgqGetGroupsgro_igenaar: TIntegerField;
+    pgqGetGroupsgro_aangemaakt: TDateTimeField;
+    pgqGetGroupsgro_del: TBooleanField;
+    pgqGetGroupsgro_profielfoto: TBlobField;
+    pgqGetGroupsgro_beschrijving: TMemoField;
     procedure DataModuleDestroy(Sender: TObject);
   private
     { Private declarations }
