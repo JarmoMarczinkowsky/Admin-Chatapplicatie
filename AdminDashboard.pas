@@ -49,7 +49,6 @@ type
     edtUserNickName: TEdit;
     edtUserEmail: TEdit;
     tbsGroupOverview: TTabSheet;
-    Label9: TLabel;
     sbtnGoToAddGroup: TAdvSmoothButton;
     sbtnDeleteGroup: TAdvSmoothButton;
     tbsAddGroup: TTabSheet;
@@ -134,6 +133,8 @@ type
     sbtnEditUserProfilePicture: TAdvSmoothButton;
     imgEditProfilePicture: TImage;
     OpenDialog1: TOpenDialog;
+    sbtnRefreshGroup: TAdvSmoothButton;
+    sbtnRefreshUser: TAdvSmoothButton;
 
     procedure FormShow(Sender: TObject);
     procedure sbtnAddUserClick(Sender: TObject);
@@ -166,6 +167,8 @@ type
     procedure sbtnEditUserProfilePictureClick(Sender: TObject);
     procedure sbtnAddGroupProfileClick(Sender: TObject);
     procedure sbtnEditGroupProfilePictureClick(Sender: TObject);
+    procedure sbtnRefreshGroupClick(Sender: TObject);
+    procedure sbtnRefreshUserClick(Sender: TObject);
   private
     { Private declarations }
     DBConnection : TPgConnection;
@@ -1021,6 +1024,16 @@ begin
   pcPages.ActivePage := tbsEditUser;
 
     
+end;
+
+procedure TForm2.sbtnRefreshGroupClick(Sender: TObject);
+begin
+  RefreshGroupOverView;
+end;
+
+procedure TForm2.sbtnRefreshUserClick(Sender: TObject);
+begin
+  RefreshUserOverView;
 end;
 
 procedure TForm2.sbtnRemoveUserFromGroupClick(Sender: TObject);

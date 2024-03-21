@@ -17,13 +17,13 @@ object Form2: TForm2
     Top = 65
     Width = 792
     Height = 469
-    ActivePage = tbsEditGroup
+    ActivePage = tbsGroupOverview
     TabOrder = 0
     OnChange = pcPagesChange
     object tbsUserOverview: TTabSheet
       Caption = 'User Overview'
       object Label3: TLabel
-        Left = 32
+        Left = 192
         Top = 23
         Width = 34
         Height = 15
@@ -140,6 +140,41 @@ object Form2: TForm2
         TabOrder = 3
         Version = '2.2.3.1'
         OnClick = sbtnGoToEditUserClick
+        TMSStyle = 8
+      end
+      object sbtnRefreshUser: TAdvSmoothButton
+        Left = 32
+        Top = 3
+        Width = 65
+        Height = 35
+        Appearance.Font.Charset = DEFAULT_CHARSET
+        Appearance.Font.Color = clWindowText
+        Appearance.Font.Height = -12
+        Appearance.Font.Name = 'Segoe UI'
+        Appearance.Font.Style = [fsBold]
+        Appearance.SimpleLayout = True
+        Appearance.Rounding = 5
+        Status.Caption = '0'
+        Status.Appearance.Fill.Color = clRed
+        Status.Appearance.Fill.ColorMirror = clNone
+        Status.Appearance.Fill.ColorMirrorTo = clNone
+        Status.Appearance.Fill.GradientType = gtSolid
+        Status.Appearance.Fill.GradientMirrorType = gtSolid
+        Status.Appearance.Fill.BorderColor = clGray
+        Status.Appearance.Fill.Rounding = 0
+        Status.Appearance.Fill.ShadowOffset = 0
+        Status.Appearance.Fill.Glow = gmNone
+        Status.Appearance.Font.Charset = DEFAULT_CHARSET
+        Status.Appearance.Font.Color = clWhite
+        Status.Appearance.Font.Height = -11
+        Status.Appearance.Font.Name = 'Segoe UI'
+        Status.Appearance.Font.Style = []
+        Caption = 'Refresh'
+        Color = 7518971
+        ParentFont = False
+        TabOrder = 4
+        Version = '2.2.3.1'
+        OnClick = sbtnRefreshUserClick
         TMSStyle = 8
       end
     end
@@ -631,13 +666,6 @@ object Form2: TForm2
     object tbsGroupOverview: TTabSheet
       Caption = 'Group overview'
       ImageIndex = 2
-      object Label9: TLabel
-        Left = 32
-        Top = 23
-        Width = 34
-        Height = 15
-        Caption = 'Label3'
-      end
       object sbtnGoToAddGroup: TAdvSmoothButton
         Left = 492
         Top = 3
@@ -749,6 +777,41 @@ object Form2: TForm2
         TabOrder = 3
         Version = '2.2.3.1'
         OnClick = sbtnGoToEditGroupClick
+        TMSStyle = 8
+      end
+      object sbtnRefreshGroup: TAdvSmoothButton
+        Left = 32
+        Top = 3
+        Width = 65
+        Height = 35
+        Appearance.Font.Charset = DEFAULT_CHARSET
+        Appearance.Font.Color = clWindowText
+        Appearance.Font.Height = -12
+        Appearance.Font.Name = 'Segoe UI'
+        Appearance.Font.Style = [fsBold]
+        Appearance.SimpleLayout = True
+        Appearance.Rounding = 5
+        Status.Caption = '0'
+        Status.Appearance.Fill.Color = clRed
+        Status.Appearance.Fill.ColorMirror = clNone
+        Status.Appearance.Fill.ColorMirrorTo = clNone
+        Status.Appearance.Fill.GradientType = gtSolid
+        Status.Appearance.Fill.GradientMirrorType = gtSolid
+        Status.Appearance.Fill.BorderColor = clGray
+        Status.Appearance.Fill.Rounding = 0
+        Status.Appearance.Fill.ShadowOffset = 0
+        Status.Appearance.Fill.Glow = gmNone
+        Status.Appearance.Font.Charset = DEFAULT_CHARSET
+        Status.Appearance.Font.Color = clWhite
+        Status.Appearance.Font.Height = -11
+        Status.Appearance.Font.Name = 'Segoe UI'
+        Status.Appearance.Font.Style = []
+        Caption = 'Refresh'
+        Color = 7518971
+        ParentFont = False
+        TabOrder = 4
+        Version = '2.2.3.1'
+        OnClick = sbtnRefreshGroupClick
         TMSStyle = 8
       end
     end
