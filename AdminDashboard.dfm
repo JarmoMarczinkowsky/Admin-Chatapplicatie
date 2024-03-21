@@ -17,7 +17,7 @@ object Form2: TForm2
     Top = 65
     Width = 792
     Height = 469
-    ActivePage = tbsEditUser
+    ActivePage = tbsEditGroup
     TabOrder = 0
     OnChange = pcPagesChange
     object tbsUserOverview: TTabSheet
@@ -598,7 +598,7 @@ object Form2: TForm2
         OnClick = sbtnBackToUserOverviewClick
         TMSStyle = 8
       end
-      object AdvSmoothButton6: TAdvSmoothButton
+      object sbtnEditUserProfilePicture: TAdvSmoothButton
         Left = 176
         Top = 230
         Width = 119
@@ -624,6 +624,7 @@ object Form2: TForm2
         Color = 15395562
         TabOrder = 9
         Version = '2.2.3.1'
+        OnClick = sbtnEditUserProfilePictureClick
         TMSStyle = 8
       end
     end
@@ -781,11 +782,12 @@ object Form2: TForm2
         Height = 15
         Caption = 'Naam'
       end
-      object imgEditGroupProfile: TImage
+      object imgAddGroupProfile: TImage
         Left = 301
         Top = 220
         Width = 75
         Height = 75
+        Stretch = True
       end
       object Label5: TLabel
         Left = 56
@@ -886,7 +888,7 @@ object Form2: TForm2
         OnClick = sbtnAddGroupClick
         TMSStyle = 8
       end
-      object sbtnEditGroupUploadProfile: TAdvSmoothButton
+      object sbtnAddGroupProfile: TAdvSmoothButton
         Left = 176
         Top = 220
         Width = 119
@@ -912,6 +914,7 @@ object Form2: TForm2
         Color = 15395562
         TabOrder = 4
         Version = '2.2.3.1'
+        OnClick = sbtnAddGroupProfileClick
         TMSStyle = 8
       end
       object slsbUser: TAdvSmoothListBox
@@ -3005,11 +3008,12 @@ object Form2: TForm2
     object tbsEditGroup: TTabSheet
       Caption = 'Edit Group'
       ImageIndex = 5
-      object Image2: TImage
+      object imgEditGroupProfile: TImage
         Left = 301
         Top = 243
         Width = 75
         Height = 75
+        Stretch = True
       end
       object Label14: TLabel
         Left = 56
@@ -3184,6 +3188,7 @@ object Form2: TForm2
         Color = 15395562
         TabOrder = 3
         Version = '2.2.3.1'
+        OnClick = sbtnEditGroupProfilePictureClick
         TMSStyle = 8
       end
       object sbtnEditGroup: TAdvSmoothButton

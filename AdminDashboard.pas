@@ -56,13 +56,13 @@ type
     Label4: TLabel;
     lblAddGroupError: TLabel;
     Label2: TLabel;
-    imgEditGroupProfile: TImage;
+    imgAddGroupProfile: TImage;
     Label5: TLabel;
     edtGroupName: TEdit;
     edtGroupDescription: TEdit;
     sbtnBackToGroupOverview: TAdvSmoothButton;
     sbtnAddGroup: TAdvSmoothButton;
-    sbtnEditGroupUploadProfile: TAdvSmoothButton;
+    sbtnAddGroupProfile: TAdvSmoothButton;
     slsbUser: TAdvSmoothListBox;
     edtAddGroupSearchUser: TEdit;
     sbtnAddUserToGroup: TAdvSmoothButton;
@@ -99,7 +99,7 @@ type
     edtEditGroupSearch: TEdit;
     edtEditGroupDescription: TEdit;
     edtEditGroupName: TEdit;
-    Image2: TImage;
+    imgEditGroupProfile: TImage;
     Label14: TLabel;
     Label15: TLabel;
     Label16: TLabel;
@@ -131,7 +131,7 @@ type
     sbtnAddUserProfilePicture: TAdvSmoothButton;
     Label19: TLabel;
     Label20: TLabel;
-    AdvSmoothButton6: TAdvSmoothButton;
+    sbtnEditUserProfilePicture: TAdvSmoothButton;
     imgEditProfilePicture: TImage;
     OpenDialog1: TOpenDialog;
 
@@ -163,6 +163,9 @@ type
     procedure AdvSmoothMegaMenu1MenuItemClick(Sender: TObject;
       ItemIndex: Integer);
     procedure sbtnAddUserProfilePictureClick(Sender: TObject);
+    procedure sbtnEditUserProfilePictureClick(Sender: TObject);
+    procedure sbtnAddGroupProfileClick(Sender: TObject);
+    procedure sbtnEditGroupProfilePictureClick(Sender: TObject);
   private
     { Private declarations }
     DBConnection : TPgConnection;
@@ -194,6 +197,7 @@ var
   pgqAddUser: TPgQuery;
   testHash : string;
   AStream : TMemoryStream;
+  BlobField: TBlobField;
 
 //  stream: TMemoryStream;
 //  niceBytes: TBytes;
@@ -202,6 +206,7 @@ begin
   pgqAddUser.Connection := DataModule2.pgcDBconnection;
 
   lblAddUserError.Caption := '';
+  lblAddUserError.Font.Color := RGB(220, 20, 60);
 
   if((Length(edtUserName.Text) > 0) AND
   (Length(edtUserStoreName.Text) > 0) AND
@@ -225,32 +230,37 @@ begin
         begin
 
 
-//          pgqAddUser.SQL.Text := '';
-//          pgqAddUser.SQL.Add('SELECT * FROM tbl_gebruikers');
-//          pgqAddUser.Open;
-//          pgqAddUser.Append;
-//          pgqAddUser.FieldByName('gbr_naam').AsString := Trim(edtUserName.Text);
-//          pgqAddUser.FieldByName('gbr_winkelnaam').AsString := Trim(edtUserStoreName.Text);
-//          pgqAddUser.FieldByName('gbr_tel').AsString := Trim(edtUserTelephone.Text);
-//          pgqAddUser.FieldByName('gbr_email').AsString := Trim(edtUserEmail.Text);
-//          pgqAddUser.FieldByName('gbr_nicknaam').AsString := Trim(edtUserNickName.Text);
-//          pgqAddUser.FieldByName('gbr_wachtwoord').AsString := HashString('Test123');
-
           pgqAddUser.SQL.Text := '';
-          pgqAddUser.SQL.Add('INSERT INTO tbl_gebruikers(gbr_naam, gbr_winkelnaam, gbr_tel, gbr_email, gbr_nicknaam, gbr_wachtwoord, gbr_profielfoto)');
-          pgqAddUser.SQL.Add('VALUES (:userName, :userStoreName, :userTel, :userEmail, :userNickname, :userPassword, :userProfilePicture)');
-          pgqAddUser.ParamByName('userName').AsString := Trim(edtUserName.Text);
-          pgqAddUser.ParamByName('userStoreName').AsString := Trim(edtUserStoreName.Text);
-          pgqAddUser.ParamByName('userTel').AsString := Trim(edtUserTelephone.Text);
-          pgqAddUser.ParamByName('userEmail').AsString := Trim(edtUserEmail.Text);
-          pgqAddUser.ParamByName('userNickname').AsString := Trim(edtUserNickName.Text);
-          pgqAddUser.ParamByName('userPassword').AsString := HashString('Test123');
+          pgqAddUser.SQL.Add('SELECT * FROM tbl_gebruikers');
+          pgqAddUser.Open;
+          pgqAddUser.Append;
+          pgqAddUser.FieldByName('gbr_naam').AsString := Trim(edtUserName.Text);
+          pgqAddUser.FieldByName('gbr_winkelnaam').AsString := Trim(edtUserStoreName.Text);
+          pgqAddUser.FieldByName('gbr_tel').AsString := Trim(edtUserTelephone.Text);
+          pgqAddUser.FieldByName('gbr_email').AsString := Trim(edtUserEmail.Text);
+          pgqAddUser.FieldByName('gbr_nicknaam').AsString := Trim(edtUserNickName.Text);
+          pgqAddUser.FieldByName('gbr_wachtwoord').AsString := HashString('Test123');
 
           AStream := TMemoryStream.Create;
           imgAddUserProfilePicture.Picture.SaveToStream(AStream);
-          pgqAddUser.ParamByName('userProfilePicture').LoadFromStream(AStream, ftGraphic);
+          BlobField := pgqAddUser.FieldByName('gbr_profielfoto') as TBlobField;
+          BlobField.LoadFromStream(AStream);
 
-          pgqAddUser.Execute;
+//          pgqAddUser.SQL.Text := '';
+//          pgqAddUser.SQL.Add('INSERT INTO tbl_gebruikers(gbr_naam, gbr_winkelnaam, gbr_tel, gbr_email, gbr_nicknaam, gbr_wachtwoord, gbr_profielfoto)');
+//          pgqAddUser.SQL.Add('VALUES (:userName, :userStoreName, :userTel, :userEmail, :userNickname, :userPassword, :userProfilePicture)');
+//          pgqAddUser.ParamByName('userName').AsString := Trim(edtUserName.Text);
+//          pgqAddUser.ParamByName('userStoreName').AsString := Trim(edtUserStoreName.Text);
+//          pgqAddUser.ParamByName('userTel').AsString := Trim(edtUserTelephone.Text);
+//          pgqAddUser.ParamByName('userEmail').AsString := Trim(edtUserEmail.Text);
+//          pgqAddUser.ParamByName('userNickname').AsString := Trim(edtUserNickName.Text);
+//          pgqAddUser.ParamByName('userPassword').AsString := HashString('Test123');
+
+//          AStream := TMemoryStream.Create;
+//          imgAddUserProfilePicture.Picture.SaveToStream(AStream);
+//          pgqAddUser.ParamByName('userProfilePicture').LoadFromStream(AStream, ftGraphic);
+
+          pgqAddUser.Post;
           AStream.Free;
 
 //          pgqAddUser.Post;
@@ -475,6 +485,8 @@ procedure TForm2.sbtnAddGroupClick(Sender: TObject);
 var
   i, idLastCreatedGroup: integer;
 //  pgqGroepsLeden: TPgQuery;
+  AStream: TMemoryStream;
+  BlobField: TBlobField;
 begin
 //  pgqGroepsLeden := TPgQuery.Create(nil);
 //  pgqGroepsLeden.Connection := DataModule2.pgcDBconnection;
@@ -494,7 +506,12 @@ begin
     pgqGetGroups.FieldByName('gro_aangemaakt').AsDateTime := now;
     pgqGetGroups.FieldByName('gro_del').AsBoolean := false;
     pgqGetGroups.FieldByName('gro_beschrijving').AsString := Trim(edtGroupDescription.Text);
+    AStream := TMemoryStream.Create;
+    imgAddGroupProfile.Picture.SaveToStream(AStream);
+    BlobField := pgqGetGroups.FieldByName('gro_profielfoto') as TBlobField;
+    BlobField.LoadFromStream(AStream);
     pgqGetGroups.Post;
+
     pgqGetGroups.Close;
     pgqGetGroups.SQL.Text := 'SELECT * FROM tbl_groepen';
     pgqGetGroups.Open;
@@ -529,6 +546,19 @@ begin
 
   end;
 
+end;
+
+procedure TForm2.sbtnAddGroupProfileClick(Sender: TObject);
+begin
+  with TOpenDialog.Create(self) do
+    try
+      Caption := 'Open afbeelding';
+      Options := [TOpenOption.ofPathMustExist, TOpenOption.ofPathMustExist];
+      if (Execute) then imgAddGroupProfile.Picture.LoadFromFile(FileName);
+
+    finally
+      Free;
+    end;
 end;
 
 procedure TForm2.AddUserToGroup(command: string; selectedGroupId: integer);
@@ -780,6 +810,8 @@ procedure TForm2.sbtnEditGroupClick(Sender: TObject);
 var
   pgqEditGroupMember, pgqGetDeletedUserId: TPgQuery;
   groupId, i: integer;
+  AStream: TMemoryStream;
+  BlobField: TBlobField;
 begin
   pgqEditGroupMember := TPgQuery.Create(nil);
   pgqGetDeletedUserId := TPgQuery.Create(nil);
@@ -817,13 +849,32 @@ begin
   getGroup.Edit;
   getGroup.FieldByName('gro_naam').AsString := edtEditGroupName.Text;
   getGroup.FieldByName('gro_beschrijving').AsString := edtEditGroupDescription.Text;
+
+  //insert image into database
+  AStream := TMemoryStream.Create;
+  imgEditGroupProfile.Picture.SaveToStream(AStream);
+  BlobField := getGroup.FieldByName('gro_profielfoto') as TBlobField;
+  BlobField.LoadFromStream(AStream);
+
   getGroup.Post;
 
   RemovedUsersList.Clear;
-
   RefreshGroupOverView;
   pcPages.ActivePage := tbsGroupOverview;
 
+end;
+
+procedure TForm2.sbtnEditGroupProfilePictureClick(Sender: TObject);
+begin
+  with TOpenDialog.Create(self) do
+  try
+    Caption := 'Open afbeelding';
+    Options := [TOpenOption.ofPathMustExist, TOpenOption.ofPathMustExist];
+    if (Execute) then imgEditGroupProfile.Picture.LoadFromFile(FileName);
+
+  finally
+    Free;
+  end;
 end;
 
 procedure TForm2.sbtnEditRemoveGroupUserClick(Sender: TObject);
@@ -837,6 +888,9 @@ begin
 end;
 
 procedure TForm2.sbtnEditUserClick(Sender: TObject);
+var
+  BlobField: TBlobField;
+  AStream: TMemoryStream;
 begin
   pgqCheckExistingUser.Edit;
   pgqCheckExistingUser.FieldByName('gbr_naam').AsString := edtEditUserName.Text;
@@ -845,7 +899,15 @@ begin
   pgqCheckExistingUser.FieldByName('gbr_tel').AsString := edtEditUserTelephone.Text;
   pgqCheckExistingUser.FieldByName('gbr_nicknaam').AsString := edtEditUserNickName.Text;
 
-  if(Length(edtEditUserPassword.Text) > 0) then 
+  AStream := TMemoryStream.Create;
+  imgEditProfilePicture.Picture.SaveToStream(AStream);
+  BlobField := pgqCheckExistingUser.FieldByName('gbr_profielfoto') as TBlobField;
+  BlobField.LoadFromStream(AStream);
+
+
+//          pgqAddUser.ParamByName('userProfilePicture').LoadFromStream(AStream, ftGraphic);
+
+  if(Length(edtEditUserPassword.Text) > 0) then
   begin
     pgqCheckExistingUser.FieldByName('gbr_wachtwoord').AsString := edtEditUserPassword.Text;
   end;
@@ -855,10 +917,24 @@ begin
   lblEditUserError.Caption := 'Gelukt';
 end;
 
+procedure TForm2.sbtnEditUserProfilePictureClick(Sender: TObject);
+begin
+  with TOpenDialog.Create(self) do
+    try
+      Caption := 'Open afbeelding';
+      Options := [TOpenOption.ofPathMustExist, TOpenOption.ofPathMustExist];
+      if (Execute) then imgEditProfilePicture.Picture.LoadFromFile(FileName);
+
+    finally
+      Free;
+    end;
+end;
+
 procedure TForm2.sbtnGoToEditGroupClick(Sender: TObject);
 var
   selectedRowId, getUserId, i: integer;
   getSelectedGroup, getSelectedGroupOwner : TPgQuery;
+  stream: TStream;
 begin
   getSelectedGroup := TPgQuery.Create(nil);
   getSelectedGroupOwner := TPgQuery.Create(nil);
@@ -885,6 +961,8 @@ begin
   edtEditGroupName.Text := getGroup.FieldByName('gro_naam').AsString;
   edtEditGroupDescription.Text := getGroup.FieldByName('gro_beschrijving').AsString;
   cbxGroupDeleted.Checked := getGroup.FieldByName('gro_del').AsBoolean;
+  stream := getGroup.CreateBlobStream(getGroup.FieldByName('gro_profielfoto'), bmRead);
+  imgEditGroupProfile.Picture.LoadFromStream(stream);
 
   //tbl_gebruikers
   getSelectedGroupOwner.SQL.Text := 'SELECT * FROM tbl_gebruikers WHERE gbr_id=:groupOwner';
