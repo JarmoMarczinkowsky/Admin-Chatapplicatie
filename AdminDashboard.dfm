@@ -6201,50 +6201,9 @@ object Form2: TForm2
     TMSStyle = 0
   end
   object dscShowUsers: TDataSource
-    DataSet = pgqGetUsers
+    DataSet = DataModule2.pgqGetUsers
     Left = 104
     Top = 312
-  end
-  object pgqGetUsers: TPgQuery
-    Connection = DataModule2.pgcDBconnection
-    SQL.Strings = (
-      'SELECT * FROM tbl_gebruikers')
-    Left = 40
-    Top = 288
-    object pgqGetUsersgbr_id: TIntegerField
-      FieldName = 'gbr_id'
-    end
-    object pgqGetUsersgbr_naam: TStringField
-      FieldName = 'gbr_naam'
-      Required = True
-      Size = 35
-    end
-    object pgqGetUsersgbr_winkelnaam: TStringField
-      FieldName = 'gbr_winkelnaam'
-      Required = True
-      Size = 75
-    end
-    object pgqGetUsersgbr_tel: TStringField
-      FieldName = 'gbr_tel'
-      Required = True
-      Size = 15
-    end
-    object pgqGetUsersgbr_email: TStringField
-      FieldName = 'gbr_email'
-      Required = True
-      Size = 75
-    end
-    object pgqGetUsersgbr_nicknaam: TStringField
-      FieldName = 'gbr_nicknaam'
-      Required = True
-      Size = 50
-    end
-    object pgqGetUsersgbr_wachtwoord: TStringField
-      FieldName = 'gbr_wachtwoord'
-      Required = True
-      FixedChar = True
-      Size = 65
-    end
   end
   object pgqCheckExistingUser: TPgQuery
     Connection = DataModule2.pgcDBconnection

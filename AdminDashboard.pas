@@ -13,14 +13,6 @@ uses
 type
   TForm2 = class(TForm)
     dscShowUsers: TDataSource;
-    pgqGetUsers: TPgQuery;
-    pgqGetUsersgbr_id: TIntegerField;
-    pgqGetUsersgbr_naam: TStringField;
-    pgqGetUsersgbr_winkelnaam: TStringField;
-    pgqGetUsersgbr_tel: TStringField;
-    pgqGetUsersgbr_email: TStringField;
-    pgqGetUsersgbr_nicknaam: TStringField;
-    pgqGetUsersgbr_wachtwoord: TStringField;
     pgqCheckExistingUser: TPgQuery;
     dscShowGroups: TDataSource;
     pgqGetGroups: TPgQuery;
@@ -345,21 +337,21 @@ begin
   slsbUser.Items.Clear;
   slsbEditSearchUser.Items.Clear;
 
-  pgqGetUsers.First;
+  DataModule2.pgqGetUsers.First;
 
-  for i := 1 to pgqGetUsers.RecordCount do
+  for i := 1 to DataModule2.pgqGetUsers.RecordCount do
   begin
     with slsbUser.Items.Add do
     begin
-      Caption := pgqGetUsersgbr_nicknaam.Text;
+      Caption := DataModule2.pgqGetUsersgbr_nicknaam.Text;
     end;
 
     with slsbEditSearchUser.Items.Add do
     begin
-      Caption := pgqGetUsersgbr_nicknaam.Text;
+      Caption := DataModule2.pgqGetUsersgbr_nicknaam.Text;
     end;
 
-    pgqGetUsers.Next;
+    DataModule2.pgqGetUsers.Next;
   end;
 
   lblAddUserError.Caption := '';
@@ -404,14 +396,14 @@ procedure TForm2.RefreshUserOverView;
 var 
   i: integer;
 begin
-  pgqGetUsers.SQL.Text := '';
-  pgqGetUsers.SQL.Add('SELECT * FROM tbl_gebruikers ORDER BY gbr_id');
-  pgqGetUsers.Open;
+  DataModule2.pgqGetUsers.SQL.Text := '';
+  DataModule2.pgqGetUsers.SQL.Add('SELECT * FROM tbl_gebruikers ORDER BY gbr_id');
+  DataModule2.pgqGetUsers.Open;
 
 //  advShowUsers.Refresh;
 
   sgrUsers.ColCount := 6;
-  sgrUsers.RowCount := pgqGetUsers.RecordCount + 1;
+  sgrUsers.RowCount := DataModule2.pgqGetUsers.RecordCount + 1;
 
   sgrUsers.Cells[0, 0] := 'Id';
   sgrUsers.Cells[1, 0] := 'Naam';
@@ -420,17 +412,17 @@ begin
   sgrUsers.Cells[4, 0] := 'Email';
   sgrUsers.Cells[5, 0] := 'Gebruikersnaam';
 
-  for i := 1 to pgqGetUsers.RecordCount do
+  for i := 1 to DataModule2.pgqGetUsers.RecordCount do
   begin
-    sgrUsers.Cells[0, i] := pgqGetUsers.FieldByName('gbr_id').AsString;
-    sgrUsers.Cells[1, i] := pgqGetUsers.FieldByName('gbr_naam').AsString;
-    sgrUsers.Cells[2, i] := pgqGetUsers.FieldByName('gbr_winkelnaam').AsString;
-    sgrUsers.Cells[3, i] := pgqGetUsers.FieldByName('gbr_tel').AsString;
-    sgrUsers.Cells[4, i] := pgqGetUsers.FieldByName('gbr_email').AsString;
-    sgrUsers.Cells[5, i] := pgqGetUsers.FieldByName('gbr_nicknaam').AsString;
-    sgrUsers.Cells[6, i] := pgqGetUsers.FieldByName('gbr_wachtwoord').AsString;
+    sgrUsers.Cells[0, i] := DataModule2.pgqGetUsers.FieldByName('gbr_id').AsString;
+    sgrUsers.Cells[1, i] := DataModule2.pgqGetUsers.FieldByName('gbr_naam').AsString;
+    sgrUsers.Cells[2, i] := DataModule2.pgqGetUsers.FieldByName('gbr_winkelnaam').AsString;
+    sgrUsers.Cells[3, i] := DataModule2.pgqGetUsers.FieldByName('gbr_tel').AsString;
+    sgrUsers.Cells[4, i] := DataModule2.pgqGetUsers.FieldByName('gbr_email').AsString;
+    sgrUsers.Cells[5, i] := DataModule2.pgqGetUsers.FieldByName('gbr_nicknaam').AsString;
+    sgrUsers.Cells[6, i] := DataModule2.pgqGetUsers.FieldByName('gbr_wachtwoord').AsString;
 
-    pgqGetUsers.Next;
+    DataModule2.pgqGetUsers.Next;
     
   end;
 
