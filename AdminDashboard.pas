@@ -12,8 +12,6 @@ uses
 
 type
   TForm2 = class(TForm)
-    pgqCheckExistingUser: TPgQuery;
-    dscShowGroups: TDataSource;
     pcPages: TPageControl;
     tbsUserOverview: TTabSheet;
     Label3: TLabel;
@@ -202,15 +200,15 @@ begin
     begin
       if(TRegEx.IsMatch(edtUserTelephone.Text, '^[0-9+\-]{10,}$')) then
       begin
-        pgqCheckExistingUser.SQL.Text := '';
-        pgqCheckExistingUser.SQL.Add('SELECT * FROM tbl_gebruikers');
-        pgqCheckExistingUser.SQL.Add('WHERE LOWER(gbr_email)=:CheckDuplicateEmail');
-        pgqCheckExistingUser.SQL.Add('OR LOWER(gbr_nicknaam)=:CheckDuplicateUserName');
-        pgqCheckExistingUser.ParamByName('CheckDuplicateEmail').AsString := LowerCase(edtUserEmail.Text);
-        pgqCheckExistingUser.ParamByName('CheckDuplicateUserName').AsString := LowerCase(edtUserNickName.Text);
-        pgqCheckExistingUser.Open;
+        DataModule2.pgqCheckExistingUser.SQL.Text := '';
+        DataModule2.pgqCheckExistingUser.SQL.Add('SELECT * FROM tbl_gebruikers');
+        DataModule2.pgqCheckExistingUser.SQL.Add('WHERE LOWER(gbr_email)=:CheckDuplicateEmail');
+        DataModule2.pgqCheckExistingUser.SQL.Add('OR LOWER(gbr_nicknaam)=:CheckDuplicateUserName');
+        DataModule2.pgqCheckExistingUser.ParamByName('CheckDuplicateEmail').AsString := LowerCase(edtUserEmail.Text);
+        DataModule2.pgqCheckExistingUser.ParamByName('CheckDuplicateUserName').AsString := LowerCase(edtUserNickName.Text);
+        DataModule2.pgqCheckExistingUser.Open;
 
-        if(pgqCheckExistingUser.RecordCount = 0) then
+        if(DataModule2.pgqCheckExistingUser.RecordCount = 0) then
         begin
 
 
@@ -477,15 +475,15 @@ begin
   if((Length(edtGroupName.Text) > 0)) then
   begin
     //creates the group
-    pgqCheckExistingUser.Close;
-    pgqCheckExistingUser.SQL.Text := 'SELECT * FROM tbl_gebruikers WHERE gbr_nicknaam=:groupOwner';
-    pgqCheckExistingUser.ParamByName('groupOwner').AsString := cboxGroupOwner.Text;
+    DataModule2.pgqCheckExistingUser.Close;
+    DataModule2.pgqCheckExistingUser.SQL.Text := 'SELECT * FROM tbl_gebruikers WHERE gbr_nicknaam=:groupOwner';
+    DataModule2.pgqCheckExistingUser.ParamByName('groupOwner').AsString := cboxGroupOwner.Text;
     DataModule2.pgqGetGroups.Options.ReturnParams := true;
-    pgqCheckExistingUser.Open;
+    DataModule2.pgqCheckExistingUser.Open;
 
     DataModule2.pgqGetGroups.Append;
     DataModule2.pgqGetGroups.FieldByName('gro_naam').AsString := Trim(edtGroupName.Text);
-    DataModule2.pgqGetGroups.FieldByName('gro_igenaar').AsInteger := StrToInt(Trim(pgqCheckExistingUser.FieldByName('gbr_id').AsString));
+    DataModule2.pgqGetGroups.FieldByName('gro_igenaar').AsInteger := StrToInt(Trim(DataModule2.pgqCheckExistingUser.FieldByName('gbr_id').AsString));
     DataModule2.pgqGetGroups.FieldByName('gro_aangemaakt').AsDateTime := now;
     DataModule2.pgqGetGroups.FieldByName('gro_del').AsBoolean := false;
     DataModule2.pgqGetGroups.FieldByName('gro_beschrijving').AsString := Trim(edtGroupDescription.Text);
@@ -574,11 +572,11 @@ begin
   pgqGroepsleden.Open;
   for I := 1 to addedUserLB.Items.Count do
   begin
-    pgqCheckExistingUser.SQL.Text := '';
-    pgqCheckExistingUser.SQL.Add('SELECT gbr_id FROM tbl_gebruikers');
-    pgqCheckExistingUser.SQL.Add('WHERE LOWER(gbr_nicknaam)=:currentUser');
-    pgqCheckExistingUser.ParamByName('currentUser').AsString := LowerCase(Trim(addedUserLB.Items[i - 1].Caption));
-    pgqCheckExistingUser.Open;
+    DataModule2.pgqCheckExistingUser.SQL.Text := '';
+    DataModule2.pgqCheckExistingUser.SQL.Add('SELECT gbr_id FROM tbl_gebruikers');
+    DataModule2.pgqCheckExistingUser.SQL.Add('WHERE LOWER(gbr_nicknaam)=:currentUser');
+    DataModule2.pgqCheckExistingUser.ParamByName('currentUser').AsString := LowerCase(Trim(addedUserLB.Items[i - 1].Caption));
+    DataModule2.pgqCheckExistingUser.Open;
 
     if(command = 'edit') then
     begin
@@ -587,7 +585,7 @@ begin
       pgqCheckDuplicateUser.SQL.Add('WHERE grl_groep = :currentGroup');
       pgqCheckDuplicateUser.SQL.Add('AND grl_gebruiker = :currentUser');
       pgqCheckDuplicateUser.ParamByName('currentGroup').AsInteger := selectedGroupId;
-      pgqCheckDuplicateUser.ParamByName('currentUser').AsInteger := pgqCheckExistingUser.FieldByName('gbr_id').AsInteger;
+      pgqCheckDuplicateUser.ParamByName('currentUser').AsInteger := DataModule2.pgqCheckExistingUser.FieldByName('gbr_id').AsInteger;
       pgqCheckDuplicateUser.Open;
 
       if(pgqCheckDuplicateUser.RecordCount > 0) then userIsDuplicate := true
@@ -597,7 +595,7 @@ begin
     if(userIsDuplicate = false) then
     begin
       pgqGroepsleden.Append;
-      pgqGroepsleden.FieldByName('grl_gebruiker').AsInteger := pgqCheckExistingUser.FieldByName('gbr_id').AsInteger;
+      pgqGroepsleden.FieldByName('grl_gebruiker').AsInteger := DataModule2.pgqCheckExistingUser.FieldByName('gbr_id').AsInteger;
       pgqGroepsleden.FieldByName('grl_groep').AsInteger := selectedGroupId;
       pgqGroepsleden.FieldByName('grl_aangemaakt').AsDateTime := now;
       pgqGroepsleden.FieldByName('grl_del').AsBoolean := false;
@@ -875,16 +873,16 @@ var
   BlobField: TBlobField;
   AStream: TMemoryStream;
 begin
-  pgqCheckExistingUser.Edit;
-  pgqCheckExistingUser.FieldByName('gbr_naam').AsString := edtEditUserName.Text;
-  pgqCheckExistingUser.FieldByName('gbr_winkelnaam').AsString := edtEditStoreName.Text;
-  pgqCheckExistingUser.FieldByName('gbr_email').AsString := edtEditUserEmail.Text;
-  pgqCheckExistingUser.FieldByName('gbr_tel').AsString := edtEditUserTelephone.Text;
-  pgqCheckExistingUser.FieldByName('gbr_nicknaam').AsString := edtEditUserNickName.Text;
+  DataModule2.pgqCheckExistingUser.Edit;
+  DataModule2.pgqCheckExistingUser.FieldByName('gbr_naam').AsString := edtEditUserName.Text;
+  DataModule2.pgqCheckExistingUser.FieldByName('gbr_winkelnaam').AsString := edtEditStoreName.Text;
+  DataModule2.pgqCheckExistingUser.FieldByName('gbr_email').AsString := edtEditUserEmail.Text;
+  DataModule2.pgqCheckExistingUser.FieldByName('gbr_tel').AsString := edtEditUserTelephone.Text;
+  DataModule2.pgqCheckExistingUser.FieldByName('gbr_nicknaam').AsString := edtEditUserNickName.Text;
 
   AStream := TMemoryStream.Create;
   imgEditProfilePicture.Picture.SaveToStream(AStream);
-  BlobField := pgqCheckExistingUser.FieldByName('gbr_profielfoto') as TBlobField;
+  BlobField := DataModule2.pgqCheckExistingUser.FieldByName('gbr_profielfoto') as TBlobField;
   BlobField.LoadFromStream(AStream);
 
 
@@ -892,10 +890,10 @@ begin
 
   if(Length(edtEditUserPassword.Text) > 0) then
   begin
-    pgqCheckExistingUser.FieldByName('gbr_wachtwoord').AsString := edtEditUserPassword.Text;
+    DataModule2.pgqCheckExistingUser.FieldByName('gbr_wachtwoord').AsString := edtEditUserPassword.Text;
   end;
 
-  pgqCheckExistingUser.Post;
+  DataModule2.pgqCheckExistingUser.Post;
 
   lblEditUserError.Caption := 'Gelukt';
 end;
@@ -961,11 +959,11 @@ begin
   begin
     with slsbEditGroupUsers.Items.Add do
     begin
-      pgqCheckExistingUser.SQL.Text := 'SELECT * FROM tbl_gebruikers WHERE gbr_id=:currentUserId';
-      pgqCheckExistingUser.ParamByName('currentUserId').AsInteger := getSelectedGroup.FieldByName('grl_gebruiker').AsInteger;
-      pgqCheckExistingUser.Open;
+      DataModule2.pgqCheckExistingUser.SQL.Text := 'SELECT * FROM tbl_gebruikers WHERE gbr_id=:currentUserId';
+      DataModule2.pgqCheckExistingUser.ParamByName('currentUserId').AsInteger := getSelectedGroup.FieldByName('grl_gebruiker').AsInteger;
+      DataModule2.pgqCheckExistingUser.Open;
 
-      Caption := pgqCheckExistingUser.FieldByName('gbr_nicknaam').AsString;
+      Caption := DataModule2.pgqCheckExistingUser.FieldByName('gbr_nicknaam').AsString;
     end;
     getSelectedGroup.Next;
   end;
@@ -983,19 +981,19 @@ begin
   selectedRowId := sgrUsers.Row;
   getUserId := StrToInt(sgrUsers.Cells[0, selectedRowId]);
 
-  pgqCheckExistingUser.SQL.Text := '';
-  pgqCheckExistingUser.SQL.Add('SELECT * FROM tbl_gebruikers');
-  pgqCheckExistingUser.SQL.Add('WHERE gbr_id=:selectedId');
-  pgqCheckExistingUser.ParamByName('selectedId').AsInteger := getUserId;
-  pgqCheckExistingUser.Open;
+  DataModule2.pgqCheckExistingUser.SQL.Text := '';
+  DataModule2.pgqCheckExistingUser.SQL.Add('SELECT * FROM tbl_gebruikers');
+  DataModule2.pgqCheckExistingUser.SQL.Add('WHERE gbr_id=:selectedId');
+  DataModule2.pgqCheckExistingUser.ParamByName('selectedId').AsInteger := getUserId;
+  DataModule2.pgqCheckExistingUser.Open;
 
-  edtEditUserName.Text := pgqCheckExistingUser.FieldByName('gbr_naam').AsString;
-  edtEditStoreName.Text := pgqCheckExistingUser.FieldByName('gbr_winkelnaam').AsString;
-  edtEditUserTelephone.Text := pgqCheckExistingUser.FieldByName('gbr_tel').AsString;
-  edtEditUserEmail.Text := pgqCheckExistingUser.FieldByName('gbr_email').AsString;
-  edtEditUserNickName.Text := pgqCheckExistingUser.FieldByName('gbr_nicknaam').AsString;
+  edtEditUserName.Text := DataModule2.pgqCheckExistingUser.FieldByName('gbr_naam').AsString;
+  edtEditStoreName.Text := DataModule2.pgqCheckExistingUser.FieldByName('gbr_winkelnaam').AsString;
+  edtEditUserTelephone.Text := DataModule2.pgqCheckExistingUser.FieldByName('gbr_tel').AsString;
+  edtEditUserEmail.Text := DataModule2.pgqCheckExistingUser.FieldByName('gbr_email').AsString;
+  edtEditUserNickName.Text := DataModule2.pgqCheckExistingUser.FieldByName('gbr_nicknaam').AsString;
 
-  stream := pgqCheckExistingUser.CreateBlobStream(pgqCheckExistingUser.FieldByName('gbr_profielfoto'), bmRead);
+  stream := DataModule2.pgqCheckExistingUser.CreateBlobStream(DataModule2.pgqCheckExistingUser.FieldByName('gbr_profielfoto'), bmRead);
   imgEditProfilePicture.Picture.LoadFromStream(stream);
 //  imgEditProfilePicture.Picture
 

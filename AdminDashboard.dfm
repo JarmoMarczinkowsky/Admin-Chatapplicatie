@@ -17,7 +17,7 @@ object Form2: TForm2
     Top = 65
     Width = 792
     Height = 469
-    ActivePage = tbsGroupOverview
+    ActivePage = tbsUserOverview
     TabOrder = 0
     OnChange = pcPagesChange
     object tbsUserOverview: TTabSheet
@@ -6199,14 +6199,5 @@ object Form2: TForm2
     Align = alCustom
     TabOrder = 2
     TMSStyle = 0
-  end
-  object pgqCheckExistingUser: TPgQuery
-    Connection = DataModule2.pgcDBconnection
-    Left = 91
-    Top = 482
-  end
-  object dscShowGroups: TDataSource
-    Left = 88
-    Top = 392
   end
 end

@@ -98,4 +98,9 @@ object DataModule2: TDataModule2
       BlobType = ftMemo
     end
   end
+  object pgqCheckExistingUser: TPgQuery
+    Connection = pgcDBconnection
+    Left = 67
+    Top = 482
+  end
 end
