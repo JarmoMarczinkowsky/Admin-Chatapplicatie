@@ -507,9 +507,9 @@ begin
     DataModule2.pgqGetGroups.Post;
 
     DataModule2.pgqGetGroups.Close;
-    DataModule2.pgqGetGroups.SQL.Text := 'SELECT * FROM tbl_groepen';
+    DataModule2.pgqGetGroups.SQL.Text := 'SELECT * FROM tbl_groepen ORDER BY gro_id DESC LIMIT 1';
     DataModule2.pgqGetGroups.Open;
-    DataModule2.pgqGetGroups.Last;
+    DataModule2.pgqGetGroups.First;
     idLastCreatedGroup := DataModule2.pgqGetGroups.FieldByName('gro_id').AsInteger;
     DataModule2.pgqGetGroups.Close;
 
@@ -839,11 +839,14 @@ begin
     pgqEditGroupMember.FieldByName('grl_del').AsBoolean := True;
     pgqEditGroupMember.Post;
 
-    pgqGetDeletedUserId.Free;
-    pgqEditGroupMember.Free;
+    pgqGetDeletedUserId.Close;
+    pgqEditGroupMember.Close;
 
     AddUserToGroup('edit', groupId);
   end;
+
+  pgqGetDeletedUserId.Free;
+  pgqEditGroupMember.Free;
 
   getGroup.Edit;
   getGroup.FieldByName('gro_naam').AsString := edtEditGroupName.Text;
@@ -1006,6 +1009,7 @@ begin
   getSelectedGroup.SQL.Text := '';
   getSelectedGroup.SQL.Add('SELECT * FROM tbl_groepleden');
   getSelectedGroup.SQL.Add('WHERE grl_groep=:selectedGroup');
+  getSelectedGroup.SQL.Add('AND grl_del = false');
   getSelectedGroup.ParamByName('selectedGroup').AsInteger := getUserId;
   getSelectedGroup.Open;
 
