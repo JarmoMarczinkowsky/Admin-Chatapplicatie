@@ -760,7 +760,7 @@ object Form2: TForm2
     Top = 72
     Width = 792
     Height = 487
-    ActivePage = tbsAddUser
+    ActivePage = tbsAddGroup
     TabOrder = 0
     OnChange = pcPagesChange
     object tbsUserOverview: TTabSheet
@@ -6250,7 +6250,7 @@ object Form2: TForm2
   object tmrRemoveError: TTimer
     Enabled = False
     OnTimer = tmrRemoveErrorTimer
-    Left = 667
-    Top = 410
+    Left = 883
+    Top = 154
   end
 end

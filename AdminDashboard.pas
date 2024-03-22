@@ -474,10 +474,11 @@ end;
 
 procedure TForm2.sbtnAddGroupClick(Sender: TObject);
 var
-  i, idLastCreatedGroup: integer;
+  i, idLastCreatedGroup, indexDeletedUser, amountOfItems: integer;
 //  pgqGroepsLeden: TPgQuery;
   AStream: TMemoryStream;
   BlobField: TBlobField;
+  getText: string;
 begin
 //  pgqGroepsLeden := TPgQuery.Create(nil);
 //  pgqGroepsLeden.Connection := DataModule2.pgcDBconnection;
@@ -514,31 +515,26 @@ begin
 
     AddUserToGroup('add', idLastCreatedGroup);
 
-    //adds the users to the group
-//    pgqGroepsleden.SQL.Text := 'SELECT * FROM tbl_groepleden';
-//    pgqGroepsleden.Open;
-////    pgqGroepsleden.Append;
-//    for I := 1 to slsbGroupAddedUsers.Items.Count do
-//    begin
-//      pgqCheckExistingUser.SQL.Text := '';
-//      pgqCheckExistingUser.SQL.Add('SELECT gbr_id FROM tbl_gebruikers');
-//      pgqCheckExistingUser.SQL.Add('WHERE LOWER(gbr_nicknaam)=:currentUser');
-//      pgqCheckExistingUser.ParamByName('currentUser').AsString := LowerCase(Trim(slsbGroupAddedUsers.Items[i - 1].Caption));
-//      pgqCheckExistingUser.Open;
-//
-//      pgqGroepsleden.Append;
-//      pgqGroepsleden.FieldByName('grl_gebruiker').AsInteger := pgqCheckExistingUser.FieldByName('gbr_id').AsInteger;
-//      pgqGroepsleden.FieldByName('grl_groep').AsInteger := idLastCreatedGroup; //placeholder
-//      pgqGroepsleden.FieldByName('grl_aangemaakt').AsDateTime := now;
-//      pgqGroepsleden.FieldByName('grl_del').AsBoolean := false;
-//
-//      pgqGroepsleden.Post;
-//    end;
+    //start clearing the boxes
+    edtGroupName.Text := '';
+    edtGroupDescription.Text := '';
+    imgAddGroupProfile.Picture := nil;
+    cboxGroupOwner.ItemIndex := 0;
 
+    //clears the added users list
+    amountOfItems := slsbGroupAddedUsers.Items.Count;
 
+    for i := 0 to amountOfItems - 1 do
+    begin
+      getText := slsbGroupAddedUsers.Items[0].Caption;
+      indexDeletedUser := cboxGroupOwner.Items.IndexOf(getText);
+      if(indexDeletedUser <> -1) then cboxGroupOwner.Items.Delete(indexDeletedUser);
+      slsbGroupAddedUsers.Items.Delete(0);
+    end;
 
+    lblAddGroupError.Font.Color := clGreen;
+    lblAddGroupError.Caption := 'Groep succesvol toegevoegd';
   end;
-
 end;
 
 procedure TForm2.sbtnAddGroupProfileClick(Sender: TObject);
@@ -900,6 +896,8 @@ begin
   pgqDuplicateNameCheck := TPgQuery.Create(nil);
   pgqDuplicateNameCheck.Connection := DataModule2.pgcDBconnection;
 
+  tmrRemoveError.Enabled := false;
+
   lblEditUserError.Font.Color := RGB(220, 20, 60);
   lblEditUserError.Caption := '';
 
@@ -915,12 +913,17 @@ begin
     begin
       if(TRegEx.IsMatch(edtEditUserTelephone.Text, '^[0-9+\-]{10,}$')) then
       begin
+        pgqDuplicateNameCheck.Close;
+
         pgqDuplicateNameCheck.SQL.Text := '';
         pgqDuplicateNameCheck.SQL.Add('SELECT * FROM tbl_gebruikers');
-        pgqDuplicateNameCheck.SQL.Add('WHERE LOWER(gbr_email)=:CheckDuplicateEmail');
-        pgqDuplicateNameCheck.SQL.Add('OR LOWER(gbr_nicknaam)=:CheckDuplicateUserName');
-        pgqDuplicateNameCheck.ParamByName('CheckDuplicateEmail').AsString := LowerCase(edtUserEmail.Text);
+        pgqDuplicateNameCheck.SQL.Add('WHERE (LOWER(gbr_email)=:CheckDuplicateEmail');
+        pgqDuplicateNameCheck.SQL.Add('OR LOWER(gbr_nicknaam)=:CheckDuplicateUserName)');
+        pgqDuplicateNameCheck.SQL.Add('AND NOT gbr_id=:selectedUserId');
+
+        pgqDuplicateNameCheck.ParamByName('CheckDuplicateEmail').AsString := LowerCase(edtEditUserEmail.Text);
         pgqDuplicateNameCheck.ParamByName('CheckDuplicateUserName').AsString := LowerCase(edtEditUserNickName.Text);
+        pgqDuplicateNameCheck.ParamByName('selectedUserId').AsInteger := DataModule2.pgqCheckExistingUser.FieldByName('gbr_id').AsInteger;
         pgqDuplicateNameCheck.Open;
 
         if(pgqDuplicateNameCheck.RecordCount = 0) then
@@ -941,17 +944,11 @@ begin
           begin
             DataModule2.pgqCheckExistingUser.FieldByName('gbr_wachtwoord').AsString := HashString(edtEditUserPassword.Text);
           end;
-//          else
-//          begin
-//            DataModule2.pgqCheckExistingUser.FieldByName('gbr_wachtwoord').AsString := DataModule2.pgqCheckExistingUser.FieldByName('gbr_wachtwoord').AsString;
-//          end;
 
           lblEditUserError.Caption := 'Gebruiker succesvol aangepast';
           lblEditUserError.Font.Color := clGreen;
 
           DataModule2.pgqCheckExistingUser.Post;
-
-          tmrRemoveError.Enabled := true;
         end
         else
         begin
@@ -967,6 +964,9 @@ begin
   begin
     lblEditUserError.Caption := 'Vul alle velden in';
   end;
+
+  tmrRemoveError.Enabled := true;
+  pgqDuplicateNameCheck.Free;
 
 
 end;
@@ -1129,7 +1129,6 @@ begin
 
       if(editDuplicateLocation = -1) then
       begin
-//        RemovedUsersList.Delete(editDuplicateLocation);
         RemovedUsersList.Add(getText);
       end;
     end;
