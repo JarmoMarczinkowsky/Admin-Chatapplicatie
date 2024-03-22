@@ -752,6 +752,7 @@ object Form2: TForm2
     OnMenuItemClick = AdvSmoothMegaMenu1MenuItemClick
     Version = '1.5.1.4'
     Align = alTop
+    ExplicitWidth = 937
     TMSStyle = 0
   end
   object pcPages: TPageControl
@@ -759,7 +760,7 @@ object Form2: TForm2
     Top = 72
     Width = 792
     Height = 487
-    ActivePage = tbsGroupOverview
+    ActivePage = tbsEditUser
     TabOrder = 0
     OnChange = pcPagesChange
     object tbsUserOverview: TTabSheet
@@ -1158,14 +1159,14 @@ object Form2: TForm2
     object tbsEditUser: TTabSheet
       Caption = 'Edit User'
       ImageIndex = 4
-      object Label10: TLabel
+      object lblEditUserTelephone: TLabel
         Left = 56
         Top = 146
         Width = 91
         Height = 15
         Caption = 'Telefoonnummer'
       end
-      object Label11: TLabel
+      object lblEditUserUserName: TLabel
         Left = 56
         Top = 175
         Width = 86
@@ -1185,28 +1186,28 @@ object Form2: TForm2
         Font.Style = [fsBold]
         ParentFont = False
       end
-      object Label7: TLabel
+      object lblEditUserStoreName: TLabel
         Left = 56
         Top = 88
         Width = 66
         Height = 15
         Caption = 'Winkelnaam'
       end
-      object Label6: TLabel
+      object lblEditUserName: TLabel
         Left = 56
         Top = 59
         Width = 32
         Height = 15
         Caption = 'Naam'
       end
-      object Label8: TLabel
+      object lblEditUserEmail: TLabel
         Left = 56
         Top = 117
         Width = 29
         Height = 15
         Caption = 'Email'
       end
-      object Label12: TLabel
+      object lblEditUserPassword: TLabel
         Left = 56
         Top = 204
         Width = 68
@@ -1220,7 +1221,7 @@ object Form2: TForm2
         Height = 75
         Stretch = True
       end
-      object Label20: TLabel
+      object lblEditUserProfilePicture: TLabel
         Left = 56
         Top = 233
         Width = 56
@@ -6245,5 +6246,11 @@ object Form2: TForm2
     Version = '2.2.3.1'
     OnClick = sbtnLogOutClick
     TMSStyle = 8
+  end
+  object tmrRemoveError: TTimer
+    Enabled = False
+    OnTimer = tmrRemoveErrorTimer
+    Left = 667
+    Top = 410
   end
 end

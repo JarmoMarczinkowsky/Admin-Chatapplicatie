@@ -53,21 +53,21 @@ type
     sgrGroups: TStringGrid;
     sgrUsers: TStringGrid;
     tbsEditUser: TTabSheet;
-    Label6: TLabel;
+    lblEditUserName: TLabel;
     edtEditUserName: TEdit;
     edtEditStoreName: TEdit;
-    Label7: TLabel;
-    Label8: TLabel;
+    lblEditUserStoreName: TLabel;
+    lblEditUserEmail: TLabel;
     edtEditUserEmail: TEdit;
     edtEditUserTelephone: TEdit;
-    Label10: TLabel;
-    Label11: TLabel;
+    lblEditUserTelephone: TLabel;
+    lblEditUserUserName: TLabel;
     edtEditUserNickName: TEdit;
     AdvSmoothButton3: TAdvSmoothButton;
     sbtnEditUser: TAdvSmoothButton;
     lblEditUserError: TLabel;
     edtEditUserPassword: TEdit;
-    Label12: TLabel;
+    lblEditUserPassword: TLabel;
     sbtnGoToEditUser: TAdvSmoothButton;
     sbtnGoToEditGroup: TAdvSmoothButton;
     sbtnRemoveUserFromGroup: TAdvSmoothButton;
@@ -107,7 +107,7 @@ type
     imgAddUserProfilePicture: TImage;
     sbtnAddUserProfilePicture: TAdvSmoothButton;
     Label19: TLabel;
-    Label20: TLabel;
+    lblEditUserProfilePicture: TLabel;
     sbtnEditUserProfilePicture: TAdvSmoothButton;
     imgEditProfilePicture: TImage;
     sbtnRefreshGroup: TAdvSmoothButton;
@@ -115,6 +115,7 @@ type
     sbtnLogOut: TAdvSmoothButton;
     lblUserOverviewAmount: TLabel;
     lblGroupOverviewAmount: TLabel;
+    tmrRemoveError: TTimer;
 
     procedure FormShow(Sender: TObject);
     procedure sbtnAddUserClick(Sender: TObject);
@@ -150,11 +151,14 @@ type
     procedure sbtnRefreshGroupClick(Sender: TObject);
     procedure sbtnRefreshUserClick(Sender: TObject);
     procedure sbtnLogOutClick(Sender: TObject);
+    procedure tmrRemoveErrorTimer(Sender: TObject);
   private
     { Private declarations }
     DBConnection : TPgConnection;
     DBLoggedInUser, getGroup: TPgQuery;
     RemovedUsersList: TStringList;
+
+    timerCounter: integer;
 
     procedure RefreshUserOverView;
     procedure RefreshGroupOverView;
@@ -188,6 +192,7 @@ var
 begin
   pgqAddUser := TPgQuery.Create(nil);
   pgqAddUser.Connection := DataModule2.pgcDBconnection;
+  timerCounter := 0;
 
   lblAddUserError.Caption := '';
   lblAddUserError.Font.Color := RGB(220, 20, 60);
@@ -212,7 +217,7 @@ begin
 
         if(DataModule2.pgqCheckExistingUser.RecordCount = 0) then
         begin
-
+          DataModule2.pgqCheckExistingUser.Close;
 
           pgqAddUser.SQL.Text := '';
           pgqAddUser.SQL.Add('SELECT * FROM tbl_gebruikers');
@@ -230,34 +235,19 @@ begin
           BlobField := pgqAddUser.FieldByName('gbr_profielfoto') as TBlobField;
           BlobField.LoadFromStream(AStream);
 
-//          pgqAddUser.SQL.Text := '';
-//          pgqAddUser.SQL.Add('INSERT INTO tbl_gebruikers(gbr_naam, gbr_winkelnaam, gbr_tel, gbr_email, gbr_nicknaam, gbr_wachtwoord, gbr_profielfoto)');
-//          pgqAddUser.SQL.Add('VALUES (:userName, :userStoreName, :userTel, :userEmail, :userNickname, :userPassword, :userProfilePicture)');
-//          pgqAddUser.ParamByName('userName').AsString := Trim(edtUserName.Text);
-//          pgqAddUser.ParamByName('userStoreName').AsString := Trim(edtUserStoreName.Text);
-//          pgqAddUser.ParamByName('userTel').AsString := Trim(edtUserTelephone.Text);
-//          pgqAddUser.ParamByName('userEmail').AsString := Trim(edtUserEmail.Text);
-//          pgqAddUser.ParamByName('userNickname').AsString := Trim(edtUserNickName.Text);
-//          pgqAddUser.ParamByName('userPassword').AsString := HashString('Test123');
-
-//          AStream := TMemoryStream.Create;
-//          imgAddUserProfilePicture.Picture.SaveToStream(AStream);
-//          pgqAddUser.ParamByName('userProfilePicture').LoadFromStream(AStream, ftGraphic);
-
           pgqAddUser.Post;
+          pgqAddUser.Free;
           AStream.Free;
 
           lblAddUserError.Font.Color := clGreen;
-          lblAddUserError.Caption := Format('Gebruiker $s succesvol toegevoegd', [Trim(edtUserNickName.Text)]);
+          lblAddUserError.Caption := 'Gebruiker ' +  Trim(edtUserNickName.Text) + ' succesvol toegevoegd';
 
           edtUserName.Text := '';
           edtUserStoreName.Text := '';
           edtUserTelephone.Text := '';
           edtUserNickName.Text := '';
           edtUserEmail.Text := '';
-          imgAddUserProfilePicture.Picture.Destroy;
-
-//          pgqAddUser.Post;
+          imgAddUserProfilePicture.Picture := nil;
         end
         else
         begin
@@ -273,6 +263,8 @@ begin
   begin
     lblAddUserError.Caption := 'Vul alle velden in';
   end;
+
+  tmrRemoveError.Enabled := true;
 end;
 
 procedure TForm2.AdvSmoothMegaMenu1MenuItemClick(Sender: TObject;
@@ -374,11 +366,11 @@ var
 begin
   if(pcPages.ActivePage = tbsUserOverview) then
   begin
-    RefreshUserOverView;
+    //RefreshUserOverView;
   end
   else if(pcPages.ActivePage = tbsGroupOverview) then
   begin
-    RefreshGroupOverView;
+    //RefreshGroupOverView;
   end
   else if (pcPages.ActivePage = tbsAddGroup) then
   begin
@@ -462,7 +454,6 @@ begin
     sgrGroups.Cells[3, i] := DataModule2.pgqGetGroups.FieldByName('gro_aangemaakt').AsString;
     sgrGroups.Cells[4, i] := DataModule2.pgqGetGroups.FieldByName('gro_del').AsString;
     sgrGroups.Cells[5, i] := DataModule2.pgqGetGroups.FieldByName('gro_beschrijving').AsString;
-
 
     DataModule2.pgqGetGroups.Next;
   end;
@@ -555,6 +546,7 @@ begin
   with TOpenDialog.Create(self) do
     try
       Caption := 'Open afbeelding';
+      Filter := 'Image Files (*.jpg;*.jpeg;*.png)|*.jpg;*.jpeg;*.png';
       Options := [TOpenOption.ofPathMustExist, TOpenOption.ofPathMustExist];
       if (Execute) then imgAddGroupProfile.Picture.LoadFromFile(FileName);
 
@@ -639,10 +631,16 @@ begin
 end;
 
 procedure TForm2.sbtnAddUserProfilePictureClick(Sender: TObject);
+var
+  testing: TBitmap;
 begin
+  testing := TBitmap.Create;
+
+
   with TOpenDialog.Create(self) do
   try
     Caption := 'Open afbeelding';
+    Filter := 'Image Files (*.jpg;*.jpeg;*.png)|*.jpg;*.jpeg;*.png';
     Options := [TOpenOption.ofPathMustExist, TOpenOption.ofPathMustExist];
     if (Execute) then imgAddUserProfilePicture.Picture.LoadFromFile(FileName);
 
@@ -874,6 +872,7 @@ begin
   with TOpenDialog.Create(self) do
   try
     Caption := 'Open afbeelding';
+    Filter := 'Image Files (*.jpg;*.jpeg;*.png)|*.jpg;*.jpeg;*.png';
     Options := [TOpenOption.ofPathMustExist, TOpenOption.ofPathMustExist];
     if (Execute) then imgEditGroupProfile.Picture.LoadFromFile(FileName);
 
@@ -913,16 +912,18 @@ begin
   BlobField.LoadFromStream(AStream);
 
 
-//          pgqAddUser.ParamByName('userProfilePicture').LoadFromStream(AStream, ftGraphic);
-
   if(Length(edtEditUserPassword.Text) > 0) then
   begin
-    DataModule2.pgqCheckExistingUser.FieldByName('gbr_wachtwoord').AsString := edtEditUserPassword.Text;
+    DataModule2.pgqCheckExistingUser.FieldByName('gbr_wachtwoord').AsString := HashString(edtEditUserPassword.Text);
   end;
 
-  DataModule2.pgqCheckExistingUser.Post;
+  lblEditUserError.Caption := 'Gebruiker succesvol aangepast';
+  lblEditUserError.Font.Color := clGreen;
 
-  lblEditUserError.Caption := 'Gelukt';
+  DataModule2.pgqCheckExistingUser.Post;
+  tmrRemoveError.Enabled := true;
+
+
 end;
 
 procedure TForm2.sbtnEditUserProfilePictureClick(Sender: TObject);
@@ -930,6 +931,7 @@ begin
   with TOpenDialog.Create(self) do
     try
       Caption := 'Open afbeelding';
+      Filter := 'Image Files (*.jpg;*.jpeg;*.png)|*.jpg;*.jpeg;*.png';
       Options := [TOpenOption.ofPathMustExist, TOpenOption.ofPathMustExist];
       if (Execute) then imgEditProfilePicture.Picture.LoadFromFile(FileName);
 
@@ -1115,6 +1117,24 @@ end;
 procedure TForm2.slsbEditAddUserToGroupClick(Sender: TObject);
 begin
   AddItemToSearchListBox('edit');
+end;
+
+procedure TForm2.tmrRemoveErrorTimer(Sender: TObject);
+begin
+
+  timerCounter := timerCounter + 1;
+
+  if(timerCounter > 8) then
+  begin
+    lblAddUserError.Caption := '';
+    lblAddGroupError.Caption := '';
+    lblEditUserError.Caption := '';
+    lblEditGroupError.Caption := '';
+
+    tmrRemoveError.Enabled := false;
+  end;
+
+
 end;
 
 Function TForm2.HashString(const Input: string): string;
