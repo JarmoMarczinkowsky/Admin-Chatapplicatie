@@ -760,7 +760,7 @@ object Form2: TForm2
     Top = 72
     Width = 792
     Height = 487
-    ActivePage = tbsGroupOverview
+    ActivePage = tbsUserOverview
     TabOrder = 0
     OnChange = pcPagesChange
     object tbsUserOverview: TTabSheet
@@ -919,6 +919,14 @@ object Form2: TForm2
         Version = '2.2.3.1'
         OnClick = sbtnRefreshUserClick
         TMSStyle = 8
+      end
+      object cbxShowDeletedUser: TCheckBox
+        Left = 103
+        Top = 13
+        Width = 178
+        Height = 17
+        Caption = 'Toon verwijderde gebruikers'
+        TabOrder = 5
       end
     end
     object tbsAddUser: TTabSheet

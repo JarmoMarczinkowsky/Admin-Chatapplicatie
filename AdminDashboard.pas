@@ -116,6 +116,7 @@ type
     lblUserOverviewAmount: TLabel;
     lblGroupOverviewAmount: TLabel;
     tmrRemoveError: TTimer;
+    cbxShowDeletedUser: TCheckBox;
 
     procedure FormShow(Sender: TObject);
     procedure sbtnAddUserClick(Sender: TObject);
@@ -394,7 +395,8 @@ var
   i: integer;
 begin
   DataModule2.pgqGetUsers.SQL.Text := '';
-  DataModule2.pgqGetUsers.SQL.Add('SELECT * FROM tbl_gebruikers ORDER BY gbr_id');
+  if(cbxShowDeletedUser.Checked) then DataModule2.pgqGetUsers.SQL.Add('SELECT * FROM tbl_gebruikers ORDER BY gbr_id')
+  else DataModule2.pgqGetUsers.SQL.Add('SELECT * FROM tbl_gebruikers WHERE gbr_del = false ORDER BY gbr_id');
   DataModule2.pgqGetUsers.Open;
 
 //  advShowUsers.Refresh;
@@ -789,14 +791,34 @@ end;
 
 procedure TForm2.sbtnDeleteUserClick(Sender: TObject);
 var 
-  selectedRowId, getUserId: integer;
+  selectedRowId, getUserId, userChoice: integer;
+  currUser: string;
 begin
   selectedRowId := sgrUsers.Row;
   getUserId := StrToInt(sgrUsers.Cells[0, selectedRowId]);
 
-  DataModule2.pgqDelete.SQL.Text := 'DELETE FROM tbl_gebruikers WHERE gbr_id=:SelectedId';
+  DataModule2.pgqDelete.SQL.Text := 'SELECT * FROM tbl_gebruikers WHERE gbr_id=:selectedId';
   DataModule2.pgqDelete.ParamByName('SelectedId').AsInteger := getUserId;
-  DataModule2.pgqDelete.Execute;
+  DataModule2.pgqDelete.Open;
+
+  currUser := DataModule2.pgqDelete.FieldByName('gbr_nicknaam').AsString;
+  userChoice := Application.MessageBox('Weet je zeker dat je deze gebruiker wilt verwijderen?' , 'Bevestig verwijderverzoek', MB_OKCANCEL );
+
+  if(userChoice = 1) then
+  begin
+    DataModule2.pgqDelete.Edit;
+    DataModule2.pgqDelete.FieldByName('gbr_del').AsBoolean := true;
+    DataModule2.pgqDelete.Post;
+  end;
+//  else if (userChoice = 2) then
+//  begin
+//    ShowMessage('Resultaat 1');
+//  end;
+
+
+//  DataModule2.pgqDelete.SQL.Text := 'DELETE FROM tbl_gebruikers WHERE gbr_id=:SelectedId';
+//  DataModule2.pgqDelete.ParamByName('SelectedId').AsInteger := getUserId;
+//  DataModule2.pgqDelete.Execute;
 
   RefreshUserOverView;
 
