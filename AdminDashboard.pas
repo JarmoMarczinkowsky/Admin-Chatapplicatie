@@ -895,33 +895,78 @@ procedure TForm2.sbtnEditUserClick(Sender: TObject);
 var
   BlobField: TBlobField;
   AStream: TMemoryStream;
+  pgqDuplicateNameCheck : TPgQuery;
 begin
+  pgqDuplicateNameCheck := TPgQuery.Create(nil);
+  pgqDuplicateNameCheck.Connection := DataModule2.pgcDBconnection;
+
   lblEditUserError.Font.Color := RGB(220, 20, 60);
   lblEditUserError.Caption := '';
 
-  DataModule2.pgqCheckExistingUser.Edit;
-  DataModule2.pgqCheckExistingUser.FieldByName('gbr_naam').AsString := edtEditUserName.Text;
-  DataModule2.pgqCheckExistingUser.FieldByName('gbr_winkelnaam').AsString := edtEditStoreName.Text;
-  DataModule2.pgqCheckExistingUser.FieldByName('gbr_email').AsString := edtEditUserEmail.Text;
-  DataModule2.pgqCheckExistingUser.FieldByName('gbr_tel').AsString := edtEditUserTelephone.Text;
-  DataModule2.pgqCheckExistingUser.FieldByName('gbr_nicknaam').AsString := edtEditUserNickName.Text;
+//  DataModule2.pgqCheckExistingUser.Close;
 
-  AStream := TMemoryStream.Create;
-  imgEditProfilePicture.Picture.SaveToStream(AStream);
-  BlobField := DataModule2.pgqCheckExistingUser.FieldByName('gbr_profielfoto') as TBlobField;
-  BlobField.LoadFromStream(AStream);
-
-
-  if(Length(edtEditUserPassword.Text) > 0) then
+  if((Length(edtEditUserName.Text) > 0) AND
+  (Length(edtEditStoreName.Text) > 0) AND
+  (Length(edtEditUserEmail.Text) > 0) AND
+  (Length(edtEditUserTelephone.Text) > 0) AND
+  (Length(edtEditUserNickName.Text) > 0)) then
   begin
-    DataModule2.pgqCheckExistingUser.FieldByName('gbr_wachtwoord').AsString := HashString(edtEditUserPassword.Text);
+    if(TRegEx.IsMatch(edtEditUserEmail.Text, '[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+')) then
+    begin
+      if(TRegEx.IsMatch(edtEditUserTelephone.Text, '^[0-9+\-]{10,}$')) then
+      begin
+        pgqDuplicateNameCheck.SQL.Text := '';
+        pgqDuplicateNameCheck.SQL.Add('SELECT * FROM tbl_gebruikers');
+        pgqDuplicateNameCheck.SQL.Add('WHERE LOWER(gbr_email)=:CheckDuplicateEmail');
+        pgqDuplicateNameCheck.SQL.Add('OR LOWER(gbr_nicknaam)=:CheckDuplicateUserName');
+        pgqDuplicateNameCheck.ParamByName('CheckDuplicateEmail').AsString := LowerCase(edtUserEmail.Text);
+        pgqDuplicateNameCheck.ParamByName('CheckDuplicateUserName').AsString := LowerCase(edtEditUserNickName.Text);
+        pgqDuplicateNameCheck.Open;
+
+        if(pgqDuplicateNameCheck.RecordCount = 0) then
+        begin
+          DataModule2.pgqCheckExistingUser.Edit;
+          DataModule2.pgqCheckExistingUser.FieldByName('gbr_naam').AsString := edtEditUserName.Text;
+          DataModule2.pgqCheckExistingUser.FieldByName('gbr_winkelnaam').AsString := edtEditStoreName.Text;
+          DataModule2.pgqCheckExistingUser.FieldByName('gbr_email').AsString := edtEditUserEmail.Text;
+          DataModule2.pgqCheckExistingUser.FieldByName('gbr_tel').AsString := edtEditUserTelephone.Text;
+          DataModule2.pgqCheckExistingUser.FieldByName('gbr_nicknaam').AsString := edtEditUserNickName.Text;
+
+          AStream := TMemoryStream.Create;
+          imgEditProfilePicture.Picture.SaveToStream(AStream);
+          BlobField := DataModule2.pgqCheckExistingUser.FieldByName('gbr_profielfoto') as TBlobField;
+          BlobField.LoadFromStream(AStream);
+
+          if(Length(edtEditUserPassword.Text) > 0) then
+          begin
+            DataModule2.pgqCheckExistingUser.FieldByName('gbr_wachtwoord').AsString := HashString(edtEditUserPassword.Text);
+          end;
+//          else
+//          begin
+//            DataModule2.pgqCheckExistingUser.FieldByName('gbr_wachtwoord').AsString := DataModule2.pgqCheckExistingUser.FieldByName('gbr_wachtwoord').AsString;
+//          end;
+
+          lblEditUserError.Caption := 'Gebruiker succesvol aangepast';
+          lblEditUserError.Font.Color := clGreen;
+
+          DataModule2.pgqCheckExistingUser.Post;
+
+          tmrRemoveError.Enabled := true;
+        end
+        else
+        begin
+          lblEditUserError.Caption := 'Email of gebruikersnaam is al in gebruik';
+        end;
+      end
+      else lblEditUserError.Caption := 'Telefoonnummer is niet correct geformatteerd' + #13#10 +
+      'Formaat: 10 characters minimaal, alleen '+ #39 + '+' + #39 + ', ' + #39 + '-' + #39 + ' en cijfers 0-9 zijn toegestaan';
+    end
+    else lblEditUserError.Caption := 'Emailadres is niet correct geformatteerd';
+  end
+  else
+  begin
+    lblEditUserError.Caption := 'Vul alle velden in';
   end;
-
-  lblEditUserError.Caption := 'Gebruiker succesvol aangepast';
-  lblEditUserError.Font.Color := clGreen;
-
-  DataModule2.pgqCheckExistingUser.Post;
-  tmrRemoveError.Enabled := true;
 
 
 end;
