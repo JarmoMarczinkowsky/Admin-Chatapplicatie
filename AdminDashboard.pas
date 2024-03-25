@@ -627,8 +627,10 @@ var
   pgqGroepsLeden, pgqCheckDuplicateUser: TPgQuery;
   i: integer;
   addedUserLB: TAdvSmoothListBox;
-  userIsDuplicate: boolean;
+  userIsDuplicate, deletedUserStatus: boolean;
+
 begin
+  deletedUserStatus := false;
   pgqGroepsLeden := TPgQuery.Create(nil);
   pgqCheckDuplicateUser := TPgQuery.Create(nil);
 
@@ -645,7 +647,6 @@ begin
   else if (command = 'edit') then
   begin
     addedUserLB := slsbEditGroupUsers;
-
   end;
 
   pgqGroepsleden.SQL.Text := 'SELECT * FROM tbl_groepleden';
@@ -660,8 +661,7 @@ begin
 
     if(command = 'edit') then
     begin
-      pgqCheckDuplicateUser.SQL.Text := '';
-      pgqCheckDuplicateUser.SQL.Add('SELECT * FROM tbl_groepleden');
+      pgqCheckDuplicateUser.SQL.Text := 'SELECT * FROM tbl_groepleden';
       pgqCheckDuplicateUser.SQL.Add('WHERE grl_groep = :currentGroup');
       pgqCheckDuplicateUser.SQL.Add('AND grl_gebruiker = :currentUser');
       pgqCheckDuplicateUser.ParamByName('currentGroup').AsInteger := selectedGroupId;
@@ -672,7 +672,18 @@ begin
       else userIsDuplicate := false;
     end;
 
-    if(userIsDuplicate = false) then
+    if(userIsDuplicate = true) then
+    begin
+      deletedUserStatus := pgqCheckDuplicateUser.FieldByName('grl_del').AsBoolean;
+      if(deletedUserStatus = true) then
+      begin
+        pgqCheckDuplicateUser.Edit;
+        pgqCheckDuplicateUser.FieldByName('grl_del').AsBoolean := false;
+        pgqCheckDuplicateUser.Post;
+      end;
+
+    end
+    else if(userIsDuplicate = false) then
     begin
       pgqGroepsleden.Append;
       pgqGroepsleden.FieldByName('grl_gebruiker').AsInteger := DataModule2.pgqCheckExistingUser.FieldByName('gbr_id').AsInteger;
@@ -681,7 +692,12 @@ begin
       pgqGroepsleden.FieldByName('grl_del').AsBoolean := false;
       pgqGroepsleden.Post;
     end;
+
+
   end;
+
+  pgqCheckDuplicateUser.Free;
+  pgqGroepsLeden.Free;
 
 end;
 
@@ -969,7 +985,6 @@ begin
 
     pgqGetDeletedUserId.Close;
     pgqEditGroupMember.Close;
-
 
   end;
   AddUserToGroup('edit', groupId);
