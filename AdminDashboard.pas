@@ -181,6 +181,7 @@ var
 
 implementation
 //  uses DMdatabaseInfo;
+  uses frmAddUser;
 
 {$R *.dfm}
 
@@ -300,10 +301,6 @@ begin
   else if (Text = 'Overzicht groepen') then pcPages.ActivePage := tbsGroupOverview
   else if (Text = 'Groep aanmaken') then pcPages.ActivePage := tbsAddGroup
   else if (Text = 'Uitloggen') then Self.Close;
-
-       
-
-
 end;
 
 procedure TForm2.sbtnBackToGroupOverviewClick(Sender: TObject);
@@ -702,12 +699,7 @@ procedure TForm2.sbtnAddUserClick(Sender: TObject);
 var
   i: integer;
 begin
-  pcPages.ActivePage := tbsAddUser;
-  edtUserName.Text := '';
-  edtUserStoreName.Text := '';
-  edtUserTelephone.Text := '';
-  edtUserNickName.Text := '';
-  edtUserEmail.Text := '';
+  Form3.Show;
 end;
 
 procedure TForm2.sbtnAddUserProfilePictureClick(Sender: TObject);

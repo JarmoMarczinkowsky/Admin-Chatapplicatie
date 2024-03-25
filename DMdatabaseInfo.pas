@@ -3,7 +3,7 @@ unit DMdatabaseInfo;
 interface
 
 uses
-  System.SysUtils, System.Classes, Data.DB, DBAccess, PgAccess, MemDS;
+  System.SysUtils, System.Classes, Data.DB, DBAccess, PgAccess, MemDS, System.Hash;
 
 type
   TDataModule2 = class(TDataModule)
@@ -29,6 +29,7 @@ type
     pgqCheckExistingUser: TPgQuery;
     pgqGetSelectedGroup: TPgQuery;
     procedure DataModuleDestroy(Sender: TObject);
+    function HashString(const Input: string): string;
   private
     { Private declarations }
   public
@@ -44,6 +45,11 @@ implementation
 {%CLASSGROUP 'Vcl.Controls.TControl'}
 
 {$R *.dfm}
+
+Function TDataModule2.HashString(const Input: string): string;
+begin
+  Result := THashSHA2.GetHashString(Input, THashSHA2.TSHA2Version.SHA256);
+end;
 
 procedure TDataModule2.DataModuleDestroy(Sender: TObject);
 begin
