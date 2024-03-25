@@ -164,9 +164,11 @@ type
 
     procedure RefreshUserOverView;
     procedure RefreshGroupOverView;
+    procedure FillUserListbox(searchLB: TAdvSmoothListBox);
     procedure AddItemToSearchListBox(commando: string);
     procedure GroupSearchUser(sender: string);
     procedure RemoveUserFromGroup(command: string);
+
     procedure AddUserToGroup(command: string; selectedGroupId: integer);
 
     function HashString(const Input: string): string;
@@ -193,84 +195,88 @@ var
 //  niceBytes: TBytes;
 begin
   pgqAddUser := TPgQuery.Create(nil);
-  pgqAddUser.Connection := DataModule2.pgcDBconnection;
-  timerCounter := 0;
 
-  lblAddUserError.Caption := '';
-  lblAddUserError.Font.Color := RGB(220, 20, 60);
-
-  if((Length(edtUserName.Text) > 0) AND
-  (Length(edtUserStoreName.Text) > 0) AND
-  (Length(edtUserEmail.Text) > 0) AND
-  (Length(edtUserTelephone.Text) > 0) AND
-  (Length(edtUserNickName.Text) > 0)) then
+  with DataModule2 do
   begin
-    if(TRegEx.IsMatch(edtUserEmail.Text, '[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+')) then
+    pgqAddUser.Connection := pgcDBconnection;
+    timerCounter := 0;
+
+    lblAddUserError.Caption := '';
+    lblAddUserError.Font.Color := RGB(220, 20, 60);
+
+    if((Length(edtUserName.Text) > 0) AND
+    (Length(edtUserStoreName.Text) > 0) AND
+    (Length(edtUserEmail.Text) > 0) AND
+    (Length(edtUserTelephone.Text) > 0) AND
+    (Length(edtUserNickName.Text) > 0)) then
     begin
-      if(TRegEx.IsMatch(edtUserTelephone.Text, '^[0-9+\-]{10,}$')) then
+      if(TRegEx.IsMatch(edtUserEmail.Text, '[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+')) then
       begin
-        DataModule2.pgqCheckExistingUser.SQL.Text := '';
-        DataModule2.pgqCheckExistingUser.SQL.Add('SELECT * FROM tbl_gebruikers');
-        DataModule2.pgqCheckExistingUser.SQL.Add('WHERE LOWER(gbr_email)=:CheckDuplicateEmail');
-        DataModule2.pgqCheckExistingUser.SQL.Add('OR LOWER(gbr_nicknaam)=:CheckDuplicateUserName');
-        DataModule2.pgqCheckExistingUser.ParamByName('CheckDuplicateEmail').AsString := LowerCase(edtUserEmail.Text);
-        DataModule2.pgqCheckExistingUser.ParamByName('CheckDuplicateUserName').AsString := LowerCase(edtUserNickName.Text);
-        DataModule2.pgqCheckExistingUser.Open;
-
-        if(DataModule2.pgqCheckExistingUser.RecordCount = 0) then
+        if(TRegEx.IsMatch(edtUserTelephone.Text, '^[0-9+\-]{10,}$')) then
         begin
-          DataModule2.pgqCheckExistingUser.Close;
+          pgqCheckExistingUser.SQL.Text := '';
+          pgqCheckExistingUser.SQL.Add('SELECT * FROM tbl_gebruikers');
+          pgqCheckExistingUser.SQL.Add('WHERE LOWER(gbr_email)=:CheckDuplicateEmail');
+          pgqCheckExistingUser.SQL.Add('OR LOWER(gbr_nicknaam)=:CheckDuplicateUserName');
+          pgqCheckExistingUser.ParamByName('CheckDuplicateEmail').AsString := LowerCase(edtUserEmail.Text);
+          pgqCheckExistingUser.ParamByName('CheckDuplicateUserName').AsString := LowerCase(edtUserNickName.Text);
+          pgqCheckExistingUser.Open;
 
-          pgqAddUser.SQL.Text := '';
-          pgqAddUser.SQL.Text := 'INSERT INTO tbl_gebruikers (gbr_naam, gbr_winkelnaam, gbr_tel, gbr_email, gbr_nicknaam, gbr_wachtwoord, gbr_profielfoto)';
-          pgqAddUser.SQL.Add('VALUES (:username, :userStoreName, :userTel, :userEmail, :userNickname, :userPassword, :userProfilePicture)');
+          if(pgqCheckExistingUser.RecordCount = 0) then
+          begin
+            pgqCheckExistingUser.Close;
 
-//          pgqAddUser.SQL.Text := '';
-//          pgqAddUser.SQL.Add('SELECT * FROM tbl_gebruikers');
-//          pgqAddUser.Open;
-//          pgqAddUser.Append;
-          pgqAddUser.ParamByName('username').AsString := Trim(edtUserName.Text);
-          pgqAddUser.ParamByName('userStoreName').AsString := Trim(edtUserStoreName.Text);
-          pgqAddUser.ParamByName('userTel').AsString := Trim(edtUserTelephone.Text);
-          pgqAddUser.ParamByName('userEmail').AsString := Trim(edtUserEmail.Text);
-          pgqAddUser.ParamByName('userNickname').AsString := Trim(edtUserNickName.Text);
-          pgqAddUser.ParamByName('userPassword').AsString := HashString('Test123');
+            pgqAddUser.SQL.Text := '';
+            pgqAddUser.SQL.Text := 'INSERT INTO tbl_gebruikers (gbr_naam, gbr_winkelnaam, gbr_tel, gbr_email, gbr_nicknaam, gbr_wachtwoord, gbr_profielfoto)';
+            pgqAddUser.SQL.Add('VALUES (:username, :userStoreName, :userTel, :userEmail, :userNickname, :userPassword, :userProfilePicture)');
+
+  //          pgqAddUser.SQL.Text := '';
+  //          pgqAddUser.SQL.Add('SELECT * FROM tbl_gebruikers');
+  //          pgqAddUser.Open;
+  //          pgqAddUser.Append;
+            pgqAddUser.ParamByName('username').AsString := Trim(edtUserName.Text);
+            pgqAddUser.ParamByName('userStoreName').AsString := Trim(edtUserStoreName.Text);
+            pgqAddUser.ParamByName('userTel').AsString := Trim(edtUserTelephone.Text);
+            pgqAddUser.ParamByName('userEmail').AsString := Trim(edtUserEmail.Text);
+            pgqAddUser.ParamByName('userNickname').AsString := Trim(edtUserNickName.Text);
+            pgqAddUser.ParamByName('userPassword').AsString := HashString('Test123');
 
 
-          AStream := TMemoryStream.Create;
-          imgAddUserProfilePicture.Picture.SaveToStream(AStream);
+            AStream := TMemoryStream.Create;
+            imgAddUserProfilePicture.Picture.SaveToStream(AStream);
 
-          pgqAddUser.ParamByName('userProfilePicture').LoadFromStream(AStream, ftGraphic);
-//          BlobField := pgqAddUser.FieldByName('gbr_profielfoto') as TBlobField;
-//          BlobField.LoadFromStream(AStream);
+            pgqAddUser.ParamByName('userProfilePicture').LoadFromStream(AStream, ftGraphic);
+  //          BlobField := pgqAddUser.FieldByName('gbr_profielfoto') as TBlobField;
+  //          BlobField.LoadFromStream(AStream);
 
-          pgqAddUser.Execute;
-          pgqAddUser.Free;
-          AStream.Free;
+            pgqAddUser.Execute;
+            pgqAddUser.Free;
+            AStream.Free;
 
-          lblAddUserError.Font.Color := clGreen;
-          lblAddUserError.Caption := 'Gebruiker ' +  Trim(edtUserNickName.Text) + ' succesvol toegevoegd';
+            lblAddUserError.Font.Color := clGreen;
+            lblAddUserError.Caption := 'Gebruiker ' +  Trim(edtUserNickName.Text) + ' succesvol toegevoegd';
 
-          edtUserName.Text := '';
-          edtUserStoreName.Text := '';
-          edtUserTelephone.Text := '';
-          edtUserNickName.Text := '';
-          edtUserEmail.Text := '';
-          imgAddUserProfilePicture.Picture := nil;
+            edtUserName.Text := '';
+            edtUserStoreName.Text := '';
+            edtUserTelephone.Text := '';
+            edtUserNickName.Text := '';
+            edtUserEmail.Text := '';
+            imgAddUserProfilePicture.Picture := nil;
+          end
+          else
+          begin
+            lblAddUserError.Caption := 'Email of gebruikersnaam is al in gebruik';
+          end;
         end
-        else
-        begin
-          lblAddUserError.Caption := 'Email of gebruikersnaam is al in gebruik';
-        end;
+        else lblAddUserError.Caption := 'Telefoonnummer is niet correct geformatteerd' + #13#10 +
+        'Formaat: 10 characters minimaal, alleen '+ #39 + '+' + #39 + ', ' + #39 + '-' + #39 + ' en cijfers 0-9 zijn toegestaan';
       end
-      else lblAddUserError.Caption := 'Telefoonnummer is niet correct geformatteerd' + #13#10 +
-      'Formaat: 10 characters minimaal, alleen '+ #39 + '+' + #39 + ', ' + #39 + '-' + #39 + ' en cijfers 0-9 zijn toegestaan';
+      else lblAddUserError.Caption := 'Emailadres is niet correct geformatteerd';
     end
-    else lblAddUserError.Caption := 'Emailadres is niet correct geformatteerd';
-  end
-  else
-  begin
-    lblAddUserError.Caption := 'Vul alle velden in';
+    else
+    begin
+      lblAddUserError.Caption := 'Vul alle velden in';
+    end;
   end;
 
   tmrRemoveError.Enabled := true;
@@ -383,28 +389,14 @@ begin
   end
   else if (pcPages.ActivePage = tbsAddGroup) then
   begin
-    DataModule2.pgqGetUsers.First;
-    for i := 1 to DataModule2.pgqGetUsers.RecordCount do
-    begin
-      with slsbUser.Items.Add do
-      begin
-        Caption := DataModule2.pgqGetUsersgbr_nicknaam.Text;
-      end;
-
-      DataModule2.pgqGetUsers.Next;
-    end;
+    //getusers = empty if not updated database
+    FillUserListbox(slsbUser);
 
   end
   else if (pcPages.ActivePage = tbsEditGroup) then
   begin
-    DataModule2.pgqGetUsers.First;
-    for i := 1 to DataModule2.pgqGetUsers.RecordCount do
-    begin
-      with slsbEditSearchUser.Items.Add do
-      begin
-        Caption := DataModule2.pgqGetUsersgbr_nicknaam.Text;
-      end;
-    end;
+    //getusers = empty if not updated database
+    FillUserListbox(slsbEditSearchUser);
 
     RemovedUsersList := TStringList.Create;
     RemovedUsersList.Duplicates := dupIgnore;
@@ -415,17 +407,17 @@ procedure TForm2.RefreshUserOverView;
 var 
   i: integer;
 begin
-  if(cbxShowDeletedUser.Checked) then DataModule2.pgqGetUsers.SQL.Text := 'SELECT * FROM tbl_gebruikers ORDER BY gbr_id'
-  else DataModule2.pgqGetUsers.SQL.Text := 'SELECT * FROM tbl_gebruikers WHERE gbr_del = false ORDER BY gbr_id';
-  DataModule2.pgqGetUsers.Open;
-
-//  advShowUsers.Refresh;
-  sgrUsers.BeginUpdate;
-
-  sgrUsers.RowCount := DataModule2.pgqGetUsers.RecordCount + 1;
-
   with DataModule2 do
   begin
+    if(cbxShowDeletedUser.Checked) then pgqGetUsers.SQL.Text := 'SELECT * FROM tbl_gebruikers ORDER BY gbr_id'
+    else pgqGetUsers.SQL.Text := 'SELECT * FROM tbl_gebruikers WHERE gbr_del = false ORDER BY gbr_id';
+    pgqGetUsers.Open;
+
+  //  advShowUsers.Refresh;
+    sgrUsers.BeginUpdate;
+
+    sgrUsers.RowCount := DataModule2.pgqGetUsers.RecordCount + 1;
+
     for i := 1 to DataModule2.pgqGetUsers.RecordCount do
     begin
       sgrUsers.Cells[0, i] := pgqGetUsers.FieldByName('gbr_id').AsString;
@@ -440,10 +432,13 @@ begin
 
     end;
     sgrUsers.EndUpdate;
+    pgqGetUsers.Free;
 
     lblUserOverviewAmount.Caption := Format('%d gebruikers gevonden', [pgqGetUsers.RecordCount]);
 
   end;
+
+
 
 
 end;
@@ -487,10 +482,44 @@ procedure TForm2.sbtnGoToAddGroupClick(Sender: TObject);
 var
   i: integer;
 begin
+  FillUserListbox(slsbUser);
   pcPages.ActivePage := tbsAddGroup;
   lblAddGroupError.Caption := '';
 
   
+end;
+
+procedure TForm2.FillUserListbox(searchLB: TAdvSmoothListBox);
+var
+  i: integer;
+begin
+  searchLB.Items.Clear;
+
+  with DataModule2 do
+  begin
+    if(pgqGetUsers.RecordCount < 1) then
+    begin
+      pgqGetUsers.SQL.Text := 'SELECT * FROM tbl_gebruikers';
+      pgqGetUsers.Open;
+    end
+    else
+      pgqGetUsers.First;
+
+    for i := 1 to pgqGetUsers.RecordCount do
+    begin
+      with searchLB.Items.Add do
+      begin
+        Caption := pgqGetUsers.FieldByName('gbr_nicknaam').AsString;
+      end;
+
+      DataModule2.pgqGetUsers.Next;
+    end;
+
+  end;
+
+
+
+
 end;
 
 procedure TForm2.sbtnAddGroupClick(Sender: TObject);
@@ -500,6 +529,7 @@ var
   AStream: TMemoryStream;
   BlobField: TBlobField;
   getText: string;
+  getPosAdmin: integer;
 begin
 //  pgqGroepsLeden := TPgQuery.Create(nil);
 //  pgqGroepsLeden.Connection := DataModule2.pgcDBconnection;
@@ -512,22 +542,27 @@ begin
     DataModule2.pgqCheckExistingUser.Close;
     DataModule2.pgqCheckExistingUser.SQL.Text := 'SELECT * FROM tbl_gebruikers WHERE gbr_nicknaam=:groupOwner';
     DataModule2.pgqCheckExistingUser.ParamByName('groupOwner').AsString := cboxGroupOwner.Text;
-    DataModule2.pgqGetGroups.Options.ReturnParams := true;
+//    DataModule2.pgqGetGroups.Options.ReturnParams := true;
     DataModule2.pgqCheckExistingUser.Open;
 
-    DataModule2.pgqGetGroups.Append;
-    DataModule2.pgqGetGroups.FieldByName('gro_naam').AsString := Trim(edtGroupName.Text);
-    DataModule2.pgqGetGroups.FieldByName('gro_igenaar').AsInteger := StrToInt(Trim(DataModule2.pgqCheckExistingUser.FieldByName('gbr_id').AsString));
-    DataModule2.pgqGetGroups.FieldByName('gro_aangemaakt').AsDateTime := now;
-    DataModule2.pgqGetGroups.FieldByName('gro_del').AsBoolean := false;
-    DataModule2.pgqGetGroups.FieldByName('gro_beschrijving').AsString := Trim(edtGroupDescription.Text);
+    DataModule2.pgqGetGroups.SQL.Text := 'INSERT INTO tbl_groepen (gro_naam, gro_igenaar, gro_aangemaakt, gro_del, gro_beschrijving, gro_profielfoto)';
+    DataModule2.pgqGetGroups.SQL.Add('VALUES (:groupName, :groupOwner, :groupCreated, :groupDeleted, :groupDescription, :groupProfilePicture)');
+//    DataModule2.pgqGetGroups.SQL.Add('SELECT SCOPE_IDENTITY()');
+    //    DataModule2.pgqGetGroups.Append;
+    DataModule2.pgqGetGroups.ParamByName('groupName').AsString := Trim(edtGroupName.Text);
+    DataModule2.pgqGetGroups.ParamByName('groupOwner').AsInteger := StrToInt(Trim(DataModule2.pgqCheckExistingUser.FieldByName('gbr_id').AsString));
+    DataModule2.pgqGetGroups.ParamByName('groupCreated').AsDateTime := now;
+    DataModule2.pgqGetGroups.ParamByName('groupDeleted').AsBoolean := false;
+    DataModule2.pgqGetGroups.ParamByName('groupDescription').AsString := Trim(edtGroupDescription.Text);
+
     AStream := TMemoryStream.Create;
     imgAddGroupProfile.Picture.SaveToStream(AStream);
-    BlobField := DataModule2.pgqGetGroups.FieldByName('gro_profielfoto') as TBlobField;
-    BlobField.LoadFromStream(AStream);
-    DataModule2.pgqGetGroups.Post;
-
+    DataModule2.pgqGetGroups.ParamByName('groupProfilePicture').LoadFromStream(AStream, ftGraphic);
+//    BlobField := DataModule2.pgqGetGroups.FieldByName('gro_profielfoto') as TBlobField;
+//    BlobField.LoadFromStream(AStream);
+    DataModule2.pgqGetGroups.Execute;
     DataModule2.pgqGetGroups.Close;
+
     DataModule2.pgqGetGroups.SQL.Text := 'SELECT * FROM tbl_groepen ORDER BY gro_id DESC LIMIT 1';
     DataModule2.pgqGetGroups.Open;
     idLastCreatedGroup := DataModule2.pgqGetGroups.FieldByName('gro_id').AsInteger;
@@ -542,15 +577,25 @@ begin
     cboxGroupOwner.ItemIndex := 0;
 
     //clears the added users list
-    amountOfItems := slsbGroupAddedUsers.Items.Count;
+    slsbGroupAddedUsers.Items.Clear;
+    getPosAdmin := cboxGroupOwner.Items.IndexOf(DataModule2.pgqGetLoggedInUser.FieldByName('gbr_nicknaam').AsString);
 
-    for i := 0 to amountOfItems - 1 do
+    if(getPosAdmin > -1) then
     begin
-      getText := slsbGroupAddedUsers.Items[0].Caption;
-      indexDeletedUser := cboxGroupOwner.Items.IndexOf(getText);
-      if(indexDeletedUser <> -1) then cboxGroupOwner.Items.Delete(indexDeletedUser);
-      slsbGroupAddedUsers.Items.Delete(0);
+      amountOfItems := cboxGroupOwner.Items.Count;
+
+      for I := 1 to amountOfItems do
+      begin
+        if( i - 1 = getPosAdmin) then continue
+        else cboxGroupOwner.Items.Delete(i - 1);
+      end;
     end;
+
+//      getText := slsbGroupAddedUsers.Items[0].Caption;
+//      indexDeletedUser := cboxGroupOwner.Items.IndexOf(getText);
+//      if(indexDeletedUser <> -1) then cboxGroupOwner.Items.Delete(indexDeletedUser);
+//      slsbGroupAddedUsers.Items.Delete(0);
+
 
     lblAddGroupError.Font.Color := clGreen;
     lblAddGroupError.Caption := 'Groep succesvol toegevoegd';
@@ -1147,20 +1192,20 @@ begin
 
     with DataModule2 do
     begin
-      DataModule2.pgqCheckExistingUser.SQL.Text := '';
-      DataModule2.pgqCheckExistingUser.SQL.Add('SELECT * FROM tbl_gebruikers');
-      DataModule2.pgqCheckExistingUser.SQL.Add('WHERE gbr_id=:selectedId');
-      DataModule2.pgqCheckExistingUser.ParamByName('selectedId').AsInteger := getUserId;
-      DataModule2.pgqCheckExistingUser.Open;
+      pgqCheckExistingUser.SQL.Text := '';
+      pgqCheckExistingUser.SQL.Add('SELECT * FROM tbl_gebruikers');
+      pgqCheckExistingUser.SQL.Add('WHERE gbr_id=:selectedId');
+      pgqCheckExistingUser.ParamByName('selectedId').AsInteger := getUserId;
+      pgqCheckExistingUser.Open;
 
-      edtEditUserName.Text := DataModule2.pgqCheckExistingUser.FieldByName('gbr_naam').AsString;
-      edtEditStoreName.Text := DataModule2.pgqCheckExistingUser.FieldByName('gbr_winkelnaam').AsString;
-      edtEditUserTelephone.Text := DataModule2.pgqCheckExistingUser.FieldByName('gbr_tel').AsString;
-      edtEditUserEmail.Text := DataModule2.pgqCheckExistingUser.FieldByName('gbr_email').AsString;
-      edtEditUserNickName.Text := DataModule2.pgqCheckExistingUser.FieldByName('gbr_nicknaam').AsString;
+      edtEditUserName.Text := pgqCheckExistingUser.FieldByName('gbr_naam').AsString;
+      edtEditStoreName.Text := pgqCheckExistingUser.FieldByName('gbr_winkelnaam').AsString;
+      edtEditUserTelephone.Text := pgqCheckExistingUser.FieldByName('gbr_tel').AsString;
+      edtEditUserEmail.Text := pgqCheckExistingUser.FieldByName('gbr_email').AsString;
+      edtEditUserNickName.Text := pgqCheckExistingUser.FieldByName('gbr_nicknaam').AsString;
 
       //loads image from database to TImage
-      stream := DataModule2.pgqCheckExistingUser.CreateBlobStream(DataModule2.pgqCheckExistingUser.FieldByName('gbr_profielfoto'), bmRead);
+      stream := pgqCheckExistingUser.CreateBlobStream(pgqCheckExistingUser.FieldByName('gbr_profielfoto'), bmRead);
       imgEditProfilePicture.Picture.LoadFromStream(stream);
     end;
 

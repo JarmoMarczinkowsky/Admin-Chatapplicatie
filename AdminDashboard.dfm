@@ -760,7 +760,7 @@ object Form2: TForm2
     Top = 72
     Width = 792
     Height = 487
-    ActivePage = tbsEditUser
+    ActivePage = tbsAddGroup
     TabOrder = 0
     OnChange = pcPagesChange
     object tbsUserOverview: TTabSheet
