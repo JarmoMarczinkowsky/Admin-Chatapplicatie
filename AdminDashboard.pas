@@ -681,34 +681,60 @@ begin
     groupOwnerCBOX := cboxEditGroupOwner
   end;
 
-  for i := 1 to searchLB.Items.Count do
+  if(searchLB.Items.CountSelected > 0) then
   begin
-    if(searchLB.Items[i - 1].Selected) then //if its selected...
+    temp := addedUsersLB.Items.IndexOfCaption(searchLB.Items[searchLB.SelectedItemIndex].Caption);
+    if(temp = -1) then
     begin
-      temp := addedUsersLB.Items.IndexOfCaption(searchLB.Items[i-1].Caption);
-      if(temp = -1) then
+      with addedUsersLB.Items.Add do
       begin
-        with addedUsersLB.Items.Add do
+        Caption := searchLB.Items[searchLB.SelectedItemIndex].Caption;
+      end;
+
+      if(groupOwnerCBOX.Items.IndexOf(searchLB.Items[searchLB.SelectedItemIndex].Caption) = -1) then
+        groupOwnerCBOX.Items.Add(searchLB.Items[searchLB.SelectedItemIndex].Caption);
+
+      if(commando = 'edit') then
+      begin
+        editDuplicateLocation := RemovedUsersList.IndexOf(searchLB.Items[searchLB.SelectedItemIndex].Caption);
+
+        if(editDuplicateLocation > -1) then
         begin
-          Caption := searchLB.Items[i - 1].Caption;
+          RemovedUsersList.Delete(editDuplicateLocation);
         end;
-
-        groupOwnerCBOX.Items.Add(searchLB.Items[i - 1].Caption);
-
-        if(commando = 'edit') then
-        begin
-          editDuplicateLocation := RemovedUsersList.IndexOf(searchLB.Items[i - 1].Caption);
-
-          if(editDuplicateLocation > -1) then
-          begin
-            RemovedUsersList.Delete(editDuplicateLocation);
-          end;
-        end;
-        
-      end
-      else errorLBL.Caption := 'Gebruiker al in lijst';
-    end;
+      end;
+    end
+    else errorLBL.Caption := 'Gebruiker al in lijst';
   end;
+
+//  for i := 1 to searchLB.Items.Count do
+//  begin
+//    if(searchLB.Items[i - 1].Selected) then //if its selected...
+//    begin
+//      temp := addedUsersLB.Items.IndexOfCaption(searchLB.Items[i-1].Caption);
+//      if(temp = -1) then
+//      begin
+//        with addedUsersLB.Items.Add do
+//        begin
+//          Caption := searchLB.Items[i - 1].Caption;
+//        end;
+//
+//        groupOwnerCBOX.Items.Add(searchLB.Items[i - 1].Caption);
+//
+//        if(commando = 'edit') then
+//        begin
+//          editDuplicateLocation := RemovedUsersList.IndexOf(searchLB.Items[i - 1].Caption);
+//
+//          if(editDuplicateLocation > -1) then
+//          begin
+//            RemovedUsersList.Delete(editDuplicateLocation);
+//          end;
+//        end;
+//
+//      end
+//      else errorLBL.Caption := 'Gebruiker al in lijst';
+//    end;
+//  end;
 end;
 
 procedure TForm2.sbtnagSearchUserClick(Sender: TObject);
@@ -1151,6 +1177,8 @@ begin
     getText := addedUsersLB.Items[addedUsersLB.SelectedItemIndex].Caption;
     indexDeletedUser := ownerCBOX.Items.IndexOf(getText);
 
+
+
     if(command = 'edit') then
     begin
       editDuplicateLocation := RemovedUsersList.IndexOf(getText);
@@ -1164,7 +1192,8 @@ begin
 
   addedUsersLB.Items.Delete(addedUsersLB.SelectedItemIndex);
 
-  if(indexDeletedUser <> -1) then ownerCBOX.Items.Delete(indexDeletedUser);
+  if(getText <> DataModule2.pgqGetLoggedInUser.FieldByName('gbr_nicknaam').AsString) then
+    if(indexDeletedUser <> -1) then ownerCBOX.Items.Delete(indexDeletedUser);
 end;
 
 procedure TForm2.sgrGroupsDrawCell(Sender: TObject; ACol, ARow: LongInt;
