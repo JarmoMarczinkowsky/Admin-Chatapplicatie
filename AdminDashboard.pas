@@ -117,6 +117,7 @@ type
     lblGroupOverviewAmount: TLabel;
     tmrRemoveError: TTimer;
     cbxShowDeletedUser: TCheckBox;
+    cbxShowDeletedGroups: TCheckBox;
 
     procedure FormShow(Sender: TObject);
     procedure sbtnAddUserClick(Sender: TObject);
@@ -433,7 +434,8 @@ procedure TForm2.RefreshGroupOverView;
 var
   i: integer;
 begin
-  DataModule2.pgqGetGroups.SQL.Text := 'SELECT * FROM tbl_groepen ORDER BY gro_id';
+  if(cbxShowDeletedGroups.Checked) then DataModule2.pgqGetGroups.SQL.Text := 'SELECT * FROM tbl_groepen ORDER BY gro_id'
+  else DataModule2.pgqGetGroups.SQL.Text := 'SELECT * FROM tbl_groepen WHERE gro_del = false ORDER BY gro_id';
   DataModule2.pgqGetGroups.Open;
 
   DataModule2.pgqGetGroups.First;
