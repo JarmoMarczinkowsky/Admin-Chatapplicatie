@@ -181,7 +181,7 @@ var
 
 implementation
 //  uses DMdatabaseInfo;
-  uses frmAddUser;
+  uses frmAddUser, frmEditUser;
 
 {$R *.dfm}
 
@@ -1107,7 +1107,6 @@ begin
   tmrRemoveError.Enabled := true;
   pgqDuplicateNameCheck.Free;
 
-
 end;
 
 procedure TForm2.sbtnEditUserProfilePictureClick(Sender: TObject);
@@ -1217,18 +1216,19 @@ begin
       pgqCheckExistingUser.ParamByName('selectedId').AsInteger := getUserId;
       pgqCheckExistingUser.Open;
 
-      edtEditUserName.Text := pgqCheckExistingUser.FieldByName('gbr_naam').AsString;
-      edtEditStoreName.Text := pgqCheckExistingUser.FieldByName('gbr_winkelnaam').AsString;
-      edtEditUserTelephone.Text := pgqCheckExistingUser.FieldByName('gbr_tel').AsString;
-      edtEditUserEmail.Text := pgqCheckExistingUser.FieldByName('gbr_email').AsString;
-      edtEditUserNickName.Text := pgqCheckExistingUser.FieldByName('gbr_nicknaam').AsString;
-
-      //loads image from database to TImage
-      stream := pgqCheckExistingUser.CreateBlobStream(pgqCheckExistingUser.FieldByName('gbr_profielfoto'), bmRead);
-      imgEditProfilePicture.Picture.LoadFromStream(stream);
+//      edtEditUserName.Text := pgqCheckExistingUser.FieldByName('gbr_naam').AsString;
+//      edtEditStoreName.Text := pgqCheckExistingUser.FieldByName('gbr_winkelnaam').AsString;
+//      edtEditUserTelephone.Text := pgqCheckExistingUser.FieldByName('gbr_tel').AsString;
+//      edtEditUserEmail.Text := pgqCheckExistingUser.FieldByName('gbr_email').AsString;
+//      edtEditUserNickName.Text := pgqCheckExistingUser.FieldByName('gbr_nicknaam').AsString;
+//
+//      //loads image from database to TImage
+//      stream := pgqCheckExistingUser.CreateBlobStream(pgqCheckExistingUser.FieldByName('gbr_profielfoto'), bmRead);
+//      imgEditProfilePicture.Picture.LoadFromStream(stream);
     end;
 
-    pcPages.ActivePage := tbsEditUser;
+    frmUserEdit.Show;
+//    pcPages.ActivePage := tbsEditUser;
 
   end;
 

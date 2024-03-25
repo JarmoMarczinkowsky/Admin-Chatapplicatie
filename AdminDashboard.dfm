@@ -760,7 +760,7 @@ object Form2: TForm2
     Top = 72
     Width = 792
     Height = 487
-    ActivePage = tbsUserOverview
+    ActivePage = tbsGroupOverview
     TabOrder = 0
     OnChange = pcPagesChange
     object tbsUserOverview: TTabSheet
@@ -932,6 +932,7 @@ object Form2: TForm2
     object tbsAddUser: TTabSheet
       Caption = 'Add User'
       ImageIndex = 1
+      TabVisible = False
       object lblTelephone: TLabel
         Left = 56
         Top = 146
@@ -1167,6 +1168,7 @@ object Form2: TForm2
     object tbsEditUser: TTabSheet
       Caption = 'Edit User'
       ImageIndex = 4
+      TabVisible = False
       object lblEditUserTelephone: TLabel
         Left = 56
         Top = 146
