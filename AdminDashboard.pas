@@ -1126,6 +1126,7 @@ var
   getSelectedGroup, getSelectedGroupOwner : TPgQuery;
   stream: TStream;
 begin
+  cboxEditGroupOwner.Items.Clear;
   FillUserListbox(slsbEditSearchUser);
   RemovedUsersList := TStringList.Create;
   RemovedUsersList.Duplicates := dupIgnore;
@@ -1144,8 +1145,7 @@ begin
     slsbEditGroupUsers.Items.Clear;
 
     //gets row with selected group
-    getSelectedGroup.SQL.Text := '';
-    getSelectedGroup.SQL.Add('SELECT * FROM tbl_groepleden');
+    getSelectedGroup.SQL.Text := 'SELECT * FROM tbl_groepleden';
     getSelectedGroup.SQL.Add('WHERE grl_groep=:selectedGroup');
     getSelectedGroup.SQL.Add('AND grl_del = false');
     getSelectedGroup.ParamByName('selectedGroup').AsInteger := getUserId;
@@ -1181,6 +1181,7 @@ begin
 
         Caption := DataModule2.pgqCheckExistingUser.FieldByName('gbr_nicknaam').AsString;
       end;
+      cboxEditGroupOwner.Items.Add(DataModule2.pgqCheckExistingUser.FieldByName('gbr_nicknaam').AsString);
       getSelectedGroup.Next;
     end;
 
