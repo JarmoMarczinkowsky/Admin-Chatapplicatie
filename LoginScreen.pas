@@ -44,8 +44,7 @@ begin
   if((Length(edtUser.Text) > 0) AND (Length(edtPassword.Text) > 0)) then
   begin
 
-    DataModule2.pgqGetLoggedInUser.SQL.Text := '';
-    DataModule2.pgqGetLoggedInUser.SQL.Add('SELECT * FROM tbl_gebruikers');
+    DataModule2.pgqGetLoggedInUser.SQL.Text := 'SELECT * FROM tbl_gebruikers';
 
     if(ContainsText(edtUser.Text, '@')) then
     begin

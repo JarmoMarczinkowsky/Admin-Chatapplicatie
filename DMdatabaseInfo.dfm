@@ -68,8 +68,8 @@ object DataModule2: TDataModule2
     Connection = pgcDBconnection
     SQL.Strings = (
       'SELECT * FROM tbl_groepen')
-    Left = 64
-    Top = 392
+    Left = 224
+    Top = 304
     object pgqGetGroupsgro_id: TIntegerField
       FieldName = 'gro_id'
     end
@@ -101,6 +101,11 @@ object DataModule2: TDataModule2
   object pgqCheckExistingUser: TPgQuery
     Connection = pgcDBconnection
     Left = 67
-    Top = 482
+    Top = 394
+  end
+  object pgqGetSelectedGroup: TPgQuery
+    Connection = pgcDBconnection
+    Left = 224
+    Top = 392
   end
 end

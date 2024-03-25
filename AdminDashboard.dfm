@@ -760,7 +760,7 @@ object Form2: TForm2
     Top = 72
     Width = 792
     Height = 487
-    ActivePage = tbsEditGroup
+    ActivePage = tbsAddUser
     TabOrder = 0
     OnChange = pcPagesChange
     object tbsUserOverview: TTabSheet
@@ -912,7 +912,7 @@ object Form2: TForm2
         Status.Appearance.Font.Height = -11
         Status.Appearance.Font.Name = 'Segoe UI'
         Status.Appearance.Font.Style = []
-        Caption = 'Refresh'
+        Caption = 'Toon'
         Color = 12623485
         ParentFont = False
         TabOrder = 4
@@ -1501,6 +1501,12 @@ object Form2: TForm2
         Height = 375
         TabOrder = 2
         OnDrawCell = sgrGroupsDrawCell
+        ColWidths = (
+          64
+          64
+          64
+          64
+          64)
       end
       object sbtnGoToEditGroup: TAdvSmoothButton
         Left = 557
@@ -1564,7 +1570,7 @@ object Form2: TForm2
         Status.Appearance.Font.Height = -11
         Status.Appearance.Font.Name = 'Segoe UI'
         Status.Appearance.Font.Style = []
-        Caption = 'Refresh'
+        Caption = 'Toon'
         Color = 12623485
         ParentFont = False
         TabOrder = 4

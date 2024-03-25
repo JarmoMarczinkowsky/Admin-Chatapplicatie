@@ -156,8 +156,8 @@ type
     procedure tmrRemoveErrorTimer(Sender: TObject);
   private
     { Private declarations }
-    DBConnection : TPgConnection;
-    DBLoggedInUser, getGroup: TPgQuery;
+//    DBConnection : TPgConnection;
+    getGroup: TPgQuery;
     RemovedUsersList: TStringList;
 
     timerCounter: integer;
@@ -313,44 +313,46 @@ procedure TForm2.FormShow(Sender: TObject);
 var 
   i, j: integer;
 begin
-  DBConnection := DataModule2.pgcDBconnection;
-  DBLoggedInUser := DataModule2.pgqGetLoggedInUser;
+//  DBConnection := DataModule2.pgcDBconnection;
 
   slsbGroupAddedUsers.Items.Clear;
 
   pcPages.ActivePage := tbsUserOverview;
-  cboxGroupOwner.Items.Add(DataModule2.pgqGetLoggedInUser.FieldByName('gbr_nicknaam').AsString);
-  cboxGroupOwner.ItemIndex := 0;
-  cboxEditGroupOwner.Items.Add(DataModule2.pgqGetLoggedInUser.FieldByName('gbr_nicknaam').AsString);
-  cboxEditGroupOwner.ItemIndex := 0;
 
-  RefreshUserOverView;
-
-  RefreshGroupOverView;
-
-  lblAddGroupError.Caption := '';
-  lblEditUserError.Caption := '';
-  lblAddGroupError.Caption := '';
-  lblEditUserError.Caption := '';
-    
-  slsbUser.Items.Clear;
-  slsbEditSearchUser.Items.Clear;
-
-  DataModule2.pgqGetUsers.First;
-
-  for i := 1 to DataModule2.pgqGetUsers.RecordCount do
+  with DataModule2 do
   begin
-    with slsbUser.Items.Add do
-    begin
-      Caption := DataModule2.pgqGetUsersgbr_nicknaam.Text;
-    end;
+    cboxGroupOwner.Items.Add(pgqGetLoggedInUser.FieldByName('gbr_nicknaam').AsString);
+    cboxGroupOwner.ItemIndex := 0;
+    cboxEditGroupOwner.Items.Add(pgqGetLoggedInUser.FieldByName('gbr_nicknaam').AsString);
+    cboxEditGroupOwner.ItemIndex := 0;
 
-    with slsbEditSearchUser.Items.Add do
-    begin
-      Caption := DataModule2.pgqGetUsersgbr_nicknaam.Text;
-    end;
+    sgrUsers.ColCount := 6;
+    sgrUsers.Cells[0, 0] := 'Id';
+    sgrUsers.Cells[1, 0] := 'Naam';
+    sgrUsers.Cells[2, 0] := 'Winkelnaam';
+    sgrUsers.Cells[3, 0] := 'Telefoon';
+    sgrUsers.Cells[4, 0] := 'Email';
+    sgrUsers.Cells[5, 0] := 'Gebruikersnaam';
 
-    DataModule2.pgqGetUsers.Next;
+    //RefreshUserOverView;
+
+    sgrGroups.ColCount := 6;
+    sgrGroups.Cells[0, 0] := 'Id';
+    sgrGroups.Cells[1, 0] := 'Naam';
+    sgrGroups.Cells[2, 0] := 'Eigenaar';
+    sgrGroups.Cells[3, 0] := 'Aangemaakt';
+    sgrGroups.Cells[4, 0] := 'Verwijderd';
+    sgrGroups.Cells[5, 0] := 'Beschrijving';
+
+    //RefreshGroupOverView;
+
+    lblAddGroupError.Caption := '';
+    lblEditUserError.Caption := '';
+    lblAddGroupError.Caption := '';
+    lblEditUserError.Caption := '';
+
+    slsbUser.Items.Clear;
+    slsbEditSearchUser.Items.Clear;
   end;
 
   lblAddUserError.Caption := '';
@@ -358,8 +360,6 @@ begin
   lblEditUserError.Caption := '';
   lblEditGroupError.Caption := '';
 
-  RemovedUsersList := TStringList.Create;
-  RemovedUsersList.Duplicates := dupIgnore;
 end;
 
 procedure TForm2.pcPagesChange(Sender: TObject);
@@ -376,18 +376,31 @@ begin
   end
   else if (pcPages.ActivePage = tbsAddGroup) then
   begin
-//    slsbUser.Items.Clear;
-//    pgqGetUsers.First;
-//    
-//    for i := 1 to pgqGetUsers.RecordCount do
-//    begin
-//      with slsbUser.Items.Add do
-//      begin
-//        Caption := pgqGetUsersgbr_naam.Text;
-//        pgqGetUsers.Next;      
-//      end;
-//    end;
+    DataModule2.pgqGetUsers.First;
+    for i := 1 to DataModule2.pgqGetUsers.RecordCount do
+    begin
+      with slsbUser.Items.Add do
+      begin
+        Caption := DataModule2.pgqGetUsersgbr_nicknaam.Text;
+      end;
 
+      DataModule2.pgqGetUsers.Next;
+    end;
+
+  end
+  else if (pcPages.ActivePage = tbsEditGroup) then
+  begin
+    DataModule2.pgqGetUsers.First;
+    for i := 1 to DataModule2.pgqGetUsers.RecordCount do
+    begin
+      with slsbEditSearchUser.Items.Add do
+      begin
+        Caption := DataModule2.pgqGetUsersgbr_nicknaam.Text;
+      end;
+    end;
+
+    RemovedUsersList := TStringList.Create;
+    RemovedUsersList.Duplicates := dupIgnore;
   end;
 end;
 
@@ -395,38 +408,36 @@ procedure TForm2.RefreshUserOverView;
 var 
   i: integer;
 begin
-  DataModule2.pgqGetUsers.SQL.Text := '';
-  if(cbxShowDeletedUser.Checked) then DataModule2.pgqGetUsers.SQL.Add('SELECT * FROM tbl_gebruikers ORDER BY gbr_id')
-  else DataModule2.pgqGetUsers.SQL.Add('SELECT * FROM tbl_gebruikers WHERE gbr_del = false ORDER BY gbr_id');
+  if(cbxShowDeletedUser.Checked) then DataModule2.pgqGetUsers.SQL.Text := 'SELECT * FROM tbl_gebruikers ORDER BY gbr_id'
+  else DataModule2.pgqGetUsers.SQL.Text := 'SELECT * FROM tbl_gebruikers WHERE gbr_del = false ORDER BY gbr_id';
   DataModule2.pgqGetUsers.Open;
 
 //  advShowUsers.Refresh;
+  sgrUsers.BeginUpdate;
 
-  sgrUsers.ColCount := 6;
   sgrUsers.RowCount := DataModule2.pgqGetUsers.RecordCount + 1;
 
-  sgrUsers.Cells[0, 0] := 'Id';
-  sgrUsers.Cells[1, 0] := 'Naam';
-  sgrUsers.Cells[2, 0] := 'Winkelnaam';
-  sgrUsers.Cells[3, 0] := 'Telefoon';
-  sgrUsers.Cells[4, 0] := 'Email';
-  sgrUsers.Cells[5, 0] := 'Gebruikersnaam';
-
-  for i := 1 to DataModule2.pgqGetUsers.RecordCount do
+  with DataModule2 do
   begin
-    sgrUsers.Cells[0, i] := DataModule2.pgqGetUsers.FieldByName('gbr_id').AsString;
-    sgrUsers.Cells[1, i] := DataModule2.pgqGetUsers.FieldByName('gbr_naam').AsString;
-    sgrUsers.Cells[2, i] := DataModule2.pgqGetUsers.FieldByName('gbr_winkelnaam').AsString;
-    sgrUsers.Cells[3, i] := DataModule2.pgqGetUsers.FieldByName('gbr_tel').AsString;
-    sgrUsers.Cells[4, i] := DataModule2.pgqGetUsers.FieldByName('gbr_email').AsString;
-    sgrUsers.Cells[5, i] := DataModule2.pgqGetUsers.FieldByName('gbr_nicknaam').AsString;
-    sgrUsers.Cells[6, i] := DataModule2.pgqGetUsers.FieldByName('gbr_wachtwoord').AsString;
+    for i := 1 to DataModule2.pgqGetUsers.RecordCount do
+    begin
+      sgrUsers.Cells[0, i] := pgqGetUsers.FieldByName('gbr_id').AsString;
+      sgrUsers.Cells[1, i] := pgqGetUsers.FieldByName('gbr_naam').AsString;
+      sgrUsers.Cells[2, i] := pgqGetUsers.FieldByName('gbr_winkelnaam').AsString;
+      sgrUsers.Cells[3, i] := pgqGetUsers.FieldByName('gbr_tel').AsString;
+      sgrUsers.Cells[4, i] := pgqGetUsers.FieldByName('gbr_email').AsString;
+      sgrUsers.Cells[5, i] := pgqGetUsers.FieldByName('gbr_nicknaam').AsString;
+      sgrUsers.Cells[6, i] := pgqGetUsers.FieldByName('gbr_wachtwoord').AsString;
 
-    DataModule2.pgqGetUsers.Next;
+      pgqGetUsers.Next;
+
+    end;
+    sgrUsers.EndUpdate;
+
+    lblUserOverviewAmount.Caption := Format('%d gebruikers gevonden', [pgqGetUsers.RecordCount]);
 
   end;
 
-  lblUserOverviewAmount.Caption := Format('%d gebruikers gevonden', [DataModule2.pgqGetUsers.RecordCount]);
 
 end;
 
@@ -434,35 +445,34 @@ procedure TForm2.RefreshGroupOverView;
 var
   i: integer;
 begin
-  if(cbxShowDeletedGroups.Checked) then DataModule2.pgqGetGroups.SQL.Text := 'SELECT * FROM tbl_groepen ORDER BY gro_id'
-  else DataModule2.pgqGetGroups.SQL.Text := 'SELECT * FROM tbl_groepen WHERE gro_del = false ORDER BY gro_id';
-  DataModule2.pgqGetGroups.Open;
-
-  DataModule2.pgqGetGroups.First;
-
-  sgrGroups.ColCount := 6;
-  sgrGroups.RowCount := DataModule2.pgqGetGroups.RecordCount + 1;
-  
-  sgrGroups.Cells[0, 0] := 'Id';
-  sgrGroups.Cells[1, 0] := 'Naam';
-  sgrGroups.Cells[2, 0] := 'Eigenaar';
-  sgrGroups.Cells[3, 0] := 'Aangemaakt';
-  sgrGroups.Cells[4, 0] := 'Verwijderd';
-  sgrGroups.Cells[5, 0] := 'Beschrijving';
-   
-  for i := 1 to DataModule2.pgqGetGroups.RecordCount do
+  with DataModule2 do
   begin
-    sgrGroups.Cells[0, i] := DataModule2.pgqGetGroups.FieldByName('gro_id').AsString;
-    sgrGroups.Cells[1, i] := DataModule2.pgqGetGroups.FieldByName('gro_naam').AsString;
-    sgrGroups.Cells[2, i] := DataModule2.pgqGetGroups.FieldByName('gro_igenaar').AsString;
-    sgrGroups.Cells[3, i] := DataModule2.pgqGetGroups.FieldByName('gro_aangemaakt').AsString;
-    sgrGroups.Cells[4, i] := DataModule2.pgqGetGroups.FieldByName('gro_del').AsString;
-    sgrGroups.Cells[5, i] := DataModule2.pgqGetGroups.FieldByName('gro_beschrijving').AsString;
+    if(cbxShowDeletedGroups.Checked) then
+      pgqGetGroups.SQL.Text := 'SELECT * FROM tbl_groepen ORDER BY gro_id'
+    else
+      pgqGetGroups.SQL.Text := 'SELECT * FROM tbl_groepen WHERE gro_del = false ORDER BY gro_id';
+    pgqGetGroups.Open;
 
-    DataModule2.pgqGetGroups.Next;
+    sgrGroups.BeginUpdate;
+    sgrGroups.RowCount := DataModule2.pgqGetGroups.RecordCount + 1;
+
+    for i := 1 to pgqGetGroups.RecordCount do
+    begin
+      sgrGroups.Cells[0, i] := pgqGetGroups.FieldByName('gro_id').AsString;
+      sgrGroups.Cells[1, i] := pgqGetGroups.FieldByName('gro_naam').AsString;
+      sgrGroups.Cells[2, i] := pgqGetGroups.FieldByName('gro_igenaar').AsString;
+      sgrGroups.Cells[3, i] := pgqGetGroups.FieldByName('gro_aangemaakt').AsString;
+      sgrGroups.Cells[4, i] := pgqGetGroups.FieldByName('gro_del').AsString;
+      sgrGroups.Cells[5, i] := pgqGetGroups.FieldByName('gro_beschrijving').AsString;
+
+      pgqGetGroups.Next;
+    end;
+    sgrGroups.EndUpdate;
+
+    lblGroupOverviewAmount.Caption := Format('%d groepen gevonden', [DataModule2.pgqGetGroups.RecordCount]);
+
   end;
 
-  lblGroupOverviewAmount.Caption := Format('%d groepen gevonden', [DataModule2.pgqGetGroups.RecordCount]);
 
 end;
 
@@ -513,7 +523,6 @@ begin
     DataModule2.pgqGetGroups.Close;
     DataModule2.pgqGetGroups.SQL.Text := 'SELECT * FROM tbl_groepen ORDER BY gro_id DESC LIMIT 1';
     DataModule2.pgqGetGroups.Open;
-    DataModule2.pgqGetGroups.First;
     idLastCreatedGroup := DataModule2.pgqGetGroups.FieldByName('gro_id').AsInteger;
     DataModule2.pgqGetGroups.Close;
 
@@ -801,20 +810,21 @@ procedure TForm2.sbtnDeleteGroupClick(Sender: TObject);
 var
   selectedRowId, getGroupId: integer;
 begin
-  selectedRowId := sgrGroups.Row;
-  getGroupId := StrToInt(sgrGroups.Cells[0, selectedRowId]);
+  if(sgrGroups.Cells[0, 1] <> '') then
+  begin
+    selectedRowId := sgrGroups.Row;
+    getGroupId := StrToInt(sgrGroups.Cells[0, selectedRowId]);
 
-  DataModule2.pgqDelete.SQL.Text := 'SELECT * FROM tbl_groepen WHERE gro_id=:selectedId';
-  DataModule2.pgqDelete.ParamByName('selectedId').AsInteger := getGroupId;
-  DataModule2.pgqDelete.Open;
-  DataModule2.pgqDelete.Edit;
-  DataModule2.pgqDelete.FieldByName('gro_del').AsBoolean := true;
-  DataModule2.pgqDelete.Post;
-//  pgqDelete.SQL.Text := 'DELETE FROM tbl_groepen WHERE gro_id=:SelectedId';
-//  pgqDelete.ParamByName('SelectedId').AsInteger := getGroupId;
-//  pgqDelete.Execute;
+    DataModule2.pgqDelete.SQL.Text := 'SELECT * FROM tbl_groepen WHERE gro_id=:selectedId';
+    DataModule2.pgqDelete.ParamByName('selectedId').AsInteger := getGroupId;
+    DataModule2.pgqDelete.Open;
+    DataModule2.pgqDelete.Edit;
+    DataModule2.pgqDelete.FieldByName('gro_del').AsBoolean := true;
+    DataModule2.pgqDelete.Post;
 
-  RefreshGroupOverView;
+    RefreshGroupOverView;
+  end;
+
 end;
 
 procedure TForm2.sbtnDeleteUserClick(Sender: TObject);
@@ -823,21 +833,31 @@ var
   currUser: string;
 begin
   selectedRowId := sgrUsers.Row;
-  getUserId := StrToInt(sgrUsers.Cells[0, selectedRowId]);
 
-  DataModule2.pgqDelete.SQL.Text := 'SELECT * FROM tbl_gebruikers WHERE gbr_id=:selectedId';
-  DataModule2.pgqDelete.ParamByName('SelectedId').AsInteger := getUserId;
-  DataModule2.pgqDelete.Open;
-
-  currUser := DataModule2.pgqDelete.FieldByName('gbr_nicknaam').AsString;
-  userChoice := Application.MessageBox('Weet je zeker dat je deze gebruiker wilt verwijderen?' , 'Bevestig verwijderverzoek', MB_OKCANCEL );
-
-  if(userChoice = 1) then
+  if(sgrUsers.Cells[0, 1] <> '') then
   begin
-    DataModule2.pgqDelete.Edit;
-    DataModule2.pgqDelete.FieldByName('gbr_del').AsBoolean := true;
-    DataModule2.pgqDelete.Post;
+    getUserId := StrToInt(sgrUsers.Cells[0, selectedRowId]);
+
+    with DataModule2 do
+    begin
+      pgqDelete.SQL.Text := 'SELECT * FROM tbl_gebruikers WHERE gbr_id=:selectedId';
+      pgqDelete.ParamByName('SelectedId').AsInteger := getUserId;
+      pgqDelete.Open;
+
+      currUser := pgqDelete.FieldByName('gbr_nicknaam').AsString;
+      userChoice := Application.MessageBox('Weet je zeker dat je deze gebruiker wilt verwijderen?' , 'Bevestig verwijderverzoek', MB_OKCANCEL );
+
+      if(userChoice = 1) then
+      begin
+        pgqDelete.Edit;
+        pgqDelete.FieldByName('gbr_del').AsBoolean := true;
+        pgqDelete.Post;
+      end;
+    end;
+
+    RefreshUserOverView;
   end;
+
 //  else if (userChoice = 2) then
 //  begin
 //    ShowMessage('Resultaat 1');
@@ -848,7 +868,7 @@ begin
 //  DataModule2.pgqDelete.ParamByName('SelectedId').AsInteger := getUserId;
 //  DataModule2.pgqDelete.Execute;
 
-  RefreshUserOverView;
+
 
 end;
 
@@ -912,6 +932,7 @@ begin
 
   RemovedUsersList.Clear;
   RefreshGroupOverView;
+  RemovedUsersList.Free;
   pcPages.ActivePage := tbsGroupOverview;
 
 end;
@@ -1044,6 +1065,8 @@ var
   getSelectedGroup, getSelectedGroupOwner : TPgQuery;
   stream: TStream;
 begin
+  if(sgrGroups.Cells[0, 1] <> '') then
+  begin
   getSelectedGroup := TPgQuery.Create(nil);
   getSelectedGroupOwner := TPgQuery.Create(nil);
   getGroup := TPgQuery.Create(nil);
@@ -1073,7 +1096,7 @@ begin
   stream := getGroup.CreateBlobStream(getGroup.FieldByName('gro_profielfoto'), bmRead);
   imgEditGroupProfile.Picture.LoadFromStream(stream);
 
-  //tbl_gebruikers
+  //get information from users table
   getSelectedGroupOwner.SQL.Text := 'SELECT * FROM tbl_gebruikers WHERE gbr_id=:groupOwner';
   getSelectedGroupOwner.ParamByName('groupOwner').AsInteger := getGroup.FieldByName('gro_igenaar').AsInteger;
   getSelectedGroupOwner.Open;
@@ -1099,6 +1122,7 @@ begin
   getSelectedGroup.Free;
 
   pcPages.ActivePage := tbsEditGroup;
+  end;
 end;
 
 procedure TForm2.sbtnGoToEditUserClick(Sender: TObject);
@@ -1107,27 +1131,35 @@ var
   stream: TStream;
 begin
   selectedRowId := sgrUsers.Row;
-  getUserId := StrToInt(sgrUsers.Cells[0, selectedRowId]);
 
-  DataModule2.pgqCheckExistingUser.SQL.Text := '';
-  DataModule2.pgqCheckExistingUser.SQL.Add('SELECT * FROM tbl_gebruikers');
-  DataModule2.pgqCheckExistingUser.SQL.Add('WHERE gbr_id=:selectedId');
-  DataModule2.pgqCheckExistingUser.ParamByName('selectedId').AsInteger := getUserId;
-  DataModule2.pgqCheckExistingUser.Open;
+  if(sgrUsers.Cells[0, 1] <> '') then
+  begin
+    getUserId := StrToInt(sgrUsers.Cells[0, selectedRowId]);
 
-  edtEditUserName.Text := DataModule2.pgqCheckExistingUser.FieldByName('gbr_naam').AsString;
-  edtEditStoreName.Text := DataModule2.pgqCheckExistingUser.FieldByName('gbr_winkelnaam').AsString;
-  edtEditUserTelephone.Text := DataModule2.pgqCheckExistingUser.FieldByName('gbr_tel').AsString;
-  edtEditUserEmail.Text := DataModule2.pgqCheckExistingUser.FieldByName('gbr_email').AsString;
-  edtEditUserNickName.Text := DataModule2.pgqCheckExistingUser.FieldByName('gbr_nicknaam').AsString;
+    with DataModule2 do
+    begin
+      DataModule2.pgqCheckExistingUser.SQL.Text := '';
+      DataModule2.pgqCheckExistingUser.SQL.Add('SELECT * FROM tbl_gebruikers');
+      DataModule2.pgqCheckExistingUser.SQL.Add('WHERE gbr_id=:selectedId');
+      DataModule2.pgqCheckExistingUser.ParamByName('selectedId').AsInteger := getUserId;
+      DataModule2.pgqCheckExistingUser.Open;
 
-  //loads image from database to TImage
-  stream := DataModule2.pgqCheckExistingUser.CreateBlobStream(DataModule2.pgqCheckExistingUser.FieldByName('gbr_profielfoto'), bmRead);
-  imgEditProfilePicture.Picture.LoadFromStream(stream);
+      edtEditUserName.Text := DataModule2.pgqCheckExistingUser.FieldByName('gbr_naam').AsString;
+      edtEditStoreName.Text := DataModule2.pgqCheckExistingUser.FieldByName('gbr_winkelnaam').AsString;
+      edtEditUserTelephone.Text := DataModule2.pgqCheckExistingUser.FieldByName('gbr_tel').AsString;
+      edtEditUserEmail.Text := DataModule2.pgqCheckExistingUser.FieldByName('gbr_email').AsString;
+      edtEditUserNickName.Text := DataModule2.pgqCheckExistingUser.FieldByName('gbr_nicknaam').AsString;
+
+      //loads image from database to TImage
+      stream := DataModule2.pgqCheckExistingUser.CreateBlobStream(DataModule2.pgqCheckExistingUser.FieldByName('gbr_profielfoto'), bmRead);
+      imgEditProfilePicture.Picture.LoadFromStream(stream);
+    end;
+
+    pcPages.ActivePage := tbsEditUser;
+
+  end;
 
 
-
-  pcPages.ActivePage := tbsEditUser;
 
     
 end;
@@ -1176,8 +1208,6 @@ begin
   begin
     getText := addedUsersLB.Items[addedUsersLB.SelectedItemIndex].Caption;
     indexDeletedUser := ownerCBOX.Items.IndexOf(getText);
-
-
 
     if(command = 'edit') then
     begin

@@ -27,6 +27,7 @@ type
     pgqGetGroupsgro_profielfoto: TBlobField;
     pgqGetGroupsgro_beschrijving: TMemoField;
     pgqCheckExistingUser: TPgQuery;
+    pgqGetSelectedGroup: TPgQuery;
     procedure DataModuleDestroy(Sender: TObject);
   private
     { Private declarations }
