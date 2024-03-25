@@ -222,22 +222,29 @@ begin
           DataModule2.pgqCheckExistingUser.Close;
 
           pgqAddUser.SQL.Text := '';
-          pgqAddUser.SQL.Add('SELECT * FROM tbl_gebruikers');
-          pgqAddUser.Open;
-          pgqAddUser.Append;
-          pgqAddUser.FieldByName('gbr_naam').AsString := Trim(edtUserName.Text);
-          pgqAddUser.FieldByName('gbr_winkelnaam').AsString := Trim(edtUserStoreName.Text);
-          pgqAddUser.FieldByName('gbr_tel').AsString := Trim(edtUserTelephone.Text);
-          pgqAddUser.FieldByName('gbr_email').AsString := Trim(edtUserEmail.Text);
-          pgqAddUser.FieldByName('gbr_nicknaam').AsString := Trim(edtUserNickName.Text);
-          pgqAddUser.FieldByName('gbr_wachtwoord').AsString := HashString('Test123');
+          pgqAddUser.SQL.Text := 'INSERT INTO tbl_gebruikers (gbr_naam, gbr_winkelnaam, gbr_tel, gbr_email, gbr_nicknaam, gbr_wachtwoord, gbr_profielfoto)';
+          pgqAddUser.SQL.Add('VALUES (:username, :userStoreName, :userTel, :userEmail, :userNickname, :userPassword, :userProfilePicture)');
+
+//          pgqAddUser.SQL.Text := '';
+//          pgqAddUser.SQL.Add('SELECT * FROM tbl_gebruikers');
+//          pgqAddUser.Open;
+//          pgqAddUser.Append;
+          pgqAddUser.ParamByName('username').AsString := Trim(edtUserName.Text);
+          pgqAddUser.ParamByName('userStoreName').AsString := Trim(edtUserStoreName.Text);
+          pgqAddUser.ParamByName('userTel').AsString := Trim(edtUserTelephone.Text);
+          pgqAddUser.ParamByName('userEmail').AsString := Trim(edtUserEmail.Text);
+          pgqAddUser.ParamByName('userNickname').AsString := Trim(edtUserNickName.Text);
+          pgqAddUser.ParamByName('userPassword').AsString := HashString('Test123');
+
 
           AStream := TMemoryStream.Create;
           imgAddUserProfilePicture.Picture.SaveToStream(AStream);
-          BlobField := pgqAddUser.FieldByName('gbr_profielfoto') as TBlobField;
-          BlobField.LoadFromStream(AStream);
 
-          pgqAddUser.Post;
+          pgqAddUser.ParamByName('userProfilePicture').LoadFromStream(AStream, ftGraphic);
+//          BlobField := pgqAddUser.FieldByName('gbr_profielfoto') as TBlobField;
+//          BlobField.LoadFromStream(AStream);
+
+          pgqAddUser.Execute;
           pgqAddUser.Free;
           AStream.Free;
 
@@ -297,10 +304,10 @@ procedure TForm2.sbtnBackToGroupOverviewClick(Sender: TObject);
 begin
   if(pcPages.ActivePage = tbsEditGroup) then
   begin
-    RemovedUsersList.Clear;
+    RemovedUsersList.Free;
   end;
 
-  RefreshGroupOverView;
+//  RefreshGroupOverView;
   pcPages.ActivePage := tbsGroupOverview;
 end;
 
@@ -1002,6 +1009,8 @@ begin
 
         if(pgqDuplicateNameCheck.RecordCount = 0) then
         begin
+
+
           DataModule2.pgqCheckExistingUser.Edit;
           DataModule2.pgqCheckExistingUser.FieldByName('gbr_naam').AsString := edtEditUserName.Text;
           DataModule2.pgqCheckExistingUser.FieldByName('gbr_winkelnaam').AsString := edtEditStoreName.Text;
