@@ -433,9 +433,9 @@ begin
 
     end;
     sgrUsers.EndUpdate;
-    pgqGetUsers.Free;
 
     lblUserOverviewAmount.Caption := Format('%d gebruikers gevonden', [pgqGetUsers.RecordCount]);
+    pgqGetUsers.Free;
 
   end;
 
@@ -473,6 +473,8 @@ begin
     sgrGroups.EndUpdate;
 
     lblGroupOverviewAmount.Caption := Format('%d groepen gevonden', [DataModule2.pgqGetGroups.RecordCount]);
+    pgqGetGroups.Free;
+
 
   end;
 
@@ -548,13 +550,11 @@ begin
     DataModule2.pgqCheckExistingUser.Close;
     DataModule2.pgqCheckExistingUser.SQL.Text := 'SELECT * FROM tbl_gebruikers WHERE gbr_nicknaam=:groupOwner';
     DataModule2.pgqCheckExistingUser.ParamByName('groupOwner').AsString := cboxGroupOwner.Text;
-//    DataModule2.pgqGetGroups.Options.ReturnParams := true;
     DataModule2.pgqCheckExistingUser.Open;
 
     DataModule2.pgqGetGroups.SQL.Text := 'INSERT INTO tbl_groepen (gro_naam, gro_igenaar, gro_aangemaakt, gro_del, gro_beschrijving, gro_profielfoto)';
     DataModule2.pgqGetGroups.SQL.Add('VALUES (:groupName, :groupOwner, :groupCreated, :groupDeleted, :groupDescription, :groupProfilePicture)');
-//    DataModule2.pgqGetGroups.SQL.Add('SELECT SCOPE_IDENTITY()');
-    //    DataModule2.pgqGetGroups.Append;
+
     DataModule2.pgqGetGroups.ParamByName('groupName').AsString := Trim(edtGroupName.Text);
     DataModule2.pgqGetGroups.ParamByName('groupOwner').AsInteger := StrToInt(Trim(DataModule2.pgqCheckExistingUser.FieldByName('gbr_id').AsString));
     DataModule2.pgqGetGroups.ParamByName('groupCreated').AsDateTime := now;
@@ -692,13 +692,10 @@ begin
       pgqGroepsleden.FieldByName('grl_del').AsBoolean := false;
       pgqGroepsleden.Post;
     end;
-
-
   end;
 
   pgqCheckDuplicateUser.Free;
   pgqGroepsLeden.Free;
-
 end;
 
 procedure TForm2.sbtnAddUserClick(Sender: TObject);
@@ -1141,8 +1138,11 @@ var
   getSelectedGroup, getSelectedGroupOwner : TPgQuery;
   stream: TStream;
 begin
+  //clears previous attempts
   cboxEditGroupOwner.Items.Clear;
   FillUserListbox(slsbEditSearchUser);
+
+  //creates list for deleting user from group
   RemovedUsersList := TStringList.Create;
   RemovedUsersList.Duplicates := dupIgnore;
 

@@ -760,7 +760,7 @@ object Form2: TForm2
     Top = 72
     Width = 792
     Height = 487
-    ActivePage = tbsEditGroup
+    ActivePage = tbsUserOverview
     TabOrder = 0
     OnChange = pcPagesChange
     object tbsUserOverview: TTabSheet
@@ -768,9 +768,9 @@ object Form2: TForm2
       object lblUserOverviewAmount: TLabel
         Left = 32
         Top = 430
-        Width = 6
+        Width = 88
         Height = 15
-        Caption = '0'
+        Caption = '0 rijen gevonden'
       end
       object sbtnAddUser: TAdvSmoothButton
         Left = 492
@@ -1420,9 +1420,9 @@ object Form2: TForm2
       object lblGroupOverviewAmount: TLabel
         Left = 32
         Top = 430
-        Width = 6
+        Width = 88
         Height = 15
-        Caption = '0'
+        Caption = '0 rijen gevonden'
       end
       object sbtnGoToAddGroup: TAdvSmoothButton
         Left = 492

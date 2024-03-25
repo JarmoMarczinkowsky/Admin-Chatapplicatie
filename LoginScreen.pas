@@ -18,6 +18,7 @@ type
     lblError: TLabel;
     Image1: TImage;    procedure sbtnLoginClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
     { Private declarations }
   public
@@ -35,6 +36,12 @@ implementation
 procedure TForm1.FormCreate(Sender: TObject);
 begin
   lblError.Caption := '';
+
+end;
+
+procedure TForm1.FormShow(Sender: TObject);
+begin
+  edtUser.SetFocus;
 end;
 
 procedure TForm1.sbtnLoginClick(Sender: TObject);
