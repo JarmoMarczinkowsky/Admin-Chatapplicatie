@@ -156,21 +156,16 @@ type
     procedure tmrRemoveErrorTimer(Sender: TObject);
   private
     { Private declarations }
-//    DBConnection : TPgConnection;
     getGroup: TPgQuery;
     RemovedUsersList: TStringList;
-
     timerCounter: integer;
-
     procedure RefreshUserOverView;
     procedure RefreshGroupOverView;
     procedure FillUserListbox(searchLB: TAdvSmoothListBox);
     procedure AddItemToSearchListBox(commando: string);
     procedure GroupSearchUser(sender: string);
     procedure RemoveUserFromGroup(command: string);
-
     procedure AddUserToGroup(command: string; selectedGroupId: integer);
-
     function HashString(const Input: string): string;
   public
     { Public declarations }
@@ -180,7 +175,6 @@ var
   Form2: TForm2;
 
 implementation
-//  uses DMdatabaseInfo;
   uses frmAddUser, frmAddGroup, frmEditUser, frmEditGroup;
 
 {$R *.dfm}
@@ -191,9 +185,6 @@ var
   testHash : string;
   AStream : TMemoryStream;
   BlobField: TBlobField;
-
-//  stream: TMemoryStream;
-//  niceBytes: TBytes;
 begin
   pgqAddUser := TPgQuery.Create(nil);
 
@@ -231,10 +222,6 @@ begin
             pgqAddUser.SQL.Text := 'INSERT INTO tbl_gebruikers (gbr_naam, gbr_winkelnaam, gbr_tel, gbr_email, gbr_nicknaam, gbr_wachtwoord, gbr_profielfoto)';
             pgqAddUser.SQL.Add('VALUES (:username, :userStoreName, :userTel, :userEmail, :userNickname, :userPassword, :userProfilePicture)');
 
-  //          pgqAddUser.SQL.Text := '';
-  //          pgqAddUser.SQL.Add('SELECT * FROM tbl_gebruikers');
-  //          pgqAddUser.Open;
-  //          pgqAddUser.Append;
             pgqAddUser.ParamByName('username').AsString := Trim(edtUserName.Text);
             pgqAddUser.ParamByName('userStoreName').AsString := Trim(edtUserStoreName.Text);
             pgqAddUser.ParamByName('userTel').AsString := Trim(edtUserTelephone.Text);
@@ -242,13 +229,10 @@ begin
             pgqAddUser.ParamByName('userNickname').AsString := Trim(edtUserNickName.Text);
             pgqAddUser.ParamByName('userPassword').AsString := HashString('Test123');
 
-
             AStream := TMemoryStream.Create;
             imgAddUserProfilePicture.Picture.SaveToStream(AStream);
 
             pgqAddUser.ParamByName('userProfilePicture').LoadFromStream(AStream, ftGraphic);
-  //          BlobField := pgqAddUser.FieldByName('gbr_profielfoto') as TBlobField;
-  //          BlobField.LoadFromStream(AStream);
 
             pgqAddUser.Execute;
             pgqAddUser.Free;
@@ -309,8 +293,6 @@ begin
   begin
     RemovedUsersList.Free;
   end;
-
-//  RefreshGroupOverView;
   pcPages.ActivePage := tbsGroupOverview;
 end;
 
@@ -323,8 +305,6 @@ procedure TForm2.FormShow(Sender: TObject);
 var 
   i, j: integer;
 begin
-//  DBConnection := DataModule2.pgcDBconnection;
-
   slsbGroupAddedUsers.Items.Clear;
 
   pcPages.ActivePage := tbsUserOverview;
@@ -344,8 +324,6 @@ begin
     sgrUsers.Cells[4, 0] := 'Email';
     sgrUsers.Cells[5, 0] := 'Gebruikersnaam';
 
-    //RefreshUserOverView;
-
     sgrGroups.ColCount := 6;
     sgrGroups.Cells[0, 0] := 'Id';
     sgrGroups.Cells[1, 0] := 'Naam';
@@ -353,8 +331,6 @@ begin
     sgrGroups.Cells[3, 0] := 'Aangemaakt';
     sgrGroups.Cells[4, 0] := 'Verwijderd';
     sgrGroups.Cells[5, 0] := 'Beschrijving';
-
-    //RefreshGroupOverView;
 
     lblAddGroupError.Caption := '';
     lblEditUserError.Caption := '';
@@ -369,7 +345,6 @@ begin
   lblAddGroupError.Caption := '';
   lblEditUserError.Caption := '';
   lblEditGroupError.Caption := '';
-
 end;
 
 procedure TForm2.pcPagesChange(Sender: TObject);
@@ -378,33 +353,16 @@ var
 begin
   if(pcPages.ActivePage = tbsUserOverview) then
   begin
-    //RefreshUserOverView;
     Self.Caption := 'Gebruikersoverzicht';
   end
   else if(pcPages.ActivePage = tbsGroupOverview) then
   begin
-    //RefreshGroupOverView;
     Self.Caption := 'Groepenoverzicht';
   end
   else if (pcPages.ActivePage = tbsOptions) then
   begin
     Self.Caption := 'Opties';
   end;
-//  else if (pcPages.ActivePage = tbsAddGroup) then
-//  begin
-//    //getusers = empty if not updated database
-//    FillUserListbox(slsbUser);
-//
-//  end
-//  else if (pcPages.ActivePage = tbsEditGroup) then
-//  begin
-//    //getusers = empty if not updated database
-//    FillUserListbox(slsbEditSearchUser);
-//
-//
-//    RemovedUsersList := TStringList.Create;
-//    RemovedUsersList.Duplicates := dupIgnore;
-//  end;
 end;
 
 procedure TForm2.RefreshUserOverView;
@@ -417,9 +375,7 @@ begin
     else pgqGetUsers.SQL.Text := 'SELECT * FROM tbl_gebruikers WHERE gbr_del = false ORDER BY gbr_id';
     pgqGetUsers.Open;
 
-  //  advShowUsers.Refresh;
     sgrUsers.BeginUpdate;
-
     sgrUsers.RowCount := DataModule2.pgqGetUsers.RecordCount + 1;
 
     for i := 1 to DataModule2.pgqGetUsers.RecordCount do
@@ -473,24 +429,14 @@ begin
 
     lblGroupOverviewAmount.Caption := Format('%d groepen gevonden', [DataModule2.pgqGetGroups.RecordCount]);
     pgqGetGroups.Free;
-
-
   end;
-
-
 end;
 
 procedure TForm2.sbtnGoToAddGroupClick(Sender: TObject);
 var
   i: integer;
 begin
-//  FillUserListbox(slsbUser);
-//
-//  slsbGroupAddedUsers.Items.Clear;
-//  pcPages.ActivePage := tbsAddGroup;
-//  lblAddGroupError.Caption := '';
   frmGroupAdd.Show;
-
 end;
 
 procedure TForm2.FillUserListbox(searchLB: TAdvSmoothListBox);
@@ -518,24 +464,17 @@ begin
 
       DataModule2.pgqGetUsers.Next;
     end;
-
   end;
-
-//  slsbGroupAddedUsers.Items.Clear;
-//  slsbEditGroupUsers.Items.Clear;
 end;
 
 procedure TForm2.sbtnAddGroupClick(Sender: TObject);
 var
   i, idLastCreatedGroup, indexDeletedUser, amountOfItems: integer;
-//  pgqGroepsLeden: TPgQuery;
   AStream: TMemoryStream;
   BlobField: TBlobField;
   getText: string;
   getPosAdmin: integer;
 begin
-//  pgqGroepsLeden := TPgQuery.Create(nil);
-//  pgqGroepsLeden.Connection := DataModule2.pgcDBconnection;
   lblAddGroupError.Font.Color := RGB(220, 20, 60);
   lblAddGroupError.Caption := '';
 
@@ -559,8 +498,6 @@ begin
     AStream := TMemoryStream.Create;
     imgAddGroupProfile.Picture.SaveToStream(AStream);
     DataModule2.pgqGetGroups.ParamByName('groupProfilePicture').LoadFromStream(AStream, ftGraphic);
-//    BlobField := DataModule2.pgqGetGroups.FieldByName('gro_profielfoto') as TBlobField;
-//    BlobField.LoadFromStream(AStream);
     DataModule2.pgqGetGroups.Execute;
     DataModule2.pgqGetGroups.Close;
 
@@ -591,12 +528,6 @@ begin
         else cboxGroupOwner.Items.Delete(i - 1);
       end;
     end;
-
-//      getText := slsbGroupAddedUsers.Items[0].Caption;
-//      indexDeletedUser := cboxGroupOwner.Items.IndexOf(getText);
-//      if(indexDeletedUser <> -1) then cboxGroupOwner.Items.Delete(indexDeletedUser);
-//      slsbGroupAddedUsers.Items.Delete(0);
-
 
     lblAddGroupError.Font.Color := clGreen;
     lblAddGroupError.Caption := 'Groep succesvol toegevoegd';
@@ -776,35 +707,6 @@ begin
     end
     else errorLBL.Caption := 'Gebruiker al in lijst';
   end;
-
-//  for i := 1 to searchLB.Items.Count do
-//  begin
-//    if(searchLB.Items[i - 1].Selected) then //if its selected...
-//    begin
-//      temp := addedUsersLB.Items.IndexOfCaption(searchLB.Items[i-1].Caption);
-//      if(temp = -1) then
-//      begin
-//        with addedUsersLB.Items.Add do
-//        begin
-//          Caption := searchLB.Items[i - 1].Caption;
-//        end;
-//
-//        groupOwnerCBOX.Items.Add(searchLB.Items[i - 1].Caption);
-//
-//        if(commando = 'edit') then
-//        begin
-//          editDuplicateLocation := RemovedUsersList.IndexOf(searchLB.Items[i - 1].Caption);
-//
-//          if(editDuplicateLocation > -1) then
-//          begin
-//            RemovedUsersList.Delete(editDuplicateLocation);
-//          end;
-//        end;
-//
-//      end
-//      else errorLBL.Caption := 'Gebruiker al in lijst';
-//    end;
-//  end;
 end;
 
 procedure TForm2.sbtnagSearchUserClick(Sender: TObject);
@@ -918,19 +820,6 @@ begin
 
     RefreshUserOverView;
   end;
-
-//  else if (userChoice = 2) then
-//  begin
-//    ShowMessage('Resultaat 1');
-//  end;
-
-
-//  DataModule2.pgqDelete.SQL.Text := 'DELETE FROM tbl_gebruikers WHERE gbr_id=:SelectedId';
-//  DataModule2.pgqDelete.ParamByName('SelectedId').AsInteger := getUserId;
-//  DataModule2.pgqDelete.Execute;
-
-
-
 end;
 
 procedure TForm2.sbtnEditGroupClick(Sender: TObject);
@@ -992,7 +881,6 @@ begin
   getGroup.Post;
 
   RemovedUsersList.Clear;
-  //RefreshGroupOverView;
   RemovedUsersList.Free;
   pcPages.ActivePage := tbsGroupOverview;
 
@@ -1036,8 +924,6 @@ begin
   lblEditUserError.Font.Color := RGB(220, 20, 60);
   lblEditUserError.Caption := '';
 
-//  DataModule2.pgqCheckExistingUser.Close;
-
   if((Length(edtEditUserName.Text) > 0) AND
   (Length(edtEditStoreName.Text) > 0) AND
   (Length(edtEditUserEmail.Text) > 0) AND
@@ -1063,8 +949,6 @@ begin
 
         if(pgqDuplicateNameCheck.RecordCount = 0) then
         begin
-
-
           DataModule2.pgqCheckExistingUser.Edit;
           DataModule2.pgqCheckExistingUser.FieldByName('gbr_naam').AsString := edtEditUserName.Text;
           DataModule2.pgqCheckExistingUser.FieldByName('gbr_winkelnaam').AsString := edtEditStoreName.Text;
@@ -1124,26 +1008,10 @@ end;
 procedure TForm2.sbtnGoToEditGroupClick(Sender: TObject);
 var
   selectedRowId, getGroupId, i: integer;
-//  getSelectedGroup, getSelectedGroupOwner : TPgQuery;
   stream: TStream;
 begin
-  //clears previous attempts
-//  cboxEditGroupOwner.Items.Clear;
-  FillUserListbox(slsbEditSearchUser);
-
-  //creates list for deleting user from group
-//  RemovedUsersList := TStringList.Create;
-//  RemovedUsersList.Duplicates := dupIgnore;
-
   if(sgrGroups.Cells[0, 1] <> '') then
   begin
-//    DataModule2.pgqGetSelectedGroup := TPgQuery.Create(nil);
-//    DataModule2.pgqGetSelectedGroupOwner := TPgQuery.Create(nil);
-//    getGroup := TPgQuery.Create(nil);
-//    DataModule2.pgqGetSelectedGroup.Connection := DataModule2.pgcDBconnection;
-//    DataModule2.pgqGetSelectedGroupOwner.Connection := DataModule2.pgcDBconnection;
-//    getGroup.Connection := DataModule2.pgcDBconnection;
-
     selectedRowId := sgrGroups.Row;
     getGroupId := StrToInt(sgrGroups.Cells[0, selectedRowId]);
     slsbEditGroupUsers.Items.Clear;
@@ -1170,40 +1038,6 @@ begin
     DataModule2.pgqGetSelectedGroup.Open;
 
     frmGroupEdit.Show;
-
-//    edtEditGroupName.Text := getGroup.FieldByName('gro_naam').AsString;
-//    edtEditGroupDescription.Text := getGroup.FieldByName('gro_beschrijving').AsString;
-//    cbxGroupDeleted.Checked := getGroup.FieldByName('gro_del').AsBoolean;
-//    stream := getGroup.CreateBlobStream(getGroup.FieldByName('gro_profielfoto'), bmRead);
-//    imgEditGroupProfile.Picture.LoadFromStream(stream);
-//
-//    //get information from users table
-//    DataModule2.pgqGetSelectedGroupOwner.SQL.Text := 'SELECT * FROM tbl_gebruikers WHERE gbr_id=:groupOwner';
-//    DataModule2.pgqGetSelectedGroupOwner.ParamByName('groupOwner').AsInteger := getGroup.FieldByName('gro_igenaar').AsInteger;
-//    DataModule2.pgqGetSelectedGroupOwner.Open;
-//
-//    cboxEditGroupOwner.Items.Add(DataModule2.pgqGetSelectedGroupOwner.FieldByName('gbr_nicknaam').AsString);
-//    cboxEditGroupOwner.ItemIndex := 0;
-//    DataModule2.pgqGetSelectedGroupOwner.Free;
-//
-//    //get every row with the selected group
-//    for i := 1 to DataModule2.pgqGetSelectedGroup.RecordCount do
-//    begin
-//      with slsbEditGroupUsers.Items.Add do
-//      begin
-//        DataModule2.pgqCheckExistingUser.SQL.Text := 'SELECT * FROM tbl_gebruikers WHERE gbr_id=:currentUserId';
-//        DataModule2.pgqCheckExistingUser.ParamByName('currentUserId').AsInteger := DataModule2.pgqGetSelectedGroup.FieldByName('grl_gebruiker').AsInteger;
-//        DataModule2.pgqCheckExistingUser.Open;
-//
-//        Caption := DataModule2.pgqCheckExistingUser.FieldByName('gbr_nicknaam').AsString;
-//      end;
-//      cboxEditGroupOwner.Items.Add(DataModule2.pgqCheckExistingUser.FieldByName('gbr_nicknaam').AsString);
-//      DataModule2.pgqGetSelectedGroup.Next;
-//    end;
-//
-//    DataModule2.pgqGetSelectedGroup.Free;
-
-//    pcPages.ActivePage := tbsEditGroup;
   end;
 end;
 
@@ -1226,25 +1060,10 @@ begin
       pgqCheckExistingUser.ParamByName('selectedId').AsInteger := getUserId;
       pgqCheckExistingUser.Open;
 
-//      edtEditUserName.Text := pgqCheckExistingUser.FieldByName('gbr_naam').AsString;
-//      edtEditStoreName.Text := pgqCheckExistingUser.FieldByName('gbr_winkelnaam').AsString;
-//      edtEditUserTelephone.Text := pgqCheckExistingUser.FieldByName('gbr_tel').AsString;
-//      edtEditUserEmail.Text := pgqCheckExistingUser.FieldByName('gbr_email').AsString;
-//      edtEditUserNickName.Text := pgqCheckExistingUser.FieldByName('gbr_nicknaam').AsString;
-//
-//      //loads image from database to TImage
-//      stream := pgqCheckExistingUser.CreateBlobStream(pgqCheckExistingUser.FieldByName('gbr_profielfoto'), bmRead);
-//      imgEditProfilePicture.Picture.LoadFromStream(stream);
     end;
 
     frmUserEdit.Show;
-//    pcPages.ActivePage := tbsEditUser;
-
   end;
-
-
-
-    
 end;
 
 procedure TForm2.sbtnLogOutClick(Sender: TObject);

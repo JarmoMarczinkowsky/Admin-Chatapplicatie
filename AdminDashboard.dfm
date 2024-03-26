@@ -3846,6 +3846,7 @@ object Form2: TForm2
     object tbsEditGroup: TTabSheet
       Caption = 'Edit Group'
       ImageIndex = 5
+      TabVisible = False
       object imgEditGroupProfile: TImage
         Left = 301
         Top = 243
