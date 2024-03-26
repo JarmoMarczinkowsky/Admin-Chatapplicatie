@@ -768,9 +768,9 @@ object Form2: TForm2
       object lblUserOverviewAmount: TLabel
         Left = 32
         Top = 430
-        Width = 88
+        Width = 120
         Height = 15
-        Caption = '0 rijen gevonden'
+        Caption = '0 gebruikers gevonden'
       end
       object sbtnAddUser: TAdvSmoothButton
         Left = 492
@@ -1422,9 +1422,9 @@ object Form2: TForm2
       object lblGroupOverviewAmount: TLabel
         Left = 32
         Top = 430
-        Width = 88
+        Width = 109
         Height = 15
-        Caption = '0 rijen gevonden'
+        Caption = '0 groepen gevonden'
       end
       object sbtnGoToAddGroup: TAdvSmoothButton
         Left = 492

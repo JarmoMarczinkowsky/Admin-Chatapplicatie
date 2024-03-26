@@ -181,7 +181,7 @@ var
 
 implementation
 //  uses DMdatabaseInfo;
-  uses frmAddUser, frmEditUser;
+  uses frmAddUser, frmAddGroup, frmEditUser;
 
 {$R *.dfm}
 
@@ -482,13 +482,13 @@ procedure TForm2.sbtnGoToAddGroupClick(Sender: TObject);
 var
   i: integer;
 begin
-  FillUserListbox(slsbUser);
+//  FillUserListbox(slsbUser);
+//
+//  slsbGroupAddedUsers.Items.Clear;
+//  pcPages.ActivePage := tbsAddGroup;
+//  lblAddGroupError.Caption := '';
+  frmGroupAdd.Show;
 
-  slsbGroupAddedUsers.Items.Clear;
-  pcPages.ActivePage := tbsAddGroup;
-  lblAddGroupError.Caption := '';
-
-  
 end;
 
 procedure TForm2.FillUserListbox(searchLB: TAdvSmoothListBox);

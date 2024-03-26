@@ -147,7 +147,7 @@ object frmUserEdit: TfrmUserEdit
     Status.Appearance.Font.Name = 'Segoe UI'
     Status.Appearance.Font.Style = []
     Caption = 'Upload bestand'
-    Color = 15395562
+    Color = 12698049
     TabOrder = 6
     Version = '2.2.3.1'
     OnClick = sbtnEditUserProfilePictureClick

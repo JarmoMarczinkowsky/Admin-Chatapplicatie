@@ -132,7 +132,7 @@ object Form3: TForm3
     Status.Appearance.Font.Name = 'Segoe UI'
     Status.Appearance.Font.Style = []
     Caption = 'Upload bestand'
-    Color = 15395562
+    Color = 12698049
     TabOrder = 5
     Version = '2.2.3.1'
     OnClick = sbtnAddUserProfilePictureClick
