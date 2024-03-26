@@ -1,7 +1,7 @@
 object Form3: TForm3
   Left = 0
   Top = 0
-  Caption = 'Form3'
+  Caption = 'Voeg gebruiker toe'
   ClientHeight = 441
   ClientWidth = 438
   Color = clBtnFace

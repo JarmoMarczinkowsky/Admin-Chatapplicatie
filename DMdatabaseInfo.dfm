@@ -10,25 +10,25 @@ object DataModule2: TDataModule2
     Database = 'rchat'
     Connected = True
     Left = 64
-    Top = 40
+    Top = 8
     EncryptedPassword = 'CDFFACFF8BFF9EFF98FF9AFFD5FF'
   end
   object pgqGetLoggedInUser: TPgQuery
     Connection = pgcDBconnection
     Left = 64
-    Top = 120
+    Top = 88
   end
   object pgqDelete: TPgQuery
     Connection = pgcDBconnection
     Left = 67
-    Top = 214
+    Top = 182
   end
   object pgqGetUsers: TPgQuery
     Connection = pgcDBconnection
     SQL.Strings = (
       'SELECT * FROM tbl_gebruikers')
     Left = 64
-    Top = 304
+    Top = 272
     object pgqGetUsersgbr_id: TIntegerField
       FieldName = 'gbr_id'
     end
@@ -69,7 +69,7 @@ object DataModule2: TDataModule2
     SQL.Strings = (
       'SELECT * FROM tbl_groepen')
     Left = 224
-    Top = 304
+    Top = 272
     object pgqGetGroupsgro_id: TIntegerField
       FieldName = 'gro_id'
     end
@@ -101,11 +101,21 @@ object DataModule2: TDataModule2
   object pgqCheckExistingUser: TPgQuery
     Connection = pgcDBconnection
     Left = 67
-    Top = 394
+    Top = 362
   end
   object pgqGetSelectedGroup: TPgQuery
     Connection = pgcDBconnection
     Left = 224
-    Top = 392
+    Top = 360
+  end
+  object pgqGetSelectedGroupOwner: TPgQuery
+    Connection = pgcDBconnection
+    Left = 224
+    Top = 448
+  end
+  object pgqGetGroupMembers: TPgQuery
+    Connection = pgcDBconnection
+    Left = 224
+    Top = 536
   end
 end

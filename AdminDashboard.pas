@@ -181,7 +181,7 @@ var
 
 implementation
 //  uses DMdatabaseInfo;
-  uses frmAddUser, frmAddGroup, frmEditUser;
+  uses frmAddUser, frmAddGroup, frmEditUser, frmEditGroup;
 
 {$R *.dfm}
 
@@ -379,26 +379,32 @@ begin
   if(pcPages.ActivePage = tbsUserOverview) then
   begin
     //RefreshUserOverView;
+    Self.Caption := 'Gebruikersoverzicht';
   end
   else if(pcPages.ActivePage = tbsGroupOverview) then
   begin
     //RefreshGroupOverView;
+    Self.Caption := 'Groepenoverzicht';
   end
-  else if (pcPages.ActivePage = tbsAddGroup) then
+  else if (pcPages.ActivePage = tbsOptions) then
   begin
-    //getusers = empty if not updated database
-    FillUserListbox(slsbUser);
-
-  end
-  else if (pcPages.ActivePage = tbsEditGroup) then
-  begin
-    //getusers = empty if not updated database
-    FillUserListbox(slsbEditSearchUser);
-
-
-    RemovedUsersList := TStringList.Create;
-    RemovedUsersList.Duplicates := dupIgnore;
+    Self.Caption := 'Opties';
   end;
+//  else if (pcPages.ActivePage = tbsAddGroup) then
+//  begin
+//    //getusers = empty if not updated database
+//    FillUserListbox(slsbUser);
+//
+//  end
+//  else if (pcPages.ActivePage = tbsEditGroup) then
+//  begin
+//    //getusers = empty if not updated database
+//    FillUserListbox(slsbEditSearchUser);
+//
+//
+//    RemovedUsersList := TStringList.Create;
+//    RemovedUsersList.Duplicates := dupIgnore;
+//  end;
 end;
 
 procedure TForm2.RefreshUserOverView;
@@ -435,10 +441,6 @@ begin
     pgqGetUsers.Free;
 
   end;
-
-
-
-
 end;
 
 procedure TForm2.RefreshGroupOverView;
@@ -521,10 +523,6 @@ begin
 
 //  slsbGroupAddedUsers.Items.Clear;
 //  slsbEditGroupUsers.Items.Clear;
-
-
-
-
 end;
 
 procedure TForm2.sbtnAddGroupClick(Sender: TObject);
@@ -1125,75 +1123,87 @@ end;
 
 procedure TForm2.sbtnGoToEditGroupClick(Sender: TObject);
 var
-  selectedRowId, getUserId, i: integer;
-  getSelectedGroup, getSelectedGroupOwner : TPgQuery;
+  selectedRowId, getGroupId, i: integer;
+//  getSelectedGroup, getSelectedGroupOwner : TPgQuery;
   stream: TStream;
 begin
   //clears previous attempts
-  cboxEditGroupOwner.Items.Clear;
+//  cboxEditGroupOwner.Items.Clear;
   FillUserListbox(slsbEditSearchUser);
 
   //creates list for deleting user from group
-  RemovedUsersList := TStringList.Create;
-  RemovedUsersList.Duplicates := dupIgnore;
+//  RemovedUsersList := TStringList.Create;
+//  RemovedUsersList.Duplicates := dupIgnore;
 
   if(sgrGroups.Cells[0, 1] <> '') then
   begin
-    getSelectedGroup := TPgQuery.Create(nil);
-    getSelectedGroupOwner := TPgQuery.Create(nil);
-    getGroup := TPgQuery.Create(nil);
-    getSelectedGroup.Connection := DataModule2.pgcDBconnection;
-    getSelectedGroupOwner.Connection := DataModule2.pgcDBconnection;
-    getGroup.Connection := DataModule2.pgcDBconnection;
+//    DataModule2.pgqGetSelectedGroup := TPgQuery.Create(nil);
+//    DataModule2.pgqGetSelectedGroupOwner := TPgQuery.Create(nil);
+//    getGroup := TPgQuery.Create(nil);
+//    DataModule2.pgqGetSelectedGroup.Connection := DataModule2.pgcDBconnection;
+//    DataModule2.pgqGetSelectedGroupOwner.Connection := DataModule2.pgcDBconnection;
+//    getGroup.Connection := DataModule2.pgcDBconnection;
 
     selectedRowId := sgrGroups.Row;
-    getUserId := StrToInt(sgrGroups.Cells[0, selectedRowId]);
+    getGroupId := StrToInt(sgrGroups.Cells[0, selectedRowId]);
     slsbEditGroupUsers.Items.Clear;
 
     //gets row with selected group
-    getSelectedGroup.SQL.Text := 'SELECT * FROM tbl_groepleden';
-    getSelectedGroup.SQL.Add('WHERE grl_groep=:selectedGroup');
-    getSelectedGroup.SQL.Add('AND grl_del = false');
-    getSelectedGroup.ParamByName('selectedGroup').AsInteger := getUserId;
-    getSelectedGroup.Open;
-
-    getGroup.SQL.Text := 'SELECT * FROM tbl_groepen WHERE gro_id=:selectedGroup';
-    getGroup.ParamByName('selectedGroup').AsInteger := getUserId;
-    getGroup.Open;
-
-    edtEditGroupName.Text := getGroup.FieldByName('gro_naam').AsString;
-    edtEditGroupDescription.Text := getGroup.FieldByName('gro_beschrijving').AsString;
-    cbxGroupDeleted.Checked := getGroup.FieldByName('gro_del').AsBoolean;
-    stream := getGroup.CreateBlobStream(getGroup.FieldByName('gro_profielfoto'), bmRead);
-    imgEditGroupProfile.Picture.LoadFromStream(stream);
-
-    //get information from users table
-    getSelectedGroupOwner.SQL.Text := 'SELECT * FROM tbl_gebruikers WHERE gbr_id=:groupOwner';
-    getSelectedGroupOwner.ParamByName('groupOwner').AsInteger := getGroup.FieldByName('gro_igenaar').AsInteger;
-    getSelectedGroupOwner.Open;
-
-    cboxEditGroupOwner.Items.Add(getSelectedGroupOwner.FieldByName('gbr_nicknaam').AsString);
-    cboxEditGroupOwner.ItemIndex := 0;
-    getSelectedGroupOwner.Free;
-
-    //get every row with the selected group
-    for i := 1 to getSelectedGroup.RecordCount do
+    if(DataModule2.pgqGetGroupMembers = nil) then
     begin
-      with slsbEditGroupUsers.Items.Add do
-      begin
-        DataModule2.pgqCheckExistingUser.SQL.Text := 'SELECT * FROM tbl_gebruikers WHERE gbr_id=:currentUserId';
-        DataModule2.pgqCheckExistingUser.ParamByName('currentUserId').AsInteger := getSelectedGroup.FieldByName('grl_gebruiker').AsInteger;
-        DataModule2.pgqCheckExistingUser.Open;
-
-        Caption := DataModule2.pgqCheckExistingUser.FieldByName('gbr_nicknaam').AsString;
-      end;
-      cboxEditGroupOwner.Items.Add(DataModule2.pgqCheckExistingUser.FieldByName('gbr_nicknaam').AsString);
-      getSelectedGroup.Next;
+      DataModule2.pgqGetGroupMembers := TPgQuery.Create(nil);
+      DataModule2.pgqGetGroupMembers.Connection := DataModule2.pgcDBconnection;
     end;
+    DataModule2.pgqGetGroupMembers.SQL.Text := 'SELECT * FROM tbl_groepleden';
+    DataModule2.pgqGetGroupMembers.SQL.Add('WHERE grl_groep=:selectedGroup');
+    DataModule2.pgqGetGroupMembers.SQL.Add('AND grl_del = false');
+    DataModule2.pgqGetGroupMembers.ParamByName('selectedGroup').AsInteger := getGroupId;
+    DataModule2.pgqGetGroupMembers.Open;
 
-    getSelectedGroup.Free;
+    if(DataModule2.pgqGetSelectedGroup = nil) then
+    begin
+      DataModule2.pgqGetSelectedGroup := TPgQuery.Create(nil);
+      DataModule2.pgqGetSelectedGroup.Connection := DataModule2.pgcDBconnection;
+    end;
+    DataModule2.pgqGetSelectedGroup.SQL.Text := 'SELECT * FROM tbl_groepen WHERE gro_id=:selectedGroup';
+    DataModule2.pgqGetSelectedGroup.ParamByName('selectedGroup').AsInteger := getGroupId;
+    DataModule2.pgqGetSelectedGroup.Open;
 
-    pcPages.ActivePage := tbsEditGroup;
+    frmGroupEdit.Show;
+
+//    edtEditGroupName.Text := getGroup.FieldByName('gro_naam').AsString;
+//    edtEditGroupDescription.Text := getGroup.FieldByName('gro_beschrijving').AsString;
+//    cbxGroupDeleted.Checked := getGroup.FieldByName('gro_del').AsBoolean;
+//    stream := getGroup.CreateBlobStream(getGroup.FieldByName('gro_profielfoto'), bmRead);
+//    imgEditGroupProfile.Picture.LoadFromStream(stream);
+//
+//    //get information from users table
+//    DataModule2.pgqGetSelectedGroupOwner.SQL.Text := 'SELECT * FROM tbl_gebruikers WHERE gbr_id=:groupOwner';
+//    DataModule2.pgqGetSelectedGroupOwner.ParamByName('groupOwner').AsInteger := getGroup.FieldByName('gro_igenaar').AsInteger;
+//    DataModule2.pgqGetSelectedGroupOwner.Open;
+//
+//    cboxEditGroupOwner.Items.Add(DataModule2.pgqGetSelectedGroupOwner.FieldByName('gbr_nicknaam').AsString);
+//    cboxEditGroupOwner.ItemIndex := 0;
+//    DataModule2.pgqGetSelectedGroupOwner.Free;
+//
+//    //get every row with the selected group
+//    for i := 1 to DataModule2.pgqGetSelectedGroup.RecordCount do
+//    begin
+//      with slsbEditGroupUsers.Items.Add do
+//      begin
+//        DataModule2.pgqCheckExistingUser.SQL.Text := 'SELECT * FROM tbl_gebruikers WHERE gbr_id=:currentUserId';
+//        DataModule2.pgqCheckExistingUser.ParamByName('currentUserId').AsInteger := DataModule2.pgqGetSelectedGroup.FieldByName('grl_gebruiker').AsInteger;
+//        DataModule2.pgqCheckExistingUser.Open;
+//
+//        Caption := DataModule2.pgqCheckExistingUser.FieldByName('gbr_nicknaam').AsString;
+//      end;
+//      cboxEditGroupOwner.Items.Add(DataModule2.pgqCheckExistingUser.FieldByName('gbr_nicknaam').AsString);
+//      DataModule2.pgqGetSelectedGroup.Next;
+//    end;
+//
+//    DataModule2.pgqGetSelectedGroup.Free;
+
+//    pcPages.ActivePage := tbsEditGroup;
   end;
 end;
 

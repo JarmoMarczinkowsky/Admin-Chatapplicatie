@@ -28,6 +28,8 @@ type
     pgqGetGroupsgro_beschrijving: TMemoField;
     pgqCheckExistingUser: TPgQuery;
     pgqGetSelectedGroup: TPgQuery;
+    pgqGetSelectedGroupOwner: TPgQuery;
+    pgqGetGroupMembers: TPgQuery;
     procedure DataModuleDestroy(Sender: TObject);
     function HashString(const Input: string): string;
   private

@@ -129,33 +129,10 @@ begin
     //will add the user to the last added group
     AddUserToGroup(idLastCreatedGroup);
 
-    //start clearing the boxes
-//    edtGroupName.Text := '';
-//    edtGroupDescription.Text := '';
-//    imgAddGroupProfile.Picture := nil;
-//    cboxGroupOwner.ItemIndex := 0;
-
-    //clears the added users list
-//    slsbGroupAddedUsers.Items.Clear;
-//    getPosAdmin := cboxGroupOwner.Items.IndexOf(DataModule2.pgqGetLoggedInUser.FieldByName('gbr_nicknaam').AsString);
-//
-//    if(getPosAdmin > -1) then
-//    begin
-//      amountOfItems := cboxGroupOwner.Items.Count;
-//
-//      for I := 1 to amountOfItems do
-//      begin
-//        if( i - 1 = getPosAdmin) then continue
-//        else cboxGroupOwner.Items.Delete(i - 1);
-//      end;
-//    end;
-//
-//    lblAddGroupError.Font.Color := clGreen;
-//    lblAddGroupError.Caption := 'Groep succesvol toegevoegd';
-
     //closes open tab when done
     Self.Close;
-  end;
+  end
+  else lblAddGroupError.Caption := 'Vul een naam in in bij de groepsnaam';
 end;
 
 procedure TfrmGroupAdd.AddUserToGroup(selectedGroupId: integer);
@@ -165,7 +142,6 @@ var
 //  addedUserLB: TAdvSmoothListBox;
 begin
   pgqGroepsLeden := TPgQuery.Create(nil);
-
   pgqGroepsLeden.Connection := DataModule2.pgcDBconnection;
 
   //loop through every user in bottom listbox
@@ -173,11 +149,15 @@ begin
   begin
     //get user id from user table from the current user it is looping through
     //will be used later for adding to the group member table
-    DataModule2.pgqCheckExistingUser.SQL.Text := '';
-    DataModule2.pgqCheckExistingUser.SQL.Add('SELECT gbr_id FROM tbl_gebruikers');
-    DataModule2.pgqCheckExistingUser.SQL.Add('WHERE LOWER(gbr_nicknaam)=:currentUser');
-    DataModule2.pgqCheckExistingUser.ParamByName('currentUser').AsString := LowerCase(Trim(slsbGroupAddedUsers.Items[i - 1].Caption));
-    DataModule2.pgqCheckExistingUser.Open;
+    with DataModule2 do
+    begin
+      pgqCheckExistingUser.SQL.Text := '';
+      pgqCheckExistingUser.SQL.Add('SELECT gbr_id FROM tbl_gebruikers');
+      pgqCheckExistingUser.SQL.Add('WHERE LOWER(gbr_nicknaam)=:currentUser');
+      pgqCheckExistingUser.ParamByName('currentUser').AsString := LowerCase(Trim(slsbGroupAddedUsers.Items[i - 1].Caption));
+      pgqCheckExistingUser.Open;
+    end;
+
 
     //inserts the group member into the table
     pgqGroepsLeden.SQL.Text := 'INSERT INTO tbl_groepleden (grl_gebruiker, grl_groep, grl_aangemaakt, grl_del)';
@@ -190,6 +170,7 @@ begin
   end;
 
   pgqGroepsLeden.Free;
+  DataModule2.pgqCheckExistingUser.Close;
 end;
 
 procedure TfrmGroupAdd.sbtnAddGroupProfileClick(Sender: TObject);
@@ -209,18 +190,7 @@ end;
 procedure TfrmGroupAdd.sbtnAddUserToGroupClick(Sender: TObject);
 var
   i, temp, editDuplicateLocation: integer;
-//  searchLB, addedUsersLB: TAdvSmoothListBox;
-//  errorLBL: TLabel;
-//  groupOwnerCBOX: TComboBox;
 begin
-
-//  if(commando = 'add') then
-//  begin
-//    searchLB := slsbUser;
-//    addedUsersLB := slsbGroupAddedUsers;
-//    errorLBL := lblAddGroupError;
-//    groupOwnerCBOX := cboxGroupOwner;
-//  end;
 
   if(slsbUser.Items.CountSelected > 0) then
   begin
@@ -234,16 +204,6 @@ begin
 
       if(cboxGroupOwner.Items.IndexOf(slsbUser.Items[slsbUser.SelectedItemIndex].Caption) = -1) then
         cboxGroupOwner.Items.Add(slsbUser.Items[slsbUser.SelectedItemIndex].Caption);
-
-//      if(commando = 'edit') then
-//      begin
-//        editDuplicateLocation := RemovedUsersList.IndexOf(slsbUser.Items[slsbUser.SelectedItemIndex].Caption);
-//
-//        if(editDuplicateLocation > -1) then
-//        begin
-//          RemovedUsersList.Delete(editDuplicateLocation);
-//        end;
-//      end;
     end
     else lblAddGroupError.Caption := 'Gebruiker al in lijst';
   end;
@@ -295,16 +255,7 @@ procedure TfrmGroupAdd.sbtnRemoveUserFromGroupClick(Sender: TObject);
 var
   indexDeletedUser, editDuplicateLocation: integer;
   getText: string;
-//  searchLB, addedUsersLB: TAdvSmoothListBox;
-//  ownerCBOX: TComboBox;
 begin
-//  if(command = 'add') then
-//  begin
-//    searchLB := slsbUser;
-//    addedUsersLB := slsbGroupAddedUsers;
-//    ownerCBOX := cboxGroupOwner;
-//  end;
-
   if(slsbGroupAddedUsers.Items.CountSelected > 0) then
   begin
     getText := slsbGroupAddedUsers.Items[slsbGroupAddedUsers.SelectedItemIndex].Caption;

@@ -1592,6 +1592,7 @@ object Form2: TForm2
     object tbsAddGroup: TTabSheet
       Caption = 'Add Group'
       ImageIndex = 3
+      TabVisible = False
       object Label4: TLabel
         Left = 56
         Top = 88
