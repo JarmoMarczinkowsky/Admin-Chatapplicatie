@@ -98,11 +98,17 @@ begin
     //gets the group owner associated by the name
     //so it can be used later for its id
     DataModule2.pgqCheckExistingUser.Close;
+    if(DataModule2.pgqCheckExistingUser = nil) then
+    begin
+      DataModule2.pgqCheckExistingUser := TPgQuery.Create(nil);
+      DataModule2.pgqCheckExistingUser.Connection := DataModule2.pgcDBconnection;
+    end;
     DataModule2.pgqCheckExistingUser.SQL.Text := 'SELECT * FROM tbl_gebruikers WHERE gbr_nicknaam=:groupOwner';
     DataModule2.pgqCheckExistingUser.ParamByName('groupOwner').AsString := cboxGroupOwner.Text;
     DataModule2.pgqCheckExistingUser.Open;
 
     //prepares the sql statement to insert into groups table
+
     DataModule2.pgqGetGroups.SQL.Text := 'INSERT INTO tbl_groepen (gro_naam, gro_igenaar, gro_aangemaakt, gro_del, gro_beschrijving, gro_profielfoto)';
     DataModule2.pgqGetGroups.SQL.Add('VALUES (:groupName, :groupOwner, :groupCreated, :groupDeleted, :groupDescription, :groupProfilePicture)');
     DataModule2.pgqGetGroups.ParamByName('groupName').AsString := Trim(edtGroupName.Text);

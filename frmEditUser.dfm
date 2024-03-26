@@ -223,9 +223,4 @@ object frmUserEdit: TfrmUserEdit
     OnClick = AdvSmoothButton3Click
     TMSStyle = 8
   end
-  object PgQuery1: TPgQuery
-    Connection = DataModule2.pgcDBconnection
-    Left = 344
-    Top = 392
-  end
 end

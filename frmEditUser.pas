@@ -29,7 +29,6 @@ type
     sbtnEditUser: TAdvSmoothButton;
     AdvSmoothButton3: TAdvSmoothButton;
     lblEditUserError: TLabel;
-    PgQuery1: TPgQuery;
     procedure FormShow(Sender: TObject);
     procedure sbtnEditUserProfilePictureClick(Sender: TObject);
     procedure AdvSmoothButton3Click(Sender: TObject);

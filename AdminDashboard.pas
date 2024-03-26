@@ -181,12 +181,12 @@ begin
       sgrUsers.Cells[6, i] := pgqGetUsers.FieldByName('gbr_wachtwoord').AsString;
 
       pgqGetUsers.Next;
-
     end;
     sgrUsers.EndUpdate;
 
     lblUserOverviewAmount.Caption := Format('%d gebruikers gevonden', [pgqGetUsers.RecordCount]);
-    DataModule2.pgqGetUsers.Close;
+    DataModule2.pgqGetUsers.Free;
+    DataModule2.pgqGetUsers := nil;
 
   end;
 end;
@@ -197,6 +197,12 @@ var
 begin
   with DataModule2 do
   begin
+  if(pgqGetGroups = nil) then
+  begin
+    pgqGetGroups := TPgQuery.Create(nil);
+    pgqGetGroups.Connection := pgcDBconnection;
+  end;
+
     if(cbxShowDeletedGroups.Checked) then
       pgqGetGroups.SQL.Text := 'SELECT * FROM tbl_groepen ORDER BY gro_id'
     else
@@ -220,7 +226,9 @@ begin
     sgrGroups.EndUpdate;
 
     lblGroupOverviewAmount.Caption := Format('%d groepen gevonden', [DataModule2.pgqGetGroups.RecordCount]);
+
     pgqGetGroups.Free;
+    pgqGetGroups := nil;
   end;
 end;
 
@@ -330,6 +338,7 @@ begin
     getGroupId := StrToInt(sgrGroups.Cells[0, selectedRowId]);
 
     //gets row with selected group
+    DataModule2.pgqGetGroupMembers := nil;
     if(DataModule2.pgqGetGroupMembers = nil) then
     begin
       DataModule2.pgqGetGroupMembers := TPgQuery.Create(nil);
@@ -341,6 +350,7 @@ begin
     DataModule2.pgqGetGroupMembers.ParamByName('selectedGroup').AsInteger := getGroupId;
     DataModule2.pgqGetGroupMembers.Open;
 
+    DataModule2.pgqGetSelectedGroup := nil;
     if(DataModule2.pgqGetSelectedGroup = nil) then
     begin
       DataModule2.pgqGetSelectedGroup := TPgQuery.Create(nil);
