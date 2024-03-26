@@ -66,6 +66,7 @@ begin
       edtEditUserTelephone.Text := pgqCheckExistingUser.FieldByName('gbr_tel').AsString;
       edtEditUserEmail.Text := pgqCheckExistingUser.FieldByName('gbr_email').AsString;
       edtEditUserNickName.Text := pgqCheckExistingUser.FieldByName('gbr_nicknaam').AsString;
+      edtEditUserPassword.Text := '';
 
       //loads image from database to TImage
 //      stream := pgqCheckExistingUser.CreateBlobStream(pgqCheckExistingUser.FieldByName('gbr_profielfoto'), bmRead);
@@ -135,8 +136,6 @@ begin
 //          lblEditUserError.Font.Color := clGreen;
 
           Self.Close;
-
-
         end
         else
         begin
@@ -144,7 +143,7 @@ begin
         end;
       end
       else lblEditUserError.Caption := 'Telefoonnummer is niet correct geformatteerd' + #13#10 +
-      'Formaat: 10 characters minimaal, alleen '+ #39 + '+' + #39 + ', ' + #39 + '-' + #39 + ' en cijfers 0-9 zijn toegestaan';
+      'Formaat: 10 characters minimaal, alleen '+ #39 + '+' + #39 + ', ' + #39 + '-' + #39 + #13#10 + ' en cijfers 0-9 zijn toegestaan';
     end
     else lblEditUserError.Caption := 'Emailadres is niet correct geformatteerd';
   end
