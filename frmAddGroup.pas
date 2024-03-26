@@ -160,53 +160,35 @@ end;
 
 procedure TfrmGroupAdd.AddUserToGroup(selectedGroupId: integer);
 var
-  pgqGroepsLeden, pgqCheckDuplicateUser: TPgQuery;
+  pgqGroepsLeden: TPgQuery;
   i: integer;
 //  addedUserLB: TAdvSmoothListBox;
-  userIsDuplicate, deletedUserStatus: boolean;
 begin
-  deletedUserStatus := false;
   pgqGroepsLeden := TPgQuery.Create(nil);
-  pgqCheckDuplicateUser := TPgQuery.Create(nil);
 
   pgqGroepsLeden.Connection := DataModule2.pgcDBconnection;
-  pgqCheckDuplicateUser.Connection := DataModule2.pgcDBconnection;
 
-  userIsDuplicate := false;
-
-
-  pgqGroepsleden.SQL.Text := 'SELECT * FROM tbl_groepleden';
-  pgqGroepsleden.Open;
+  //loop through every user in bottom listbox
   for I := 1 to slsbGroupAddedUsers.Items.Count do
   begin
+    //get user id from user table from the current user it is looping through
+    //will be used later for adding to the group member table
     DataModule2.pgqCheckExistingUser.SQL.Text := '';
     DataModule2.pgqCheckExistingUser.SQL.Add('SELECT gbr_id FROM tbl_gebruikers');
     DataModule2.pgqCheckExistingUser.SQL.Add('WHERE LOWER(gbr_nicknaam)=:currentUser');
     DataModule2.pgqCheckExistingUser.ParamByName('currentUser').AsString := LowerCase(Trim(slsbGroupAddedUsers.Items[i - 1].Caption));
     DataModule2.pgqCheckExistingUser.Open;
 
-    if(userIsDuplicate = true) then
-    begin
-      deletedUserStatus := pgqCheckDuplicateUser.FieldByName('grl_del').AsBoolean;
-      if(deletedUserStatus = true) then
-      begin
-        pgqCheckDuplicateUser.Edit;
-        pgqCheckDuplicateUser.FieldByName('grl_del').AsBoolean := false;
-        pgqCheckDuplicateUser.Post;
-      end;
-    end
-    else if(userIsDuplicate = false) then
-    begin
-      pgqGroepsleden.Append;
-      pgqGroepsleden.FieldByName('grl_gebruiker').AsInteger := DataModule2.pgqCheckExistingUser.FieldByName('gbr_id').AsInteger;
-      pgqGroepsleden.FieldByName('grl_groep').AsInteger := selectedGroupId;
-      pgqGroepsleden.FieldByName('grl_aangemaakt').AsDateTime := now;
-      pgqGroepsleden.FieldByName('grl_del').AsBoolean := false;
-      pgqGroepsleden.Post;
-    end;
+    //inserts the group member into the table
+    pgqGroepsLeden.SQL.Text := 'INSERT INTO tbl_groepleden (grl_gebruiker, grl_groep, grl_aangemaakt, grl_del)';
+    pgqGroepsLeden.SQL.Add('VALUES (:userId, :groupId, :timeUserAdded, :groupMemberDeleted)');
+    pgqGroepsleden.ParamByName('userId').AsInteger := DataModule2.pgqCheckExistingUser.FieldByName('gbr_id').AsInteger;
+    pgqGroepsleden.ParamByName('groupId').AsInteger := selectedGroupId;
+    pgqGroepsleden.ParamByName('timeUserAdded').AsDateTime := now;
+    pgqGroepsleden.ParamByName('groupMemberDeleted').AsBoolean := false;
+    pgqGroepsleden.Execute;
   end;
 
-  pgqCheckDuplicateUser.Free;
   pgqGroepsLeden.Free;
 end;
 
