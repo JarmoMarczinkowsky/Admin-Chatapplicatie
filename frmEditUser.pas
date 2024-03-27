@@ -134,6 +134,7 @@ begin
 //          lblEditUserError.Caption := 'Gebruiker succesvol aangepast';
 //          lblEditUserError.Font.Color := clGreen;
 
+          if(not pgqDuplicateNameCheck.IsEmpty) then pgqDuplicateNameCheck.Close;
           Self.Close;
         end
         else
@@ -151,7 +152,7 @@ begin
     lblEditUserError.Caption := 'Vul alle velden in';
   end;
 
-  pgqDuplicateNameCheck.Free;
+  if(not pgqDuplicateNameCheck.IsEmpty) then pgqDuplicateNameCheck.Close;
 end;
 
 procedure TfrmUserEdit.sbtnEditUserProfilePictureClick(Sender: TObject);

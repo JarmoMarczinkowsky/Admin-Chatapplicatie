@@ -67,6 +67,7 @@ type
     procedure RefreshGroupOverView;
     procedure FillUserListbox(searchLB: TAdvSmoothListBox);
     function HashString(const Input: string): string;
+    procedure AutoSizeCol(grid: TStringGrid; Column: integer);
   public
     { Public declarations }
   end;
@@ -157,20 +158,20 @@ var
 begin
   with DataModule2 do
   begin
-    if(DataModule2.pgqGetUsers = nil) then
+    if(pgqGetUsers = nil) then
     begin
-      DataModule2.pgqGetUsers := TPgQuery.Create(nil);
-      DataModule2.pgqGetUsers.Connection := pgcDBconnection;
+      pgqGetUsers := TPgQuery.Create(nil);
+      pgqGetUsers.Connection := pgcDBconnection;
     end;
 
-    if(cbxShowDeletedUser.Checked) then DataModule2.pgqGetUsers.SQL.Text := 'SELECT * FROM tbl_gebruikers ORDER BY gbr_id'
-    else DataModule2.pgqGetUsers.SQL.Text := 'SELECT * FROM tbl_gebruikers WHERE gbr_del = false ORDER BY gbr_id';
-    DataModule2.pgqGetUsers.Open;
+    if(cbxShowDeletedUser.Checked) then pgqGetUsers.SQL.Text := 'SELECT * FROM tbl_gebruikers ORDER BY gbr_id'
+    else pgqGetUsers.SQL.Text := 'SELECT * FROM tbl_gebruikers WHERE gbr_del = false ORDER BY gbr_id';
+    pgqGetUsers.Open;
 
     sgrUsers.BeginUpdate;
-    sgrUsers.RowCount := DataModule2.pgqGetUsers.RecordCount + 1;
+    sgrUsers.RowCount := pgqGetUsers.RecordCount + 1;
 
-    for i := 1 to DataModule2.pgqGetUsers.RecordCount do
+    for i := 1 to pgqGetUsers.RecordCount do
     begin
       sgrUsers.Cells[0, i] := pgqGetUsers.FieldByName('gbr_id').AsString;
       sgrUsers.Cells[1, i] := pgqGetUsers.FieldByName('gbr_naam').AsString;
@@ -182,13 +183,31 @@ begin
 
       pgqGetUsers.Next;
     end;
+
+    for i := 0 to sgrUsers.ColCount - 1 do
+    AutoSizeCol(sgrUsers, i);
+
     sgrUsers.EndUpdate;
 
     lblUserOverviewAmount.Caption := Format('%d gebruikers gevonden', [pgqGetUsers.RecordCount]);
-    DataModule2.pgqGetUsers.Free;
-    DataModule2.pgqGetUsers := nil;
-
+//    DataModule2.pgqGetUsers.Free;
+//    DataModule2.pgqGetUsers := nil;
+    pgqGetUsers.Close;
   end;
+end;
+
+procedure TForm2.AutoSizeCol(Grid: TStringGrid;
+Column: integer);
+var
+  i, W, WMax: integer;
+begin
+  WMax := 0;
+  for i := 0 to (Grid.RowCount - 1) do begin
+    W := Grid.Canvas.TextWidth(Grid.Cells[Column, i]);
+    if W > WMax then
+      WMax := W;
+  end;
+  Grid.ColWidths[Column] := WMax + 5;
 end;
 
 procedure TForm2.RefreshGroupOverView;
@@ -197,11 +216,11 @@ var
 begin
   with DataModule2 do
   begin
-  if(pgqGetGroups = nil) then
-  begin
-    pgqGetGroups := TPgQuery.Create(nil);
-    pgqGetGroups.Connection := pgcDBconnection;
-  end;
+    if(pgqGetGroups = nil) then
+    begin
+      pgqGetGroups := TPgQuery.Create(nil);
+      pgqGetGroups.Connection := pgcDBconnection;
+    end;
 
     if(cbxShowDeletedGroups.Checked) then
       pgqGetGroups.SQL.Text := 'SELECT * FROM tbl_groepen ORDER BY gro_id'
@@ -223,12 +242,17 @@ begin
 
       pgqGetGroups.Next;
     end;
+
+    for i := 0 to sgrGroups.ColCount - 1 do
+      AutoSizeCol(sgrGroups, i);
+
     sgrGroups.EndUpdate;
 
     lblGroupOverviewAmount.Caption := Format('%d groepen gevonden', [DataModule2.pgqGetGroups.RecordCount]);
 
-    pgqGetGroups.Free;
-    pgqGetGroups := nil;
+    pgqGetGroups.Close;
+//    pgqGetGroups.Free;
+//    pgqGetGroups := nil;
   end;
 end;
 
@@ -298,7 +322,7 @@ end;
 procedure TForm2.sbtnDeleteUserClick(Sender: TObject);
 var 
   selectedRowId, getUserId, userChoice: integer;
-  currUser: string;
+  currUser, myText: string;
 begin
   selectedRowId := sgrUsers.Row;
 
@@ -313,7 +337,7 @@ begin
       pgqDelete.Open;
 
       currUser := pgqDelete.FieldByName('gbr_nicknaam').AsString;
-      userChoice := Application.MessageBox('Weet je zeker dat je deze gebruiker wilt verwijderen?' , 'Bevestig verwijderverzoek', MB_OKCANCEL );
+      userChoice := Application.MessageBox(PWideChar('Weet je zeker dat je ' + currUser + ' wilt verwijderen?') , 'Bevestig verwijderverzoek', MB_OKCANCEL );
 
       if(userChoice = 1) then
       begin
@@ -323,7 +347,7 @@ begin
       end;
     end;
 
-    RefreshUserOverView;
+//    RefreshUserOverView;
   end;
 end;
 
@@ -338,29 +362,32 @@ begin
     getGroupId := StrToInt(sgrGroups.Cells[0, selectedRowId]);
 
     //gets row with selected group
-    DataModule2.pgqGetGroupMembers := nil;
-    if(DataModule2.pgqGetGroupMembers = nil) then
+    with DataModule2 do
     begin
-      DataModule2.pgqGetGroupMembers := TPgQuery.Create(nil);
-      DataModule2.pgqGetGroupMembers.Connection := DataModule2.pgcDBconnection;
-    end;
-    DataModule2.pgqGetGroupMembers.SQL.Text := 'SELECT * FROM tbl_groepleden';
-    DataModule2.pgqGetGroupMembers.SQL.Add('WHERE grl_groep=:selectedGroup');
-    DataModule2.pgqGetGroupMembers.SQL.Add('AND grl_del = false');
-    DataModule2.pgqGetGroupMembers.ParamByName('selectedGroup').AsInteger := getGroupId;
-    DataModule2.pgqGetGroupMembers.Open;
+//      DataModule2.pgqGetGroupMembers := nil;
+//      if(DataModule2.pgqGetGroupMembers = nil) then
+//      begin
+      pgqGetGroupMembers := TPgQuery.Create(nil);
+      pgqGetGroupMembers.Connection := DataModule2.pgcDBconnection;
+//      end;
+      pgqGetGroupMembers.SQL.Text := 'SELECT * FROM tbl_groepleden';
+      pgqGetGroupMembers.SQL.Add('WHERE grl_groep=:selectedGroup');
+      pgqGetGroupMembers.SQL.Add('AND grl_del = false');
+      pgqGetGroupMembers.ParamByName('selectedGroup').AsInteger := getGroupId;
+      pgqGetGroupMembers.Open;
 
-    DataModule2.pgqGetSelectedGroup := nil;
-    if(DataModule2.pgqGetSelectedGroup = nil) then
-    begin
-      DataModule2.pgqGetSelectedGroup := TPgQuery.Create(nil);
-      DataModule2.pgqGetSelectedGroup.Connection := DataModule2.pgcDBconnection;
-    end;
-    DataModule2.pgqGetSelectedGroup.SQL.Text := 'SELECT * FROM tbl_groepen WHERE gro_id=:selectedGroup';
-    DataModule2.pgqGetSelectedGroup.ParamByName('selectedGroup').AsInteger := getGroupId;
-    DataModule2.pgqGetSelectedGroup.Open;
+//      DataModule2.pgqGetSelectedGroup := nil;
+//      if(DataModule2.pgqGetSelectedGroup = nil) then
+//      begin
+      pgqGetSelectedGroup := TPgQuery.Create(nil);
+      pgqGetSelectedGroup.Connection := DataModule2.pgcDBconnection;
+//      end;
+      pgqGetSelectedGroup.SQL.Text := 'SELECT * FROM tbl_groepen WHERE gro_id=:selectedGroup';
+      pgqGetSelectedGroup.ParamByName('selectedGroup').AsInteger := getGroupId;
+      pgqGetSelectedGroup.Open;
 
-    frmGroupEdit.Show;
+      frmGroupEdit.Show;
+    end;
   end;
 end;
 

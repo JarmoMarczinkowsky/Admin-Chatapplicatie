@@ -176,22 +176,23 @@ var
   AStream: TMemoryStream;
   BlobField: TBlobField;
 begin
-  if(pgqEditGroupMember = nil) then
-  begin
-    pgqEditGroupMember := TPgQuery.Create(nil);
-    pgqEditGroupMember.Connection := DataModule2.pgcDBconnection;
-  end;
+//  pgqEditGroupMember := nil;
+  pgqEditGroupMember := TPgQuery.Create(nil);
+  pgqEditGroupMember.Connection := DataModule2.pgcDBconnection;
+//  end;
 
-  if(pgqGetDeletedUserId = nil) then
-  begin
-    pgqGetDeletedUserId := TPgQuery.Create(nil);
-    pgqGetDeletedUserId.Connection := DataModule2.pgcDBconnection;
-  end;
+//  pgqGetDeletedUserId := nil;
+//  if(pgqGetDeletedUserId = nil) then
+//  begin
+  pgqGetDeletedUserId := TPgQuery.Create(nil);
+  pgqGetDeletedUserId.Connection := DataModule2.pgcDBconnection;
+//  end;
 
   lblEditGroupError.Caption := '';
   lblEditGroupError.Font.Color := RGB(220, 20, 60);
 
   //TODO: fix getgroups getting cleared
+  DataModule2.pgqGetSelectedGroup := nil;
   if(DataModule2.pgqGetSelectedGroup = nil) then
   begin
     DataModule2.pgqGetSelectedGroup := TPgQuery.Create(nil);
