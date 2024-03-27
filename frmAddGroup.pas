@@ -55,28 +55,35 @@ procedure TfrmGroupAdd.FormShow(Sender: TObject);
 var
   i: integer;
 begin
+  cboxGroupOwner.Items.Clear;
+  slsbGroupAddedUsers.Items.Clear;
+  edtGroupName.Text := '';
+  edtGroupDescription.Text := '';
+  edtAddGroupSearchUser.Text := '';
+  imgAddGroupProfile.Picture := nil;
+
   cboxGroupOwner.Items.Add(DataModule2.pgqGetLoggedInUser.FieldByName('gbr_nicknaam').AsString);
   cboxGroupOwner.ItemIndex := 0;
 
   with DataModule2 do
   begin
-    if(pgqGetUsers.RecordCount < 1) then
+    if(slsbUser.Items.Count = 0) then
     begin
-      pgqGetUsers.SQL.Text := 'SELECT * FROM tbl_gebruikers ORDER BY gbr_nicknaam';
+      pgqGetUsers.SQL.Text := 'SELECT * FROM tbl_gebruikers WHERE gbr_del = false ORDER BY gbr_nicknaam';
       pgqGetUsers.Open;
-    end
-    else
-      pgqGetUsers.First;
 
-    for i := 1 to pgqGetUsers.RecordCount do
-    begin
-      with slsbUser.Items.Add do
+      for i := 1 to pgqGetUsers.RecordCount do
       begin
-        Caption := pgqGetUsers.FieldByName('gbr_nicknaam').AsString;
-      end;
+        with slsbUser.Items.Add do
+        begin
+          Caption := pgqGetUsers.FieldByName('gbr_nicknaam').AsString;
+        end;
 
-      DataModule2.pgqGetUsers.Next;
+        DataModule2.pgqGetUsers.Next;
+      end;
     end;
+//    else
+//      pgqGetUsers.First;
   end;
 
   lblAddGroupError.Caption := '';

@@ -138,24 +138,21 @@ var
 begin
   with DataModule2 do
   begin
-    if(pgqGetUsers.RecordCount < 1) then
+    if(slsbEditSearchUser.Items.Count = 0) then
     begin
-      pgqGetUsers.SQL.Text := 'SELECT * FROM tbl_gebruikers';
+      pgqGetUsers.SQL.Text := 'SELECT * FROM tbl_gebruikers WHERE gbr_del = false ORDER BY gbr_nicknaam';
       pgqGetUsers.Open;
-    end
-    else
-      pgqGetUsers.First;
 
-    for i := 1 to pgqGetUsers.RecordCount do
-    begin
-      with slsbEditSearchUser.Items.Add do
+      for i := 1 to pgqGetUsers.RecordCount do
       begin
-        Caption := pgqGetUsers.FieldByName('gbr_nicknaam').AsString;
+        with slsbEditSearchUser.Items.Add do
+        begin
+          Caption := pgqGetUsers.FieldByName('gbr_nicknaam').AsString;
+        end;
+
+        DataModule2.pgqGetUsers.Next;
       end;
-
-      DataModule2.pgqGetUsers.Next;
     end;
-
   end;
 end;
 
@@ -171,13 +168,13 @@ var
   AStream: TMemoryStream;
   BlobField: TBlobField;
 begin
-//  pgqEditGroupMember := nil;
+//  if(not Assigned(pgqEditGroupMember)) then
+//  begin
   pgqEditGroupMember := TPgQuery.Create(nil);
   pgqEditGroupMember.Connection := DataModule2.pgcDBconnection;
 //  end;
 
-//  pgqGetDeletedUserId := nil;
-//  if(pgqGetDeletedUserId = nil) then
+//  if(not Assigned(pgqGetDeletedUserId)) then
 //  begin
   pgqGetDeletedUserId := TPgQuery.Create(nil);
   pgqGetDeletedUserId.Connection := DataModule2.pgcDBconnection;
@@ -187,18 +184,16 @@ begin
   lblEditGroupError.Font.Color := RGB(220, 20, 60);
 
   //TODO: fix getgroups getting cleared
-  DataModule2.pgqGetSelectedGroup := nil;
-  if(DataModule2.pgqGetSelectedGroup = nil) then
-  begin
-    DataModule2.pgqGetSelectedGroup := TPgQuery.Create(nil);
-    DataModule2.pgqGetSelectedGroup.Connection := DataModule2.pgcDBconnection;
-  end;
+//  if(not Assigned(DataModule2.pgqGetSelectedGroup)) then
+//  begin
+//  DataModule2.pgqGetSelectedGroup := TPgQuery.Create(nil);
+//  DataModule2.pgqGetSelectedGroup.Connection := DataModule2.pgcDBconnection;
+//  end;
   groupId := DataModule2.pgqGetSelectedGroup.FieldByName('gro_id').AsInteger;
 
   for i := 1 to RemovedUsersList.Count do
   begin
-    pgqGetDeletedUserId.SQL.Text := '';
-    pgqGetDeletedUserId.SQL.Add('SELECT * FROM tbl_gebruikers');
+    pgqGetDeletedUserId.SQL.Text := 'SELECT * FROM tbl_gebruikers';
     pgqGetDeletedUserId.SQL.Add('WHERE gbr_nicknaam = :currentUser');
     pgqGetDeletedUserId.ParamByName('currentUser').AsString := RemovedUsersList[i - 1];
     pgqGetDeletedUserId.Open;
@@ -221,12 +216,8 @@ begin
   end;
   AddUserToGroup(groupId);
 
-  if(pgqGetDeletedUserId.Active) then pgqGetDeletedUserId.Close;
-  if(pgqEditGroupMember.Active) then pgqEditGroupMember.Close;
-//  pgqGetDeletedUserId.Free;
-//  pgqGetDeletedUserId := nil;
-//  pgqEditGroupMember.Free;
-//  pgqEditGroupMember := nil;
+//  if(pgqGetDeletedUserId.Active) then pgqGetDeletedUserId.Close;
+//  if(pgqEditGroupMember.Active) then pgqEditGroupMember.Close;
 
   DataModule2.pgqCheckExistingUser.SQL.Text := 'SELECT gbr_id FROM tbl_gebruikers';
   DataModule2.pgqCheckExistingUser.SQL.Add('WHERE gbr_nicknaam=:newGroupOwner');
@@ -237,6 +228,7 @@ begin
   DataModule2.pgqGetSelectedGroup.FieldByName('gro_naam').AsString := edtEditGroupName.Text;
   DataModule2.pgqGetSelectedGroup.FieldByName('gro_beschrijving').AsString := edtEditGroupDescription.Text;
   DataModule2.pgqGetSelectedGroup.FieldByName('gro_igenaar').AsInteger := DataModule2.pgqCheckExistingUser.FieldByName('gbr_id').AsInteger;
+  DataModule2.pgqGetSelectedGroup.FieldByName('gro_del').AsBoolean := cbxGroupDeleted.Checked;
 
   DataModule2.pgqCheckExistingUser.Close;
 
@@ -248,9 +240,9 @@ begin
 
   DataModule2.pgqGetSelectedGroup.Post;
 
+  //if(DataModule2.pgqGetSelectedGroup.Active) then DataModule2.pgqGetSelectedGroup.Close;
   RemovedUsersList.Clear;
   //RefreshGroupOverView;
-//  RemovedUsersList.Free;
 //  pcPages.ActivePage := tbsGroupOverview;
 
   Self.Close;
@@ -373,25 +365,18 @@ var
 begin
 
   deletedUserStatus := false;
-  if(not Assigned(pgqGroepsLeden)) then
-  begin
-    pgqGroepsLeden := TPgQuery.Create(nil);
-    pgqGroepsLeden.Connection := DataModule2.pgcDBconnection;
-  end;
 
+  pgqGroepsLeden := TPgQuery.Create(nil);
+  pgqGroepsLeden.Connection := DataModule2.pgcDBconnection;
 
-  if(not Assigned(pgqCheckDuplicateUser)) then
-  begin
-    pgqCheckDuplicateUser := TPgQuery.Create(nil);
-    pgqCheckDuplicateUser.Connection := DataModule2.pgcDBconnection;
-  end;
+  pgqCheckDuplicateUser := TPgQuery.Create(nil);
+  pgqCheckDuplicateUser.Connection := DataModule2.pgcDBconnection;
 
   userIsDuplicate := false;
 
   for I := 1 to slsbEditGroupUsers.Items.Count do
   begin
-    DataModule2.pgqCheckExistingUser.SQL.Text := '';
-    DataModule2.pgqCheckExistingUser.SQL.Add('SELECT gbr_id FROM tbl_gebruikers');
+    DataModule2.pgqCheckExistingUser.SQL.Text := 'SELECT gbr_id FROM tbl_gebruikers';
     DataModule2.pgqCheckExistingUser.SQL.Add('WHERE LOWER(gbr_nicknaam)=:currentUser');
     DataModule2.pgqCheckExistingUser.ParamByName('currentUser').AsString := LowerCase(Trim(slsbEditGroupUsers.Items[i - 1].Caption));
     DataModule2.pgqCheckExistingUser.Open;

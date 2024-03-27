@@ -300,21 +300,35 @@ end;
 
 procedure TForm2.sbtnDeleteGroupClick(Sender: TObject);
 var
-  selectedRowId, getGroupId: integer;
+  selectedRowId, getGroupId, userChoice: integer;
+  currGroup: string;
 begin
   if(sgrGroups.Cells[0, 1] <> '') then
   begin
     selectedRowId := sgrGroups.Row;
     getGroupId := StrToInt(sgrGroups.Cells[0, selectedRowId]);
 
-    DataModule2.pgqDelete.SQL.Text := 'SELECT * FROM tbl_groepen WHERE gro_id=:selectedId';
-    DataModule2.pgqDelete.ParamByName('selectedId').AsInteger := getGroupId;
-    DataModule2.pgqDelete.Open;
-    DataModule2.pgqDelete.Edit;
-    DataModule2.pgqDelete.FieldByName('gro_del').AsBoolean := true;
-    DataModule2.pgqDelete.Post;
+    with DataModule2 do
+    begin
+      pgqDelete.SQL.Text := 'SELECT * FROM tbl_groepen WHERE gro_id=:selectedId';
+      pgqDelete.ParamByName('selectedId').AsInteger := getGroupId;
+      pgqDelete.Open;
 
-    RefreshGroupOverView;
+      currGroup := pgqDelete.FieldByName('gro_naam').AsString;
+
+      userChoice := Application.MessageBox(PWideChar('Weet je zeker dat je ' + currGroup + ' wilt verwijderen?') , 'Bevestig verwijderverzoek', MB_OKCANCEL );
+      if(userChoice = 1) then
+      begin
+        if(pgqDelete.ParamByName('gbr_del').AsBoolean) then ShowMessage(currGroup + ' is al verwijderd')
+        else
+        begin
+          pgqDelete.Edit;
+          pgqDelete.FieldByName('gbr_del').AsBoolean := true;
+          pgqDelete.Post;
+        end;
+      end;
+    end;
+//    RefreshGroupOverView;
   end;
 
 end;
