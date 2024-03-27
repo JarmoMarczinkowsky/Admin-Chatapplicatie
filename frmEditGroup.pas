@@ -37,7 +37,6 @@ type
     procedure sbtnEditGroupCancelClick(Sender: TObject);
     procedure sbtnEditGroupClick(Sender: TObject);
     procedure sbtnEditGroupProfilePictureClick(Sender: TObject);
-    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     { Private declarations }
     RemovedUsersList: TStringList;
@@ -55,14 +54,6 @@ implementation
   uses DMdatabaseInfo;
 
 {$R *.dfm}
-
-procedure TfrmGroupEdit.FormClose(Sender: TObject; var Action: TCloseAction);
-begin
-  with DataModule2 do
-  begin
-    pgqGetSelectedGroup.Free;
-  end;
-end;
 
 procedure TfrmGroupEdit.FormShow(Sender: TObject);
 var
@@ -89,8 +80,8 @@ begin
   getOwnerId := DataModule2.pgqGetSelectedGroup.FieldByName('gro_igenaar').AsInteger;
 
   //get information from users table
-  DataModule2.pgqGetSelectedGroupOwner := nil;
-  if(DataModule2.pgqGetSelectedGroupOwner = nil) then
+//  DataModule2.pgqGetSelectedGroupOwner := nil;
+  if(not Assigned(DataModule2.pgqGetSelectedGroupOwner)) then
   begin
     DataModule2.pgqGetSelectedGroupOwner := TPgQuery.Create(nil);
     DataModule2.pgqGetSelectedGroupOwner.Connection := DataModule2.pgcDBconnection;
@@ -101,7 +92,7 @@ begin
 
   cboxEditGroupOwner.Items.Add(DataModule2.pgqGetSelectedGroupOwner.FieldByName('gbr_nicknaam').AsString);
   cboxEditGroupOwner.ItemIndex := 0;
-  DataModule2.pgqGetSelectedGroupOwner.Free;
+  DataModule2.pgqGetSelectedGroupOwner.Close;
 
   //loops through every found group members
   for i := 1 to DataModule2.pgqGetGroupMembers.RecordCount do
@@ -124,15 +115,19 @@ begin
     DataModule2.pgqGetGroupMembers.Next;
   end;
 
-  DataModule2.pgqGetGroupMembers.Free;
+  DataModule2.pgqGetGroupMembers.Close;
 
   if(cboxEditGroupOwner.Items.IndexOf(DataModule2.pgqGetLoggedInUser.FieldByName('gbr_nicknaam').AsString) = -1) then
   begin
     cboxEditGroupOwner.Items.Add(DataModule2.pgqGetLoggedInUser.FieldByName('gbr_nicknaam').AsString);
   end;
 
-  RemovedUsersList := TStringList.Create;
-  RemovedUsersList.Duplicates := dupIgnore;
+  if(not Assigned(RemovedUsersList)) then
+  begin
+    RemovedUsersList := TStringList.Create;
+    RemovedUsersList.Duplicates := dupIgnore;
+  end;
+
 
   FillListBox;
 end;
@@ -226,10 +221,12 @@ begin
   end;
   AddUserToGroup(groupId);
 
+  if(pgqGetDeletedUserId.Active) then pgqGetDeletedUserId.Close;
+  if(pgqEditGroupMember.Active) then pgqEditGroupMember.Close;
 //  pgqGetDeletedUserId.Free;
-  pgqGetDeletedUserId := nil;
+//  pgqGetDeletedUserId := nil;
 //  pgqEditGroupMember.Free;
-  pgqEditGroupMember := nil;
+//  pgqEditGroupMember := nil;
 
   DataModule2.pgqCheckExistingUser.SQL.Text := 'SELECT gbr_id FROM tbl_gebruikers';
   DataModule2.pgqCheckExistingUser.SQL.Add('WHERE gbr_nicknaam=:newGroupOwner');
@@ -253,7 +250,7 @@ begin
 
   RemovedUsersList.Clear;
   //RefreshGroupOverView;
-  RemovedUsersList.Free;
+//  RemovedUsersList.Free;
 //  pcPages.ActivePage := tbsGroupOverview;
 
   Self.Close;
@@ -336,7 +333,7 @@ begin
     end;
   end;
 
-  searchQuery.Free;
+  searchQuery.Close;
 end;
 
 procedure TfrmGroupEdit.slsbEditAddUserToGroupClick(Sender: TObject);
@@ -374,16 +371,16 @@ var
   i: integer;
   userIsDuplicate, deletedUserStatus: boolean;
 begin
-  pgqGroepsLeden := nil;
+
   deletedUserStatus := false;
-  if(pgqGroepsLeden = nil) then
+  if(not Assigned(pgqGroepsLeden)) then
   begin
     pgqGroepsLeden := TPgQuery.Create(nil);
     pgqGroepsLeden.Connection := DataModule2.pgcDBconnection;
   end;
 
-  pgqCheckDuplicateUser := nil;
-  if(pgqCheckDuplicateUser = nil) then
+
+  if(not Assigned(pgqCheckDuplicateUser)) then
   begin
     pgqCheckDuplicateUser := TPgQuery.Create(nil);
     pgqCheckDuplicateUser.Connection := DataModule2.pgcDBconnection;
@@ -432,10 +429,8 @@ begin
     end;
   end;
 
-  pgqCheckDuplicateUser.Free;
-  pgqCheckDuplicateUser := nil;
-  pgqGroepsLeden.Free;
-  pgqGroepsLeden := nil;
+  if(pgqCheckDuplicateUser.Active) then pgqCheckDuplicateUser.Close;
+  if(pgqGroepsLeden.Active) then pgqGroepsLeden.Close;
 end;
 
 end.

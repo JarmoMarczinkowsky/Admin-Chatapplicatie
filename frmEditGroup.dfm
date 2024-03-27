@@ -10,7 +10,6 @@ object frmGroupEdit: TfrmGroupEdit
   Font.Height = -12
   Font.Name = 'Segoe UI'
   Font.Style = []
-  OnClose = FormClose
   OnShow = FormShow
   TextHeight = 15
   object Label15: TLabel

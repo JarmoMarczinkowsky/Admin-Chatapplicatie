@@ -113,7 +113,8 @@ begin
   //          BlobField.LoadFromStream(AStream);
 
             pgqAddUser.Execute;
-            pgqAddUser.Free;
+
+            if(pgqAddUser.Active) then pgqAddUser.Close;
             AStream.Free;
 
             lblAddUserError.Font.Color := clGreen;

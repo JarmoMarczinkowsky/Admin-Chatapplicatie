@@ -341,12 +341,15 @@ begin
 
       if(userChoice = 1) then
       begin
-        pgqDelete.Edit;
-        pgqDelete.FieldByName('gbr_del').AsBoolean := true;
-        pgqDelete.Post;
+        if(pgqDelete.ParamByName('gbr_del').AsBoolean) then ShowMessage(currUser + ' is al verwijderd')
+        else
+        begin
+          pgqDelete.Edit;
+          pgqDelete.FieldByName('gbr_del').AsBoolean := true;
+          pgqDelete.Post;
+        end;
       end;
     end;
-
 //    RefreshUserOverView;
   end;
 end;

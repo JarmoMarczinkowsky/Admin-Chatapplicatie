@@ -175,7 +175,7 @@ begin
     pgqGroepsleden.Execute;
   end;
 
-  pgqGroepsLeden.Free;
+  if(pgqGroepsLeden.Active) then pgqGroepsLeden.Close;
   DataModule2.pgqCheckExistingUser.Close;
 end;
 
@@ -222,8 +222,11 @@ var
 begin
   lblAddGroupError.Caption := '';
 
-  searchQuery := TPgQuery.Create(nil);
-  searchQuery.Connection := DataModule2.pgcDBconnection;
+  if(not Assigned(searchQuery)) then
+  begin
+    searchQuery := TPgQuery.Create(nil);
+    searchQuery.Connection := DataModule2.pgcDBconnection;
+  end;
 
   slsbUser.Items.Clear;
   searchQuery.SQL.Text := '';
@@ -249,7 +252,7 @@ begin
     end;
   end;
 
-  searchQuery.Free;
+  searchQuery.Close;
 end;
 
 procedure TfrmGroupAdd.sbtnBackToGroupOverviewClick(Sender: TObject);
