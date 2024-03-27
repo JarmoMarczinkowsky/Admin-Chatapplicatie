@@ -265,16 +265,28 @@ end;
 
 procedure TfrmGroupEdit.sbtnEditRemoveGroupUserClick(Sender: TObject);
 var
-  indexDeletedUser, editDuplicateLocation: integer;
+  indexDeletedUser, editDuplicateLocation, i: integer;
   getText: string;
   searchLB, addedUsersLB: TAdvSmoothListBox;
-  ownerCBOX: TComboBox;
+//  ownerCBOX: TComboBox;
 begin
 
   if(slsbEditGroupUsers.Items.CountSelected > 0) then
   begin
     getText := slsbEditGroupUsers.Items[slsbEditGroupUsers.SelectedItemIndex].Caption;
     indexDeletedUser := cboxEditGroupOwner.Items.IndexOf(getText);
+
+    if(getText = cboxEditGroupOwner.Text) then
+    begin
+      for i := 1 to cboxEditGroupOwner.Items.Count do
+      begin
+        if(i - 1 <> indexDeletedUser) then
+        begin
+          cboxEditGroupOwner.ItemIndex := i - 1;
+          break;
+        end;
+      end;
+    end;
 
     editDuplicateLocation := RemovedUsersList.IndexOf(getText);
 
@@ -288,6 +300,8 @@ begin
 
   if(getText <> DataModule2.pgqGetLoggedInUser.FieldByName('gbr_nicknaam').AsString) then
     if(indexDeletedUser <> -1) then cboxEditGroupOwner.Items.Delete(indexDeletedUser);
+
+
 end;
 
 procedure TfrmGroupEdit.sbtnEditSearchUserClick(Sender: TObject);

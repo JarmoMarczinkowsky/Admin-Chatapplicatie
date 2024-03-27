@@ -269,19 +269,36 @@ end;
 
 procedure TfrmGroupAdd.sbtnRemoveUserFromGroupClick(Sender: TObject);
 var
-  indexDeletedUser, editDuplicateLocation: integer;
+  indexDeletedUser, editDuplicateLocation, i: integer;
   getText: string;
 begin
-  if(slsbGroupAddedUsers.Items.CountSelected > 0) then
+  if(slsbGroupAddedUsers.Items.Count > 0) then
   begin
-    getText := slsbGroupAddedUsers.Items[slsbGroupAddedUsers.SelectedItemIndex].Caption;
-    indexDeletedUser := cboxGroupOwner.Items.IndexOf(getText);
+    if(slsbGroupAddedUsers.Items.CountSelected > 0) then
+    begin
+      getText := slsbGroupAddedUsers.Items[slsbGroupAddedUsers.SelectedItemIndex].Caption;
+      indexDeletedUser := cboxGroupOwner.Items.IndexOf(getText);
+    end;
+
+    if(getText = cboxGroupOwner.Text) then
+    begin
+      for i := 1 to cboxGroupOwner.Items.Count do
+      begin
+        if(i - 1 <> indexDeletedUser) then
+        begin
+          cboxGroupOwner.ItemIndex := i - 1;
+          break;
+        end;
+      end;
+    end;
+
+    slsbGroupAddedUsers.Items.Delete(slsbGroupAddedUsers.SelectedItemIndex);
+
+    if(getText <> DataModule2.pgqGetLoggedInUser.FieldByName('gbr_nicknaam').AsString) then
+      if(indexDeletedUser <> -1) then cboxGroupOwner.Items.Delete(indexDeletedUser);
+
   end;
 
-  slsbGroupAddedUsers.Items.Delete(slsbGroupAddedUsers.SelectedItemIndex);
-
-  if(getText <> DataModule2.pgqGetLoggedInUser.FieldByName('gbr_nicknaam').AsString) then
-    if(indexDeletedUser <> -1) then cboxGroupOwner.Items.Delete(indexDeletedUser);
 end;
 
 end.
