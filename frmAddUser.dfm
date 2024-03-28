@@ -208,9 +208,4 @@ object Form3: TForm3
     OnClick = sbtnBackToUserOverviewClick
     TMSStyle = 8
   end
-  object PgQuery1: TPgQuery
-    Connection = DataModule2.pgcDBconnection
-    Left = 328
-    Top = 368
-  end
 end

@@ -756,9 +756,4 @@ object frmGroupAdd: TfrmGroupAdd
     OnClick = sbtnBackToGroupOverviewClick
     TMSStyle = 8
   end
-  object PgQuery1: TPgQuery
-    Connection = DataModule2.pgcDBconnection
-    Left = 640
-    Top = 384
-  end
 end

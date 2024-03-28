@@ -8,7 +8,8 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Graphics, AdvUtil, Vcl.Grids, AdvObj, BaseGrid,
   AdvGrid, DBAdvGrid, Vcl.ExtCtrls, Data.DB, MemDS, DBAccess, PgAccess,
   AdvSmoothButton, Vcl.StdCtrls, Vcl.ComCtrls, DMdatabaseInfo, AdvSmoothListBox,
-  Vcl.DBGrids, Vcl.Mask, RzEdit, GDIPMenu, AdvSmoothMegaMenu, AdvSmoothPanel;
+  Vcl.DBGrids, Vcl.Mask, RzEdit, GDIPMenu, AdvSmoothMegaMenu, AdvSmoothPanel,
+  AdvSmoothLabel;
 
 type
   TfrmAdminDashboard = class(TForm)
@@ -38,6 +39,9 @@ type
     tmrRemoveError: TTimer;
     cbxShowDeletedUser: TCheckBox;
     cbxShowDeletedGroups: TCheckBox;
+    spnlMenu: TAdvSmoothPanel;
+    AdvSmoothButton1: TAdvSmoothButton;
+    slblWelcomeMessage: TAdvSmoothLabel;
 
     procedure FormShow(Sender: TObject);
     procedure sbtnAddUserClick(Sender: TObject);
@@ -123,6 +127,8 @@ begin
     sgrGroups.Cells[4, 0] := 'Verwijderd';
     sgrGroups.Cells[5, 0] := 'Beschrijving';
   end;
+
+  slblWelcomeMessage.Caption.Text := 'Welkom, ' + DataModule2.pgqGetLoggedInUser.FieldByName('gbr_naam').AsString;
 end;
 
 procedure TfrmAdminDashboard.pcPagesChange(Sender: TObject);

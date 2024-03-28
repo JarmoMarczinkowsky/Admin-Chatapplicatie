@@ -28,7 +28,6 @@ type
     sbtnAddGroup: TAdvSmoothButton;
     sbtnBackToGroupOverview: TAdvSmoothButton;
     lblAddGroupError: TLabel;
-    PgQuery1: TPgQuery;
     procedure FormShow(Sender: TObject);
     procedure sbtnBackToGroupOverviewClick(Sender: TObject);
     procedure sbtnAddGroupProfileClick(Sender: TObject);

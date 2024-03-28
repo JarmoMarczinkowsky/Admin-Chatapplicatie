@@ -27,7 +27,6 @@ type
     AdvSmoothButton1: TAdvSmoothButton;
     sbtnBackToUserOverview: TAdvSmoothButton;
     lblAddUserError: TLabel;
-    PgQuery1: TPgQuery;
     procedure sbtnAddUserProfilePictureClick(Sender: TObject);
     procedure AdvSmoothButton1Click(Sender: TObject);
     procedure sbtnBackToUserOverviewClick(Sender: TObject);

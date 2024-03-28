@@ -1,7 +1,7 @@
 object frmUserEdit: TfrmUserEdit
   Left = 0
   Top = 0
-  Caption = 'frmUserEdit'
+  Caption = 'Wijzig gebruiker'
   ClientHeight = 441
   ClientWidth = 432
   Color = clBtnFace

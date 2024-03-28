@@ -29,7 +29,6 @@ type
     sbtnEditGroup: TAdvSmoothButton;
     sbtnEditGroupCancel: TAdvSmoothButton;
     lblEditGroupError: TLabel;
-    PgQuery1: TPgQuery;
     procedure FormShow(Sender: TObject);
     procedure sbtnEditSearchUserClick(Sender: TObject);
     procedure slsbEditAddUserToGroupClick(Sender: TObject);

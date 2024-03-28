@@ -1,7 +1,7 @@
 object frmGroupEdit: TfrmGroupEdit
   Left = 0
   Top = 0
-  Caption = 'Wijzig gebruiker'
+  Caption = 'Wijzig groep'
   ClientHeight = 463
   ClientWidth = 711
   Color = clBtnFace
@@ -769,10 +769,5 @@ object frmGroupEdit: TfrmGroupEdit
     Version = '2.2.3.1'
     OnClick = sbtnEditGroupCancelClick
     TMSStyle = 8
-  end
-  object PgQuery1: TPgQuery
-    Connection = DataModule2.pgcDBconnection
-    Left = 616
-    Top = 400
   end
 end

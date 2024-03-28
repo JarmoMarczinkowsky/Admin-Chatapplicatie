@@ -69,6 +69,8 @@ begin
 
       if(pgqGetLoggedInUser.RecordCount > 0) then
       begin
+        edtUser.Text := '';
+        edtPassword.Text := '';
         frmAdminDashboard.Show;
       end
       else
