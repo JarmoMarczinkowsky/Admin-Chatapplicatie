@@ -129,7 +129,7 @@
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="AdminDashboard.pas">
-            <Form>Form2</Form>
+            <Form>frmAdminDashboard</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="DMdatabaseInfo.pas">
