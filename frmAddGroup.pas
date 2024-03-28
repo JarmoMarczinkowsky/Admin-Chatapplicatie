@@ -230,11 +230,8 @@ var
 begin
   lblAddGroupError.Caption := '';
 
-  if(not Assigned(searchQuery)) then
-  begin
-    searchQuery := TPgQuery.Create(nil);
-    searchQuery.Connection := DataModule2.pgcDBconnection;
-  end;
+  searchQuery := TPgQuery.Create(nil);
+  searchQuery.Connection := DataModule2.pgcDBconnection;
 
   slsbUser.Items.Clear;
   searchQuery.SQL.Text := '';

@@ -67,9 +67,10 @@ begin
       edtEditUserNickName.Text := pgqCheckExistingUser.FieldByName('gbr_nicknaam').AsString;
       edtEditUserPassword.Text := '';
 
+      //gives error when loading Jan Janssen
       //loads image from database to TImage
-//      stream := pgqCheckExistingUser.CreateBlobStream(pgqCheckExistingUser.FieldByName('gbr_profielfoto'), bmRead);
       stream := pgqCheckExistingUser.CreateBlobStream(pgqCheckExistingUser.FieldByName('gbr_profielfoto'), bmRead);
+      stream.Position := 0;
       imgEditProfilePicture.Picture.LoadFromStream(stream);
     end;
 end;

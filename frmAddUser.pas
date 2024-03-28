@@ -27,6 +27,8 @@ type
     AdvSmoothButton1: TAdvSmoothButton;
     sbtnBackToUserOverview: TAdvSmoothButton;
     lblAddUserError: TLabel;
+    edtUserPassword: TEdit;
+    lblUserPassword: TLabel;
     procedure sbtnAddUserProfilePictureClick(Sender: TObject);
     procedure AdvSmoothButton1Click(Sender: TObject);
     procedure sbtnBackToUserOverviewClick(Sender: TObject);
@@ -100,8 +102,9 @@ begin
             pgqAddUser.ParamByName('userTel').AsString := Trim(edtUserTelephone.Text);
             pgqAddUser.ParamByName('userEmail').AsString := Trim(edtUserEmail.Text);
             pgqAddUser.ParamByName('userNickname').AsString := Trim(edtUserNickName.Text);
-            pgqAddUser.ParamByName('userPassword').AsString := HashString('Test123');
 
+            if(edtUserPassword.Text = '') then pgqAddUser.ParamByName('userPassword').AsString := HashString('Test123')
+            else pgqAddUser.ParamByName('userPassword').AsString := HashString(edtUserPassword.Text);
 
             AStream := TMemoryStream.Create;
             imgAddUserProfilePicture.Picture.SaveToStream(AStream);
@@ -133,7 +136,7 @@ begin
           end;
         end
         else lblAddUserError.Caption := 'Telefoonnummer is niet correct geformatteerd' + #13#10 +
-        'Formaat: 10 characters minimaal, alleen '+ #39 + '+' + #39 + ', ' + #39 + '-' + #39 + ' en cijfers 0-9 zijn toegestaan';
+        'Formaat: 10 characters minimaal, alleen '+ #39 + '+' + #39 + ', ' + #39 + '-' + #39 + #13#10 + ' en cijfers 0-9 zijn toegestaan';
       end
       else lblAddUserError.Caption := 'Emailadres is niet correct geformatteerd';
     end

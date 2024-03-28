@@ -49,21 +49,21 @@ object Form3: TForm3
   end
   object Label19: TLabel
     Left = 56
-    Top = 204
+    Top = 233
     Width = 56
     Height = 15
     Caption = 'Profielfoto'
   end
   object imgAddUserProfilePicture: TImage
     Left = 301
-    Top = 201
+    Top = 230
     Width = 75
     Height = 75
     Stretch = True
   end
   object lblAddUserError: TLabel
-    Left = 56
-    Top = 360
+    Left = 60
+    Top = 398
     Width = 28
     Height = 15
     Caption = 'Error'
@@ -73,6 +73,13 @@ object Form3: TForm3
     Font.Name = 'Segoe UI'
     Font.Style = [fsBold]
     ParentFont = False
+  end
+  object lblUserPassword: TLabel
+    Left = 56
+    Top = 204
+    Width = 68
+    Height = 15
+    Caption = 'Wachtwoord'
   end
   object edtUserName: TEdit
     Left = 176
@@ -111,7 +118,7 @@ object Form3: TForm3
   end
   object sbtnAddUserProfilePicture: TAdvSmoothButton
     Left = 176
-    Top = 201
+    Top = 230
     Width = 119
     Height = 27
     Appearance.SimpleLayout = True
@@ -133,14 +140,14 @@ object Form3: TForm3
     Status.Appearance.Font.Style = []
     Caption = 'Upload bestand'
     Color = 12698049
-    TabOrder = 5
+    TabOrder = 6
     Version = '2.2.3.1'
     OnClick = sbtnAddUserProfilePictureClick
     TMSStyle = 8
   end
   object AdvSmoothButton1: TAdvSmoothButton
     Left = 56
-    Top = 304
+    Top = 349
     Width = 125
     Height = 27
     Appearance.Font.Charset = DEFAULT_CHARSET
@@ -168,14 +175,14 @@ object Form3: TForm3
     Caption = 'Toevoegen'
     Color = 13472847
     ParentFont = False
-    TabOrder = 6
+    TabOrder = 7
     Version = '2.2.3.1'
     OnClick = AdvSmoothButton1Click
     TMSStyle = 8
   end
   object sbtnBackToUserOverview: TAdvSmoothButton
     Left = 187
-    Top = 304
+    Top = 349
     Width = 125
     Height = 27
     Appearance.Font.Charset = DEFAULT_CHARSET
@@ -203,9 +210,17 @@ object Form3: TForm3
     Caption = 'Annuleren'
     Color = 16764551
     ParentFont = False
-    TabOrder = 7
+    TabOrder = 8
     Version = '2.2.3.1'
     OnClick = sbtnBackToUserOverviewClick
     TMSStyle = 8
+  end
+  object edtUserPassword: TEdit
+    Left = 176
+    Top = 201
+    Width = 200
+    Height = 23
+    PasswordChar = #8226
+    TabOrder = 5
   end
 end

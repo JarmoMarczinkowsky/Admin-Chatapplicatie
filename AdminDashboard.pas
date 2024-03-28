@@ -324,7 +324,7 @@ begin
       pgqDelete.Open;
 
       currGroup := pgqDelete.FieldByName('gro_naam').AsString;
-      //check for already deleted user
+      //check for already deleted group
       if(pgqDelete.FieldByName('gbr_del').AsBoolean) then ShowMessage(currGroup + ' is al verwijderd')
       else //if user is not deleted -> show messagebox to confirm
       begin
@@ -332,7 +332,7 @@ begin
         if(userChoice = 1) then
         begin
           pgqDelete.Edit;
-          pgqDelete.FieldByName('gbr_del').AsBoolean := true;
+          pgqDelete.FieldByName('gro_del').AsBoolean := true;
           pgqDelete.Post;
         end;
       end;
@@ -360,18 +360,20 @@ begin
       pgqDelete.Open;
 
       currUser := pgqDelete.FieldByName('gbr_nicknaam').AsString;
-      userChoice := Application.MessageBox(PWideChar('Weet je zeker dat je ' + currUser + ' wilt verwijderen?') , 'Bevestig verwijderverzoek', MB_OKCANCEL );
-
-      if(userChoice = 1) then
+      if(pgqDelete.FieldByName('gbr_del').AsBoolean) then ShowMessage(currUser + ' is al verwijderd')
+      else
       begin
-        if(pgqDelete.FieldByName('gbr_del').AsBoolean) then ShowMessage(currUser + ' is al verwijderd')
-        else
+        userChoice := Application.MessageBox(PWideChar('Weet je zeker dat je ' + currUser + ' wilt verwijderen?') , 'Bevestig verwijderverzoek', MB_OKCANCEL );
+
+        if(userChoice = 1) then
         begin
           pgqDelete.Edit;
           pgqDelete.FieldByName('gbr_del').AsBoolean := true;
           pgqDelete.Post;
         end;
       end;
+
+
     end;
 //    RefreshUserOverView;
   end;
