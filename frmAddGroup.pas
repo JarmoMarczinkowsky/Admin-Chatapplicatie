@@ -61,8 +61,6 @@ begin
   edtAddGroupSearchUser.Text := '';
   imgAddGroupProfile.Picture := nil;
 
-
-
   with DataModule2 do
   begin
     cboxGroupOwner.Items.Add(pgqGetLoggedInUser.FieldByName('gbr_nicknaam').AsString);
@@ -83,8 +81,6 @@ begin
         pgqGetUsers.Next;
       end;
     end;
-//    else
-//      pgqGetUsers.First;
   end;
 
   lblAddGroupError.Caption := '';

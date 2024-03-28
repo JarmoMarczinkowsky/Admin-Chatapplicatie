@@ -875,7 +875,7 @@ object frmAdminDashboard: TfrmAdminDashboard
         Status.Appearance.Font.Height = -11
         Status.Appearance.Font.Name = 'Segoe UI'
         Status.Appearance.Font.Style = []
-        Caption = 'Wijzigen'
+        Caption = 'Bewerken'
         Color = 15785659
         ParentFont = False
         TabOrder = 3
@@ -999,7 +999,7 @@ object frmAdminDashboard: TfrmAdminDashboard
         Status.Appearance.Font.Height = -11
         Status.Appearance.Font.Name = 'Segoe UI'
         Status.Appearance.Font.Style = []
-        Caption = 'Verwijder'
+        Caption = 'Verwijderen'
         Color = 4210943
         ParentFont = False
         TabOrder = 1
@@ -1048,7 +1048,7 @@ object frmAdminDashboard: TfrmAdminDashboard
         Status.Appearance.Font.Height = -11
         Status.Appearance.Font.Name = 'Segoe UI'
         Status.Appearance.Font.Style = []
-        Caption = 'Wijzigen'
+        Caption = 'Bewerken'
         Color = 15785659
         ParentFont = False
         TabOrder = 3
@@ -1120,8 +1120,8 @@ object frmAdminDashboard: TfrmAdminDashboard
         DisplayFormat = ',0;(,0)'
       end
       object sbtnCancelOptions: TAdvSmoothButton
-        Left = 195
-        Top = 232
+        Left = 187
+        Top = 360
         Width = 125
         Height = 27
         Appearance.Font.Charset = DEFAULT_CHARSET
@@ -1154,8 +1154,8 @@ object frmAdminDashboard: TfrmAdminDashboard
         TMSStyle = 8
       end
       object sbtnChangeOption: TAdvSmoothButton
-        Left = 64
-        Top = 232
+        Left = 56
+        Top = 360
         Width = 125
         Height = 27
         Appearance.Font.Charset = DEFAULT_CHARSET

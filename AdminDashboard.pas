@@ -65,7 +65,7 @@ type
     procedure sbtnChangeOptionClick(Sender: TObject);
   private
     { Private declarations }
-    getGroup: TPgQuery;
+    getGroup, pgqGetSettings: TPgQuery;
     RemovedUsersList: TStringList;
     timerCounter: integer;
     procedure RefreshUserOverView;
@@ -126,6 +126,12 @@ begin
     sgrGroups.Cells[3, 0] := 'Aangemaakt';
     sgrGroups.Cells[4, 0] := 'Verwijderd';
     sgrGroups.Cells[5, 0] := 'Beschrijving';
+
+    pgqGetSettings := TPgQuery.Create(nil);
+    pgqGetSettings.Connection := pgcDBconnection;
+    pgqGetSettings.SQL.Text := 'SELECT * FROM tbl_appopties WHERE opt_id = 1';
+    pgqGetSettings.Open;
+    numRefreshRate.Value := pgqGetSettings.FieldByName('opt_refreshrate').AsInteger;
   end;
 
   slblWelcomeMessage.Caption.Text := 'Welkom, ' + DataModule2.pgqGetLoggedInUser.FieldByName('gbr_naam').AsString;
@@ -318,12 +324,12 @@ begin
       pgqDelete.Open;
 
       currGroup := pgqDelete.FieldByName('gro_naam').AsString;
-
-      userChoice := Application.MessageBox(PWideChar('Weet je zeker dat je ' + currGroup + ' wilt verwijderen?') , 'Bevestig verwijderverzoek', MB_OKCANCEL );
-      if(userChoice = 1) then
+      //check for already deleted user
+      if(pgqDelete.FieldByName('gbr_del').AsBoolean) then ShowMessage(currGroup + ' is al verwijderd')
+      else //if user is not deleted -> show messagebox to confirm
       begin
-        if(pgqDelete.FieldByName('gbr_del').AsBoolean) then ShowMessage(currGroup + ' is al verwijderd')
-        else
+        userChoice := Application.MessageBox(PWideChar('Weet je zeker dat je ' + currGroup + ' wilt verwijderen?') , 'Bevestig verwijderverzoek', MB_OKCANCEL );
+        if(userChoice = 1) then
         begin
           pgqDelete.Edit;
           pgqDelete.FieldByName('gbr_del').AsBoolean := true;
