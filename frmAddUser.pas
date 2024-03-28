@@ -62,7 +62,6 @@ begin
   with DataModule2 do
   begin
     pgqAddUser.Connection := pgcDBconnection;
-//    timerCounter := 0;
 
     lblAddUserError.Caption := '';
     lblAddUserError.Font.Color := RGB(220, 20, 60);

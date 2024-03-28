@@ -36,7 +36,6 @@ implementation
 procedure TForm1.FormCreate(Sender: TObject);
 begin
   lblError.Caption := '';
-
 end;
 
 procedure TForm1.FormShow(Sender: TObject);
@@ -46,43 +45,44 @@ end;
 
 procedure TForm1.sbtnLoginClick(Sender: TObject);
 begin
-  if(NOT DataModule2.pgcDBconnection.Connected) then DataModule2.pgcDBconnection.Open;
-
-  if((Length(edtUser.Text) > 0) AND (Length(edtPassword.Text) > 0)) then
+  with DataModule2 do
   begin
+    if(NOT pgcDBconnection.Connected) then pgcDBconnection.Open;
 
-    DataModule2.pgqGetLoggedInUser.SQL.Text := 'SELECT * FROM tbl_gebruikers';
-
-    if(ContainsText(edtUser.Text, '@')) then
+    if((Length(edtUser.Text) > 0) AND (Length(edtPassword.Text) > 0)) then
     begin
-      DataModule2.pgqGetLoggedInUser.SQL.Add('WHERE LOWER(gbr_email)=:user');
-    end
+      pgqGetLoggedInUser.SQL.Text := 'SELECT * FROM tbl_gebruikers';
+
+      if(ContainsText(edtUser.Text, '@')) then
+      begin
+        pgqGetLoggedInUser.SQL.Add('WHERE LOWER(gbr_email)=:user');
+      end
+      else
+      begin
+        pgqGetLoggedInUser.SQL.Add('WHERE LOWER(gbr_nicknaam)=:user');
+      end;
+
+      pgqGetLoggedInUser.SQL.Add('AND gbr_wachtwoord=:password');
+      pgqGetLoggedInUser.ParamByName('user').AsString := Trim(LowerCase(edtUser.Text));
+      pgqGetLoggedInUser.ParamByName('password').AsString := THashSHA2.GetHashString(edtPassword.Text, SHA256);
+      pgqGetLoggedInUser.Open;
+
+      if(pgqGetLoggedInUser.RecordCount > 0) then
+      begin
+        frmAdminDashboard.Show;
+      end
+      else
+      begin
+        if(ContainsText(edtUser.Text, '@')) then lblError.Caption := 'Email of wachtwoord is incorrect'
+        else lblError.Caption := 'Gebruikersnaam of wachtwoord is incorrect';
+      end;
+    end //end of if 
     else
     begin
-      DataModule2.pgqGetLoggedInUser.SQL.Add('WHERE LOWER(gbr_nicknaam)=:user');
+      lblError.Caption := 'Gebruikersnaam of wachtwoord is leeg';
     end;
-
-    DataModule2.pgqGetLoggedInUser.SQL.Add('AND gbr_wachtwoord=:password');
-    DataModule2.pgqGetLoggedInUser.ParamByName('user').AsString := Trim(LowerCase(edtUser.Text));
-    DataModule2.pgqGetLoggedInUser.ParamByName('password').AsString := THashSHA2.GetHashString(edtPassword.Text, SHA256);
-    DataModule2.pgqGetLoggedInUser.Open;
-
-    if(DataModule2.pgqGetLoggedInUser.RecordCount > 0) then
-    begin
-      Form2.Show;
-    end
-    else
-    begin
-      if(ContainsText(edtUser.Text, '@')) then lblError.Caption := 'Email of wachtwoord is incorrect'
-      else lblError.Caption := 'Gebruikersnaam of wachtwoord is incorrect';
-    end;
-
-  end
-  else
-  begin
-    lblError.Caption := 'Gebruikersnaam of wachtwoord is leeg';
   end;
-
+  
 end;
 
 end.

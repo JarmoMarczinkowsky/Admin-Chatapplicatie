@@ -11,7 +11,7 @@ uses
   Vcl.DBGrids, Vcl.Mask, RzEdit, GDIPMenu, AdvSmoothMegaMenu, AdvSmoothPanel;
 
 type
-  TForm2 = class(TForm)
+  TfrmAdminDashboard = class(TForm)
     pcPages: TPageControl;
     tbsUserOverview: TTabSheet;
     sbtnAddUser: TAdvSmoothButton;
@@ -24,7 +24,7 @@ type
     sbtnGoToEditUser: TAdvSmoothButton;
     sbtnGoToEditGroup: TAdvSmoothButton;
     tbsOptions: TTabSheet;
-    RzNumericEdit1: TRzNumericEdit;
+    numRefreshRate: TRzNumericEdit;
     Label18: TLabel;
     sbtnCancelOptions: TAdvSmoothButton;
     sbtnChangeOption: TAdvSmoothButton;
@@ -58,6 +58,7 @@ type
     procedure sbtnRefreshUserClick(Sender: TObject);
     procedure sbtnLogOutClick(Sender: TObject);
     procedure tmrRemoveErrorTimer(Sender: TObject);
+    procedure sbtnChangeOptionClick(Sender: TObject);
   private
     { Private declarations }
     getGroup: TPgQuery;
@@ -73,14 +74,14 @@ type
   end;
 
 var
-  Form2: TForm2;
+  frmAdminDashboard: TfrmAdminDashboard;
 
 implementation
   uses frmAddUser, frmAddGroup, frmEditUser, frmEditGroup;
 
 {$R *.dfm}
 
-procedure TForm2.AdvSmoothMegaMenu1MenuItemClick(Sender: TObject;
+procedure TfrmAdminDashboard.AdvSmoothMegaMenu1MenuItemClick(Sender: TObject;
   ItemIndex: Integer);
 begin
   if(ItemIndex = 0) then pcPages.ActivePage := tbsUserOverview
@@ -89,26 +90,16 @@ begin
 
 end;
 
-procedure TForm2.AdvSmoothMegaMenu1MenuSubItemClick(Sender: TObject;
+procedure TfrmAdminDashboard.AdvSmoothMegaMenu1MenuSubItemClick(Sender: TObject;
   Menu: TAdvSmoothMegaMenu; MenuItem: TAdvSmoothMegaMenuItem;
   Item: TGDIPMenuSectionItem; Text: string);
 begin
   if (Text = 'Overzicht gebruikers') then pcPages.ActivePage := tbsUserOverview
   else if (Text = 'Overzicht groepen') then pcPages.ActivePage := tbsGroupOverview
-//  else if (Text = 'Groep aanmaken') then pcPages.ActivePage :=
   else if (Text = 'Uitloggen') then Self.Close;
 end;
 
-//procedure TForm2.sbtnBackToGroupOverviewClick(Sender: TObject);
-//begin
-//  if(pcPages.ActivePage = tbsEditGroup) then
-//  begin
-//    RemovedUsersList.Free;
-//  end;
-//  pcPages.ActivePage := tbsGroupOverview;
-//end;
-
-procedure TForm2.FormShow(Sender: TObject);
+procedure TfrmAdminDashboard.FormShow(Sender: TObject);
 var 
   i, j: integer;
 begin
@@ -134,7 +125,7 @@ begin
   end;
 end;
 
-procedure TForm2.pcPagesChange(Sender: TObject);
+procedure TfrmAdminDashboard.pcPagesChange(Sender: TObject);
 var
   i: integer;
 begin
@@ -152,7 +143,7 @@ begin
   end;
 end;
 
-procedure TForm2.RefreshUserOverView;
+procedure TfrmAdminDashboard.RefreshUserOverView;
 var 
   i: integer;
 begin
@@ -183,20 +174,15 @@ begin
 
       pgqGetUsers.Next;
     end;
-
-    for i := 0 to sgrUsers.ColCount - 1 do
-    AutoSizeCol(sgrUsers, i);
-
+    for i := 0 to sgrUsers.ColCount - 1 do AutoSizeCol(sgrUsers, i);
     sgrUsers.EndUpdate;
 
     lblUserOverviewAmount.Caption := Format('%d gebruikers gevonden', [pgqGetUsers.RecordCount]);
-//    DataModule2.pgqGetUsers.Free;
-//    DataModule2.pgqGetUsers := nil;
     pgqGetUsers.Close;
   end;
 end;
 
-procedure TForm2.AutoSizeCol(Grid: TStringGrid;
+procedure TfrmAdminDashboard.AutoSizeCol(Grid: TStringGrid;
 Column: integer);
 var
   i, W, WMax: integer;
@@ -210,7 +196,7 @@ begin
   Grid.ColWidths[Column] := WMax + 5;
 end;
 
-procedure TForm2.RefreshGroupOverView;
+procedure TfrmAdminDashboard.RefreshGroupOverView;
 var
   i: integer;
 begin
@@ -229,7 +215,7 @@ begin
     pgqGetGroups.Open;
 
     sgrGroups.BeginUpdate;
-    sgrGroups.RowCount := DataModule2.pgqGetGroups.RecordCount + 1;
+    sgrGroups.RowCount := pgqGetGroups.RecordCount + 1;
 
     for i := 1 to pgqGetGroups.RecordCount do
     begin
@@ -242,28 +228,22 @@ begin
 
       pgqGetGroups.Next;
     end;
-
-    for i := 0 to sgrGroups.ColCount - 1 do
-      AutoSizeCol(sgrGroups, i);
-
+    for i := 0 to sgrGroups.ColCount - 1 do AutoSizeCol(sgrGroups, i);
     sgrGroups.EndUpdate;
 
-    lblGroupOverviewAmount.Caption := Format('%d groepen gevonden', [DataModule2.pgqGetGroups.RecordCount]);
-
+    lblGroupOverviewAmount.Caption := Format('%d groepen gevonden', [pgqGetGroups.RecordCount]);
     pgqGetGroups.Close;
-//    pgqGetGroups.Free;
-//    pgqGetGroups := nil;
   end;
 end;
 
-procedure TForm2.sbtnGoToAddGroupClick(Sender: TObject);
+procedure TfrmAdminDashboard.sbtnGoToAddGroupClick(Sender: TObject);
 var
   i: integer;
 begin
   frmGroupAdd.Show;
 end;
 
-procedure TForm2.FillUserListbox(searchLB: TAdvSmoothListBox);
+procedure TfrmAdminDashboard.FillUserListbox(searchLB: TAdvSmoothListBox);
 var
   i: integer;
 begin
@@ -286,19 +266,36 @@ begin
         Caption := pgqGetUsers.FieldByName('gbr_nicknaam').AsString;
       end;
 
-      DataModule2.pgqGetUsers.Next;
+      pgqGetUsers.Next;
     end;
   end;
 end;
 
-procedure TForm2.sbtnAddUserClick(Sender: TObject);
+procedure TfrmAdminDashboard.sbtnAddUserClick(Sender: TObject);
 var
   i: integer;
 begin
   Form3.Show;
 end;
 
-procedure TForm2.sbtnDeleteGroupClick(Sender: TObject);
+procedure TfrmAdminDashboard.sbtnChangeOptionClick(Sender: TObject);
+var
+  pgqSettings: TPgQuery;
+begin
+  if(numRefreshRate.Value > 0) then
+  begin
+    pgqSettings := TPgQuery.Create(nil);
+    pgqSettings.Connection := DataModule2.pgcDBconnection;
+
+    pgqSettings.SQL.Text := 'SELECT * FROM tbl_appopties WHERE opt_id = 1';
+    pgqSettings.Open;
+    pgqSettings.Edit;
+    pgqSettings.FieldByName('opt_refreshrate').AsInteger := Round(numRefreshRate.Value);
+    pgqSettings.Post;
+  end;
+end;
+
+procedure TfrmAdminDashboard.sbtnDeleteGroupClick(Sender: TObject);
 var
   selectedRowId, getGroupId, userChoice: integer;
   currGroup: string;
@@ -319,7 +316,7 @@ begin
       userChoice := Application.MessageBox(PWideChar('Weet je zeker dat je ' + currGroup + ' wilt verwijderen?') , 'Bevestig verwijderverzoek', MB_OKCANCEL );
       if(userChoice = 1) then
       begin
-        if(pgqDelete.ParamByName('gbr_del').AsBoolean) then ShowMessage(currGroup + ' is al verwijderd')
+        if(pgqDelete.FieldByName('gbr_del').AsBoolean) then ShowMessage(currGroup + ' is al verwijderd')
         else
         begin
           pgqDelete.Edit;
@@ -333,13 +330,13 @@ begin
 
 end;
 
-procedure TForm2.sbtnDeleteUserClick(Sender: TObject);
+procedure TfrmAdminDashboard.sbtnDeleteUserClick(Sender: TObject);
 var 
   selectedRowId, getUserId, userChoice: integer;
   currUser, myText: string;
 begin
   selectedRowId := sgrUsers.Row;
-
+  //delete error
   if(sgrUsers.Cells[0, 1] <> '') then
   begin
     getUserId := StrToInt(sgrUsers.Cells[0, selectedRowId]);
@@ -355,7 +352,7 @@ begin
 
       if(userChoice = 1) then
       begin
-        if(pgqDelete.ParamByName('gbr_del').AsBoolean) then ShowMessage(currUser + ' is al verwijderd')
+        if(pgqDelete.FieldByName('gbr_del').AsBoolean) then ShowMessage(currUser + ' is al verwijderd')
         else
         begin
           pgqDelete.Edit;
@@ -368,7 +365,7 @@ begin
   end;
 end;
 
-procedure TForm2.sbtnGoToEditGroupClick(Sender: TObject);
+procedure TfrmAdminDashboard.sbtnGoToEditGroupClick(Sender: TObject);
 var
   selectedRowId, getGroupId, i: integer;
   stream: TStream;
@@ -381,24 +378,18 @@ begin
     //gets row with selected group
     with DataModule2 do
     begin
-//      DataModule2.pgqGetGroupMembers := nil;
-//      if(DataModule2.pgqGetGroupMembers = nil) then
-//      begin
       pgqGetGroupMembers := TPgQuery.Create(nil);
-      pgqGetGroupMembers.Connection := DataModule2.pgcDBconnection;
-//      end;
+      pgqGetGroupMembers.Connection := pgcDBconnection;
+
       pgqGetGroupMembers.SQL.Text := 'SELECT * FROM tbl_groepleden';
       pgqGetGroupMembers.SQL.Add('WHERE grl_groep=:selectedGroup');
       pgqGetGroupMembers.SQL.Add('AND grl_del = false');
       pgqGetGroupMembers.ParamByName('selectedGroup').AsInteger := getGroupId;
       pgqGetGroupMembers.Open;
 
-//      DataModule2.pgqGetSelectedGroup := nil;
-//      if(DataModule2.pgqGetSelectedGroup = nil) then
-//      begin
       pgqGetSelectedGroup := TPgQuery.Create(nil);
-      pgqGetSelectedGroup.Connection := DataModule2.pgcDBconnection;
-//      end;
+      pgqGetSelectedGroup.Connection := pgcDBconnection;
+
       pgqGetSelectedGroup.SQL.Text := 'SELECT * FROM tbl_groepen WHERE gro_id=:selectedGroup';
       pgqGetSelectedGroup.ParamByName('selectedGroup').AsInteger := getGroupId;
       pgqGetSelectedGroup.Open;
@@ -408,7 +399,7 @@ begin
   end;
 end;
 
-procedure TForm2.sbtnGoToEditUserClick(Sender: TObject);
+procedure TfrmAdminDashboard.sbtnGoToEditUserClick(Sender: TObject);
 var
   selectedRowId, getUserId: integer;
   stream: TStream;
@@ -433,22 +424,22 @@ begin
   end;
 end;
 
-procedure TForm2.sbtnLogOutClick(Sender: TObject);
+procedure TfrmAdminDashboard.sbtnLogOutClick(Sender: TObject);
 begin
   Self.Close;
 end;
 
-procedure TForm2.sbtnRefreshGroupClick(Sender: TObject);
+procedure TfrmAdminDashboard.sbtnRefreshGroupClick(Sender: TObject);
 begin
   RefreshGroupOverView;
 end;
 
-procedure TForm2.sbtnRefreshUserClick(Sender: TObject);
+procedure TfrmAdminDashboard.sbtnRefreshUserClick(Sender: TObject);
 begin
   RefreshUserOverView;
 end;
 
-procedure TForm2.sgrGroupsDrawCell(Sender: TObject; ACol, ARow: LongInt;
+procedure TfrmAdminDashboard.sgrGroupsDrawCell(Sender: TObject; ACol, ARow: LongInt;
   Rect: TRect; State: TGridDrawState);
 var
   AGrid : TStringGrid;
@@ -467,9 +458,8 @@ begin
   AGrid.Canvas.TextOut(Rect.Left + 2, Rect.Top + 2, AGrid.Cells[ACol, ARow]);
 end;
 
-procedure TForm2.tmrRemoveErrorTimer(Sender: TObject);
+procedure TfrmAdminDashboard.tmrRemoveErrorTimer(Sender: TObject);
 begin
-
   timerCounter := timerCounter + 1;
 
   if(timerCounter > 8) then
@@ -478,7 +468,7 @@ begin
   end;
 end;
 
-Function TForm2.HashString(const Input: string): string;
+Function TfrmAdminDashboard.HashString(const Input: string): string;
 begin
   Result := THashSHA2.GetHashString(Input, THashSHA2.TSHA2Version.SHA256);
 end;

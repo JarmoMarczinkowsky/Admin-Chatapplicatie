@@ -1,4 +1,4 @@
-object Form2: TForm2
+object frmAdminDashboard: TfrmAdminDashboard
   Left = 0
   Top = 0
   Caption = 'Administrator dashboard'
@@ -764,7 +764,7 @@ object Form2: TForm2
     TabOrder = 0
     OnChange = pcPagesChange
     object tbsUserOverview: TTabSheet
-      Caption = 'User Overview'
+      Caption = 'Gebruikers'
       object lblUserOverviewAmount: TLabel
         Left = 32
         Top = 430
@@ -930,7 +930,7 @@ object Form2: TForm2
       end
     end
     object tbsGroupOverview: TTabSheet
-      Caption = 'Group overview'
+      Caption = 'Groepen'
       ImageIndex = 2
       object lblGroupOverviewAmount: TLabel
         Left = 32
@@ -1103,7 +1103,7 @@ object Form2: TForm2
       end
     end
     object tbsOptions: TTabSheet
-      Caption = 'Options'
+      Caption = 'Opties'
       ImageIndex = 6
       object Label18: TLabel
         Left = 56
@@ -1112,7 +1112,7 @@ object Form2: TForm2
         Height = 15
         Caption = 'Secondes per refresh'
       end
-      object RzNumericEdit1: TRzNumericEdit
+      object numRefreshRate: TRzNumericEdit
         Left = 184
         Top = 56
         Width = 193
@@ -1182,11 +1182,12 @@ object Form2: TForm2
         Status.Appearance.Font.Height = -11
         Status.Appearance.Font.Name = 'Segoe UI'
         Status.Appearance.Font.Style = []
-        Caption = 'Toevoegen'
+        Caption = 'Wijzigen'
         Color = 13472847
         ParentFont = False
         TabOrder = 2
         Version = '2.2.3.1'
+        OnClick = sbtnChangeOptionClick
         TMSStyle = 8
       end
       object sbtnBackButton: TAdvSmoothButton
