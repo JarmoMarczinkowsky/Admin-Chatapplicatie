@@ -88,11 +88,11 @@ end;
 
 procedure TfrmGroupAdd.sbtnAddGroupClick(Sender: TObject);
 var
-  i, idLastCreatedGroup, indexDeletedUser, amountOfItems: integer;
+  idLastCreatedGroup: integer;
   AStream: TMemoryStream;
-  BlobField: TBlobField;
-  getText: string;
-  getPosAdmin: integer;
+//  BlobField: TBlobField;
+//  getText: string;
+//  getPosAdmin: integer;
 begin
   lblAddGroupError.Font.Color := RGB(220, 20, 60);
   lblAddGroupError.Caption := '';
@@ -203,7 +203,7 @@ end;
 
 procedure TfrmGroupAdd.sbtnAddUserToGroupClick(Sender: TObject);
 var
-  i, temp, editDuplicateLocation: integer;
+  temp: integer;
 begin
 
   if(slsbUser.Items.CountSelected > 0) then
@@ -267,7 +267,7 @@ end;
 
 procedure TfrmGroupAdd.sbtnRemoveUserFromGroupClick(Sender: TObject);
 var
-  indexDeletedUser, editDuplicateLocation, i: integer;
+  indexDeletedUser, i: integer;
   getText: string;
 begin
   if(slsbGroupAddedUsers.Items.Count > 0) then

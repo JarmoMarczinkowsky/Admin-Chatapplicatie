@@ -10,6 +10,7 @@ object Form3: TForm3
   Font.Height = -12
   Font.Name = 'Segoe UI'
   Font.Style = []
+  FormStyle = fsStayOnTop
   OnShow = FormShow
   TextHeight = 15
   object lblName: TLabel
@@ -62,8 +63,8 @@ object Form3: TForm3
     Stretch = True
   end
   object lblAddUserError: TLabel
-    Left = 60
-    Top = 398
+    Left = 8
+    Top = 385
     Width = 28
     Height = 15
     Caption = 'Error'
@@ -146,8 +147,8 @@ object Form3: TForm3
     TMSStyle = 8
   end
   object AdvSmoothButton1: TAdvSmoothButton
-    Left = 56
-    Top = 349
+    Left = 8
+    Top = 406
     Width = 125
     Height = 27
     Appearance.Font.Charset = DEFAULT_CHARSET
@@ -181,8 +182,8 @@ object Form3: TForm3
     TMSStyle = 8
   end
   object sbtnBackToUserOverview: TAdvSmoothButton
-    Left = 187
-    Top = 349
+    Left = 139
+    Top = 406
     Width = 125
     Height = 27
     Appearance.Font.Charset = DEFAULT_CHARSET

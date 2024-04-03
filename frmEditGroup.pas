@@ -56,9 +56,8 @@ implementation
 
 procedure TfrmGroupEdit.FormShow(Sender: TObject);
 var
-  selectedRowId, getUserId, i, getOwnerId: integer;
+  i, getOwnerId: integer;
   stream: TStream;
-  groupMemberName: string;
 begin
   lblEditGroupError.Caption := '';
   edtEditGroupName.Text := '';
@@ -128,11 +127,8 @@ begin
       RemovedUsersList.Duplicates := dupIgnore;
     end;
 
-
     FillListBox;
-
   end;
-
 end;
 
 procedure TfrmGroupEdit.FillListBox;
@@ -211,9 +207,6 @@ begin
 
     AddUserToGroup(groupId);
 
-  //  if(pgqGetDeletedUserId.Active) then pgqGetDeletedUserId.Close;
-  //  if(pgqEditGroupMember.Active) then pgqEditGroupMember.Close;
-
     pgqCheckExistingUser.SQL.Text := 'SELECT gbr_id FROM tbl_gebruikers';
     pgqCheckExistingUser.SQL.Add('WHERE gbr_nicknaam=:newGroupOwner');
     pgqCheckExistingUser.ParamByName('newGroupOwner').AsString := cboxEditGroupOwner.Text;
@@ -258,7 +251,6 @@ procedure TfrmGroupEdit.sbtnEditRemoveGroupUserClick(Sender: TObject);
 var
   indexDeletedUser, editDuplicateLocation, i: integer;
   getText: string;
-  searchLB, addedUsersLB: TAdvSmoothListBox;
 begin
   if(slsbEditGroupUsers.Items.CountSelected > 0) then
   begin
@@ -295,8 +287,6 @@ procedure TfrmGroupEdit.sbtnEditSearchUserClick(Sender: TObject);
 var
   i: integer;
   searchQuery: TPgQuery;
-  searchLB: TAdvSmoothListBox;
-  searchBar: TEdit;
 begin
   lblEditGroupError.Caption := '';
 
@@ -331,7 +321,7 @@ end;
 
 procedure TfrmGroupEdit.slsbEditAddUserToGroupClick(Sender: TObject);
 var
-  i, temp, editDuplicateLocation: integer;
+  temp, editDuplicateLocation: integer;
 begin
   if(slsbEditSearchUser.Items.CountSelected > 0) then
   begin

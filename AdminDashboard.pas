@@ -30,17 +30,14 @@ type
     sbtnCancelOptions: TAdvSmoothButton;
     sbtnChangeOption: TAdvSmoothButton;
     sbtnBackButton: TAdvSmoothButton;
-    AdvSmoothMegaMenu1: TAdvSmoothMegaMenu;
     sbtnRefreshGroup: TAdvSmoothButton;
     sbtnRefreshUser: TAdvSmoothButton;
-    sbtnLogOut: TAdvSmoothButton;
     lblUserOverviewAmount: TLabel;
     lblGroupOverviewAmount: TLabel;
-    tmrRemoveError: TTimer;
     cbxShowDeletedUser: TCheckBox;
     cbxShowDeletedGroups: TCheckBox;
     spnlMenu: TAdvSmoothPanel;
-    AdvSmoothButton1: TAdvSmoothButton;
+    sbtnLogout: TAdvSmoothButton;
     slblWelcomeMessage: TAdvSmoothLabel;
 
     procedure FormShow(Sender: TObject);
@@ -61,17 +58,15 @@ type
     procedure sbtnRefreshGroupClick(Sender: TObject);
     procedure sbtnRefreshUserClick(Sender: TObject);
     procedure sbtnLogOutClick(Sender: TObject);
-    procedure tmrRemoveErrorTimer(Sender: TObject);
+//    procedure tmrRemoveErrorTimer(Sender: TObject);
     procedure sbtnChangeOptionClick(Sender: TObject);
+    procedure FormResize(Sender: TObject);
   private
     { Private declarations }
     getGroup, pgqGetSettings: TPgQuery;
-    RemovedUsersList: TStringList;
     timerCounter: integer;
     procedure RefreshUserOverView;
     procedure RefreshGroupOverView;
-    procedure FillUserListbox(searchLB: TAdvSmoothListBox);
-    function HashString(const Input: string): string;
     procedure AutoSizeCol(grid: TStringGrid; Column: integer);
   public
     { Public declarations }
@@ -103,9 +98,20 @@ begin
   else if (Text = 'Uitloggen') then Self.Close;
 end;
 
+procedure TfrmAdminDashboard.FormResize(Sender: TObject);
+var
+  position: integer;
+begin
+  position := Self.Width - Round(sbtnLogout.Width * 1.25);
+  sbtnLogout.Left := position;
+  slblWelcomeMessage.Left := position - (slblWelcomeMessage.Width + 5);
+
+  sbtnAddUser.Left := Self.Width - Round(sbtnAddUser.Width * 1.25) + 10;
+  sbtnGoToEditUser.Left := Self.Width - Round(sbtnAddUser.Width * 1.25) + 10;
+//  Screen.PixelsPerInch * 100 / 96;
+end;
+
 procedure TfrmAdminDashboard.FormShow(Sender: TObject);
-var 
-  i, j: integer;
 begin
   pcPages.ActivePage := tbsUserOverview;
 
@@ -138,8 +144,6 @@ begin
 end;
 
 procedure TfrmAdminDashboard.pcPagesChange(Sender: TObject);
-var
-  i: integer;
 begin
   if(pcPages.ActivePage = tbsUserOverview) then
   begin
@@ -159,20 +163,6 @@ procedure TfrmAdminDashboard.RefreshUserOverView;
 var 
   i: integer;
 begin
-//  try
-//    DataModule2.pgcDBconnection.Connected;
-//  except
-//    try
-//      DataModule2.pgcDBconnection.Open;
-//    except
-//      on E: Exception do
-//      begin
-//        lblUserOverviewAmount.Caption := 'Geen verbinding mogelijk met de database' + E.Message;
-//        Exit;
-//      end;
-//    end;
-//  end;
-
   with DataModule2 do
   begin
     if(pgqGetUsers = nil) then
@@ -263,43 +253,11 @@ begin
 end;
 
 procedure TfrmAdminDashboard.sbtnGoToAddGroupClick(Sender: TObject);
-var
-  i: integer;
 begin
   frmGroupAdd.Show;
 end;
 
-procedure TfrmAdminDashboard.FillUserListbox(searchLB: TAdvSmoothListBox);
-var
-  i: integer;
-begin
-  searchLB.Items.Clear;
-
-  with DataModule2 do
-  begin
-    if(pgqGetUsers.RecordCount < 1) then
-    begin
-      pgqGetUsers.SQL.Text := 'SELECT * FROM tbl_gebruikers';
-      pgqGetUsers.Open;
-    end
-    else
-      pgqGetUsers.First;
-
-    for i := 1 to pgqGetUsers.RecordCount do
-    begin
-      with searchLB.Items.Add do
-      begin
-        Caption := pgqGetUsers.FieldByName('gbr_nicknaam').AsString;
-      end;
-
-      pgqGetUsers.Next;
-    end;
-  end;
-end;
-
 procedure TfrmAdminDashboard.sbtnAddUserClick(Sender: TObject);
-var
-  i: integer;
 begin
   Form3.Show;
 end;
@@ -351,15 +309,13 @@ begin
         end;
       end;
     end;
-//    RefreshGroupOverView;
   end;
-
 end;
 
 procedure TfrmAdminDashboard.sbtnDeleteUserClick(Sender: TObject);
 var 
   selectedRowId, getUserId, userChoice: integer;
-  currUser, myText: string;
+  currUser: string;
 begin
   selectedRowId := sgrUsers.Row;
   //delete error
@@ -386,17 +342,13 @@ begin
           pgqDelete.Post;
         end;
       end;
-
-
     end;
-//    RefreshUserOverView;
   end;
 end;
 
 procedure TfrmAdminDashboard.sbtnGoToEditGroupClick(Sender: TObject);
 var
-  selectedRowId, getGroupId, i: integer;
-  stream: TStream;
+  selectedRowId, getGroupId: integer;
 begin
   if(sgrGroups.Cells[0, 1] <> '') then
   begin
@@ -430,7 +382,6 @@ end;
 procedure TfrmAdminDashboard.sbtnGoToEditUserClick(Sender: TObject);
 var
   selectedRowId, getUserId: integer;
-  stream: TStream;
 begin
   selectedRowId := sgrUsers.Row;
 
@@ -454,7 +405,8 @@ end;
 
 procedure TfrmAdminDashboard.sbtnLogOutClick(Sender: TObject);
 begin
-  frmLogin.Visible := true;
+//  frmLogin.Visible := true;
+  frmLogin.Close;
   Self.Close;
 end;
 
@@ -466,8 +418,6 @@ end;
 procedure TfrmAdminDashboard.sbtnRefreshUserClick(Sender: TObject);
 begin
   RefreshUserOverView;
-
-
 end;
 
 procedure TfrmAdminDashboard.sgrGroupsDrawCell(Sender: TObject; ACol, ARow: LongInt;
@@ -489,19 +439,14 @@ begin
   AGrid.Canvas.TextOut(Rect.Left + 2, Rect.Top + 2, AGrid.Cells[ACol, ARow]);
 end;
 
-procedure TfrmAdminDashboard.tmrRemoveErrorTimer(Sender: TObject);
-begin
-  timerCounter := timerCounter + 1;
-
-  if(timerCounter > 8) then
-  begin
-    tmrRemoveError.Enabled := false;
-  end;
-end;
-
-Function TfrmAdminDashboard.HashString(const Input: string): string;
-begin
-  Result := THashSHA2.GetHashString(Input, THashSHA2.TSHA2Version.SHA256);
-end;
+//procedure TfrmAdminDashboard.tmrRemoveErrorTimer(Sender: TObject);
+//begin
+//  timerCounter := timerCounter + 1;
+//
+//  if(timerCounter > 8) then
+//  begin
+//    tmrRemoveError.Enabled := false;
+//  end;
+//end;
 
 end.

@@ -51,9 +51,9 @@ implementation
 procedure TForm3.AdvSmoothButton1Click(Sender: TObject);
 var
   pgqAddUser: TPgQuery;
-  testHash : string;
+//  testHash : string;
   AStream : TMemoryStream;
-  BlobField: TBlobField;
+//  BlobField: TBlobField;
 
 //  stream: TMemoryStream;
 //  niceBytes: TBytes;
@@ -154,16 +154,28 @@ end;
 
 procedure TForm3.sbtnAddUserProfilePictureClick(Sender: TObject);
 var
-  testing: TBitmap;
+//  testing: TBitmap;
+  getFile: TFileStream;
+  getSize: Double;
 begin
-  testing := TBitmap.Create;
+//  testing := TBitmap.Create;
 
   with TOpenDialog.Create(self) do
   try
     Caption := 'Open afbeelding';
     Filter := 'Image Files (*.jpg;*.jpeg;*.png)|*.jpg;*.jpeg;*.png';
     Options := [TOpenOption.ofPathMustExist, TOpenOption.ofPathMustExist];
-    if (Execute) then imgAddUserProfilePicture.Picture.LoadFromFile(FileName);
+    if (Execute) then
+    begin
+      getFile := TFileStream.Create(FileName, fmOpenRead or fmShareDenyNone);
+      getSize := Round(getFile.Size / 1048576);
+
+      if(getSize < 2) then
+      begin
+        imgAddUserProfilePicture.Picture.LoadFromFile(FileName);
+      end
+      else lblAddUserError.Caption :=  'Afbeelding is te groot (moet kleiner dan 2 mb zijn)';
+    end;
 
   finally
     Free;

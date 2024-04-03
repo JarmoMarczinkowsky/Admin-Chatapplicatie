@@ -10,6 +10,7 @@ object frmGroupEdit: TfrmGroupEdit
   Font.Height = -12
   Font.Name = 'Segoe UI'
   Font.Style = []
+  FormStyle = fsStayOnTop
   OnShow = FormShow
   TextHeight = 15
   object Label15: TLabel
@@ -55,8 +56,8 @@ object frmGroupEdit: TfrmGroupEdit
     Caption = 'Profielfoto'
   end
   object lblEditGroupError: TLabel
-    Left = 62
-    Top = 416
+    Left = 60
+    Top = 344
     Width = 28
     Height = 15
     Caption = 'Error'
@@ -701,8 +702,8 @@ object frmGroupEdit: TfrmGroupEdit
     TabOrder = 10
   end
   object sbtnEditGroup: TAdvSmoothButton
-    Left = 120
-    Top = 368
+    Left = 8
+    Top = 428
     Width = 125
     Height = 27
     Appearance.Font.Charset = DEFAULT_CHARSET
@@ -736,8 +737,8 @@ object frmGroupEdit: TfrmGroupEdit
     TMSStyle = 8
   end
   object sbtnEditGroupCancel: TAdvSmoothButton
-    Left = 251
-    Top = 368
+    Left = 139
+    Top = 428
     Width = 125
     Height = 27
     Appearance.Font.Charset = DEFAULT_CHARSET

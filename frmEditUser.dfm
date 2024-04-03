@@ -10,6 +10,7 @@ object frmUserEdit: TfrmUserEdit
   Font.Height = -12
   Font.Name = 'Segoe UI'
   Font.Style = []
+  FormStyle = fsStayOnTop
   OnShow = FormShow
   TextHeight = 15
   object lblEditUserName: TLabel
@@ -69,8 +70,8 @@ object frmUserEdit: TfrmUserEdit
     Stretch = True
   end
   object lblEditUserError: TLabel
-    Left = 56
-    Top = 392
+    Left = 8
+    Top = 385
     Width = 28
     Height = 15
     Caption = 'Error'
@@ -154,8 +155,8 @@ object frmUserEdit: TfrmUserEdit
     TMSStyle = 8
   end
   object sbtnEditUser: TAdvSmoothButton
-    Left = 56
-    Top = 333
+    Left = 8
+    Top = 406
     Width = 125
     Height = 27
     Appearance.Font.Charset = DEFAULT_CHARSET
@@ -189,8 +190,8 @@ object frmUserEdit: TfrmUserEdit
     TMSStyle = 8
   end
   object AdvSmoothButton3: TAdvSmoothButton
-    Left = 187
-    Top = 333
+    Left = 139
+    Top = 406
     Width = 125
     Height = 27
     Appearance.Font.Charset = DEFAULT_CHARSET
