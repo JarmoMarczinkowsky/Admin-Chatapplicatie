@@ -181,6 +181,12 @@ begin
     lblEditGroupError.Caption := '';
     lblEditGroupError.Font.Color := RGB(220, 20, 60);
 
+    if(Length(edtEditGroupName.Text) = 0) then
+    begin
+      lblEditGroupError.Caption := 'Geen groepsnaam ingevoerd';
+      Exit;
+    end;
+
     groupId := pgqGetSelectedGroup.FieldByName('gro_id').AsInteger;
 
     for i := 1 to RemovedUsersList.Count do

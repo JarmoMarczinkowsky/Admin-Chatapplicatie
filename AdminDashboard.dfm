@@ -758,7 +758,7 @@ object frmAdminDashboard: TfrmAdminDashboard
     Top = 72
     Width = 792
     Height = 487
-    ActivePage = tbsUserOverview
+    ActivePage = tbsGroupOverview
     TabOrder = 0
     OnChange = pcPagesChange
     object tbsUserOverview: TTabSheet
@@ -10652,6 +10652,7 @@ object frmAdminDashboard: TfrmAdminDashboard
     Version = '1.7.1.6'
     Align = alTop
     TabOrder = 3
+    ExplicitWidth = 937
     TMSStyle = 0
     object slblWelcomeMessage: TAdvSmoothLabel
       Left = 605

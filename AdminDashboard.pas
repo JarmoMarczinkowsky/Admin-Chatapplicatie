@@ -325,7 +325,7 @@ begin
 
       currGroup := pgqDelete.FieldByName('gro_naam').AsString;
       //check for already deleted group
-      if(pgqDelete.FieldByName('gbr_del').AsBoolean) then ShowMessage(currGroup + ' is al verwijderd')
+      if(pgqDelete.FieldByName('gro_del').AsBoolean) then ShowMessage(currGroup + ' is al verwijderd')
       else //if user is not deleted -> show messagebox to confirm
       begin
         userChoice := Application.MessageBox(PWideChar('Weet je zeker dat je ' + currGroup + ' wilt verwijderen?') , 'Bevestig verwijderverzoek', MB_OKCANCEL );
