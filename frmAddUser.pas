@@ -33,6 +33,7 @@ type
     procedure AdvSmoothButton1Click(Sender: TObject);
     procedure sbtnBackToUserOverviewClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure FormResize(Sender: TObject);
   private
     { Private declarations }
 //    function HashString(const Input: string): string;
@@ -145,6 +146,11 @@ begin
       lblAddUserError.Caption := 'Vul alle velden in';
     end;
   end;
+end;
+
+procedure TForm3.FormResize(Sender: TObject);
+begin
+  //tomorrow.
 end;
 
 procedure TForm3.FormShow(Sender: TObject);

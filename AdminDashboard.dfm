@@ -18,7 +18,7 @@ object frmAdminDashboard: TfrmAdminDashboard
     Top = 50
     Width = 939
     Height = 517
-    ActivePage = tbsGroupOverview
+    ActivePage = tbsUserOverview
     Align = alClient
     TabOrder = 0
     OnChange = pcPagesChange
@@ -34,7 +34,7 @@ object frmAdminDashboard: TfrmAdminDashboard
         Caption = '0 gebruikers gevonden'
       end
       object sbtnAddUser: TAdvSmoothButton
-        Left = 687
+        Left = 828
         Top = 44
         Width = 100
         Height = 35
@@ -69,7 +69,7 @@ object frmAdminDashboard: TfrmAdminDashboard
         TMSStyle = 8
       end
       object sbtnDeleteUser: TAdvSmoothButton
-        Left = 687
+        Left = 828
         Top = 126
         Width = 100
         Height = 35
@@ -106,13 +106,13 @@ object frmAdminDashboard: TfrmAdminDashboard
       object sgrUsers: TStringGrid
         Left = 32
         Top = 44
-        Width = 649
+        Width = 777
         Height = 375
         TabOrder = 2
         OnDrawCell = sgrGroupsDrawCell
       end
       object sbtnGoToEditUser: TAdvSmoothButton
-        Left = 687
+        Left = 828
         Top = 85
         Width = 100
         Height = 35
@@ -383,8 +383,8 @@ object frmAdminDashboard: TfrmAdminDashboard
         DisplayFormat = ',0;(,0)'
       end
       object sbtnCancelOptions: TAdvSmoothButton
-        Left = 187
-        Top = 360
+        Left = 134
+        Top = 457
         Width = 125
         Height = 27
         Appearance.Font.Charset = DEFAULT_CHARSET
@@ -417,8 +417,8 @@ object frmAdminDashboard: TfrmAdminDashboard
         TMSStyle = 8
       end
       object sbtnChangeOption: TAdvSmoothButton
-        Left = 56
-        Top = 360
+        Left = 3
+        Top = 457
         Width = 125
         Height = 27
         Appearance.Font.Charset = DEFAULT_CHARSET

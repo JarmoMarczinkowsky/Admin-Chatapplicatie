@@ -125,7 +125,7 @@
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
         <DCCReference Include="LoginScreen.pas">
-            <Form>Form1</Form>
+            <Form>frmLogin</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="AdminDashboard.pas">

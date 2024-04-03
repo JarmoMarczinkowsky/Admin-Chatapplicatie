@@ -2,7 +2,7 @@ program AdminChatapp;
 
 uses
   Vcl.Forms,
-  LoginScreen in 'LoginScreen.pas' {Form1},
+  LoginScreen in 'LoginScreen.pas' {frmLogin},
   AdminDashboard in 'AdminDashboard.pas' {frmAdminDashboard},
   DMdatabaseInfo in 'DMdatabaseInfo.pas' {DataModule2: TDataModule},
   frmAddUser in 'frmAddUser.pas' {Form3},
@@ -15,7 +15,7 @@ uses
 begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
-  Application.CreateForm(TForm1, Form1);
+  Application.CreateForm(TfrmLogin, frmLogin);
   Application.CreateForm(TfrmAdminDashboard, frmAdminDashboard);
   Application.CreateForm(TDataModule2, DataModule2);
   Application.CreateForm(TForm3, Form3);

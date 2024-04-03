@@ -102,13 +102,34 @@ procedure TfrmAdminDashboard.FormResize(Sender: TObject);
 var
   position: integer;
 begin
-  position := Self.Width - Round(sbtnLogout.Width * 1.25);
+  position := Self.ClientWidth - Round(sbtnLogout.Width * 1.1);
   sbtnLogout.Left := position;
   slblWelcomeMessage.Left := position - (slblWelcomeMessage.Width + 5);
 
-  sbtnAddUser.Left := Self.Width - Round(sbtnAddUser.Width * 1.25) + 10;
-  sbtnGoToEditUser.Left := Self.Width - Round(sbtnAddUser.Width * 1.25) + 10;
-//  Screen.PixelsPerInch * 100 / 96;
+  if(pcPages.ActivePage = tbsUserOverview) then
+  begin
+    position := Self.ClientWidth - Round(sbtnAddUser.Width * 1.1);
+    sbtnAddUser.Left := position;
+    sbtnGoToEditUser.Left := position;
+    sbtnDeleteUser.Left := position;
+
+    sgrUsers.Width := Self.ClientWidth - 200;
+    sgrUsers.Height := Self.ClientHeight - 192;
+
+    lblUserOverviewAmount.Top := Self.ClientHeight - 130;
+  end
+  else if (pcPages.ActivePage = tbsGroupOverview) then
+  begin
+    position := Self.ClientWidth - Round(sbtnAddUser.Width * 1.1);
+    sbtnGoToAddGroup.Left := position;
+    sbtnGoToEditGroup.Left := position;
+    sbtnDeleteGroup.Left := position;
+
+    sgrGroups.Width := Self.ClientWidth - 200;
+    sgrGroups.Height := Self.ClientHeight - 192;
+
+    lblGroupOverviewAmount.Top := Self.ClientHeight - 130;
+  end;
 end;
 
 procedure TfrmAdminDashboard.FormShow(Sender: TObject);
