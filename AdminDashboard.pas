@@ -159,19 +159,19 @@ procedure TfrmAdminDashboard.RefreshUserOverView;
 var 
   i: integer;
 begin
-  try
-    DataModule2.pgcDBconnection.Connected;
-  except
-    try
-      DataModule2.pgcDBconnection.Open;
-    except
-      on E: Exception do
-      begin
-        lblUserOverviewAmount.Caption := 'Geen verbinding mogelijk met de database' + E.Message;
-        Exit;
-      end;
-    end;
-  end;
+//  try
+//    DataModule2.pgcDBconnection.Connected;
+//  except
+//    try
+//      DataModule2.pgcDBconnection.Open;
+//    except
+//      on E: Exception do
+//      begin
+//        lblUserOverviewAmount.Caption := 'Geen verbinding mogelijk met de database' + E.Message;
+//        Exit;
+//      end;
+//    end;
+//  end;
 
   with DataModule2 do
   begin

@@ -7,6 +7,7 @@ object DataModule2: TDataModule2
     Username = 'stage2'
     Server = '142.132.213.151'
     LoginPrompt = False
+    AfterDisconnect = pgcDBconnectionAfterDisconnect
     Database = 'rchat'
     Connected = True
     Left = 64

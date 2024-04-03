@@ -32,6 +32,7 @@ type
     pgqGetGroupMembers: TPgQuery;
     procedure DataModuleDestroy(Sender: TObject);
     function HashString(const Input: string): string;
+    procedure pgcDBconnectionAfterDisconnect(Sender: TObject);
   private
     { Private declarations }
   public
@@ -51,6 +52,11 @@ implementation
 Function TDataModule2.HashString(const Input: string): string;
 begin
   Result := THashSHA2.GetHashString(Input, THashSHA2.TSHA2Version.SHA256);
+end;
+
+procedure TDataModule2.pgcDBconnectionAfterDisconnect(Sender: TObject);
+begin
+  pgcDBconnection.Open;
 end;
 
 procedure TDataModule2.DataModuleDestroy(Sender: TObject);

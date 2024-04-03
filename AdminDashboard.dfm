@@ -13,8 +13,8 @@ object frmAdminDashboard: TfrmAdminDashboard
   OnShow = FormShow
   TextHeight = 15
   object AdvSmoothMegaMenu1: TAdvSmoothMegaMenu
-    Left = -8
-    Top = 178
+    Left = 0
+    Top = 170
     Width = 939
     Height = 50
     DefaultMenuContentFill.Color = clWhite
