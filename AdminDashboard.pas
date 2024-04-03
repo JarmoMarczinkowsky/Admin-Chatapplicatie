@@ -81,7 +81,7 @@ var
   frmAdminDashboard: TfrmAdminDashboard;
 
 implementation
-  uses frmAddUser, frmAddGroup, frmEditUser, frmEditGroup;
+  uses LoginScreen, frmAddUser, frmAddGroup, frmEditUser, frmEditGroup;
 
 {$R *.dfm}
 
@@ -159,6 +159,20 @@ procedure TfrmAdminDashboard.RefreshUserOverView;
 var 
   i: integer;
 begin
+  try
+    DataModule2.pgcDBconnection.Connected;
+  except
+    try
+      DataModule2.pgcDBconnection.Open;
+    except
+      on E: Exception do
+      begin
+        lblUserOverviewAmount.Caption := 'Geen verbinding mogelijk met de database' + E.Message;
+        Exit;
+      end;
+    end;
+  end;
+
   with DataModule2 do
   begin
     if(pgqGetUsers = nil) then
@@ -440,6 +454,7 @@ end;
 
 procedure TfrmAdminDashboard.sbtnLogOutClick(Sender: TObject);
 begin
+  frmLogin.Visible := true;
   Self.Close;
 end;
 
@@ -451,6 +466,8 @@ end;
 procedure TfrmAdminDashboard.sbtnRefreshUserClick(Sender: TObject);
 begin
   RefreshUserOverView;
+
+
 end;
 
 procedure TfrmAdminDashboard.sgrGroupsDrawCell(Sender: TObject; ACol, ARow: LongInt;

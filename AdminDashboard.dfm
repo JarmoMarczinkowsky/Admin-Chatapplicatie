@@ -14,7 +14,7 @@ object frmAdminDashboard: TfrmAdminDashboard
   TextHeight = 15
   object AdvSmoothMegaMenu1: TAdvSmoothMegaMenu
     Left = -8
-    Top = 176
+    Top = 178
     Width = 939
     Height = 50
     DefaultMenuContentFill.Color = clWhite
@@ -758,7 +758,7 @@ object frmAdminDashboard: TfrmAdminDashboard
     Top = 72
     Width = 792
     Height = 487
-    ActivePage = tbsGroupOverview
+    ActivePage = tbsUserOverview
     TabOrder = 0
     OnChange = pcPagesChange
     object tbsUserOverview: TTabSheet
@@ -1106,9 +1106,9 @@ object frmAdminDashboard: TfrmAdminDashboard
       object Label18: TLabel
         Left = 56
         Top = 59
-        Width = 109
+        Width = 111
         Height = 15
-        Caption = 'Secondes per refresh'
+        Caption = 'Seconden per refresh'
       end
       object numRefreshRate: TRzNumericEdit
         Left = 184

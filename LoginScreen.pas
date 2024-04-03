@@ -9,7 +9,7 @@ uses
   DBAccess, PgAccess, MemDS, Vcl.ExtCtrls, Vcl.Imaging.pngimage;
 
 type
-  TForm1 = class(TForm)
+  TfrmLogin = class(TForm)
     sbtnLogin: TAdvSmoothButton;
     edtUser: TEdit;
     edtPassword: TEdit;
@@ -26,24 +26,24 @@ type
   end;
 
 var
-  Form1: TForm1;
+  frmLogin: TfrmLogin;
 
 implementation
   uses DMdatabaseInfo, AdminDashboard;
 
 {$R *.dfm}
 
-procedure TForm1.FormCreate(Sender: TObject);
+procedure TfrmLogin.FormCreate(Sender: TObject);
 begin
   lblError.Caption := '';
 end;
 
-procedure TForm1.FormShow(Sender: TObject);
+procedure TfrmLogin.FormShow(Sender: TObject);
 begin
   edtUser.SetFocus;
 end;
 
-procedure TForm1.sbtnLoginClick(Sender: TObject);
+procedure TfrmLogin.sbtnLoginClick(Sender: TObject);
 begin
   with DataModule2 do
   begin
@@ -72,6 +72,7 @@ begin
         edtUser.Text := '';
         edtPassword.Text := '';
         frmAdminDashboard.Show;
+        frmLogin.Visible := false;
       end
       else
       begin
