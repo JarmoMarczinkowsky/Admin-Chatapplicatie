@@ -16,9 +16,12 @@ type
     Label1: TLabel;
     Label2: TLabel;
     lblError: TLabel;
-    Image1: TImage;    procedure sbtnLoginClick(Sender: TObject);
+    imgLogo: TImage;
+    AdvSmoothButton1: TAdvSmoothButton;    procedure sbtnLoginClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure AdvSmoothButton1Click(Sender: TObject);
+    procedure FormResize(Sender: TObject);
   private
     { Private declarations }
   public
@@ -33,9 +36,19 @@ implementation
 
 {$R *.dfm}
 
+procedure TfrmLogin.AdvSmoothButton1Click(Sender: TObject);
+begin
+  Self.Close;
+end;
+
 procedure TfrmLogin.FormCreate(Sender: TObject);
 begin
   lblError.Caption := '';
+end;
+
+procedure TfrmLogin.FormResize(Sender: TObject);
+begin
+  imgLogo.Left := Round(Self.ClientWidth / 2 - imgLogo.Width / 2);
 end;
 
 procedure TfrmLogin.FormShow(Sender: TObject);

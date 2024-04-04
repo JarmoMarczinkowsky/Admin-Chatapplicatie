@@ -29,7 +29,6 @@ type
     Label18: TLabel;
     sbtnCancelOptions: TAdvSmoothButton;
     sbtnChangeOption: TAdvSmoothButton;
-    sbtnBackButton: TAdvSmoothButton;
     sbtnRefreshGroup: TAdvSmoothButton;
     sbtnRefreshUser: TAdvSmoothButton;
     lblUserOverviewAmount: TLabel;
@@ -60,7 +59,6 @@ type
     procedure sbtnLogOutClick(Sender: TObject);
 //    procedure tmrRemoveErrorTimer(Sender: TObject);
     procedure sbtnChangeOptionClick(Sender: TObject);
-    procedure FormResize(Sender: TObject);
   private
     { Private declarations }
     getGroup, pgqGetSettings: TPgQuery;
@@ -98,40 +96,6 @@ begin
   else if (Text = 'Uitloggen') then Self.Close;
 end;
 
-procedure TfrmAdminDashboard.FormResize(Sender: TObject);
-var
-  position: integer;
-begin
-  position := Self.ClientWidth - Round(sbtnLogout.Width * 1.1);
-  sbtnLogout.Left := position;
-  slblWelcomeMessage.Left := position - (slblWelcomeMessage.Width + 5);
-
-  if(pcPages.ActivePage = tbsUserOverview) then
-  begin
-    position := Self.ClientWidth - Round(sbtnAddUser.Width * 1.1);
-    sbtnAddUser.Left := position;
-    sbtnGoToEditUser.Left := position;
-    sbtnDeleteUser.Left := position;
-
-    sgrUsers.Width := Self.ClientWidth - 200;
-    sgrUsers.Height := Self.ClientHeight - 192;
-
-    lblUserOverviewAmount.Top := Self.ClientHeight - 130;
-  end
-  else if (pcPages.ActivePage = tbsGroupOverview) then
-  begin
-    position := Self.ClientWidth - Round(sbtnAddUser.Width * 1.1);
-    sbtnGoToAddGroup.Left := position;
-    sbtnGoToEditGroup.Left := position;
-    sbtnDeleteGroup.Left := position;
-
-    sgrGroups.Width := Self.ClientWidth - 200;
-    sgrGroups.Height := Self.ClientHeight - 192;
-
-    lblGroupOverviewAmount.Top := Self.ClientHeight - 130;
-  end;
-end;
-
 procedure TfrmAdminDashboard.FormShow(Sender: TObject);
 begin
   pcPages.ActivePage := tbsUserOverview;
@@ -162,6 +126,12 @@ begin
   end;
 
   slblWelcomeMessage.Caption.Text := 'Welkom, ' + DataModule2.pgqGetLoggedInUser.FieldByName('gbr_naam').AsString;
+
+//  Self.PixelsPerInch := 96;
+
+  //center form on startup
+  frmAdminDashboard.Left := (frmAdminDashboard.Monitor.Width  - frmAdminDashboard.Width)  div 2;
+  frmAdminDashboard.Top  := (frmAdminDashboard.Monitor.Height - frmAdminDashboard.Height) div 2;
 end;
 
 procedure TfrmAdminDashboard.pcPagesChange(Sender: TObject);

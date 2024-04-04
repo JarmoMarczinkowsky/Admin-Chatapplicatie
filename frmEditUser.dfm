@@ -2,8 +2,8 @@ object frmUserEdit: TfrmUserEdit
   Left = 0
   Top = 0
   Caption = 'Wijzig gebruiker'
-  ClientHeight = 441
-  ClientWidth = 432
+  ClientHeight = 317
+  ClientWidth = 342
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -12,68 +12,76 @@ object frmUserEdit: TfrmUserEdit
   Font.Style = []
   FormStyle = fsStayOnTop
   OnShow = FormShow
+  DesignSize = (
+    342
+    317)
   TextHeight = 15
   object lblEditUserName: TLabel
-    Left = 56
-    Top = 59
+    Left = 8
+    Top = 19
     Width = 32
     Height = 15
     Caption = 'Naam'
   end
   object lblEditUserStoreName: TLabel
-    Left = 56
-    Top = 88
+    Left = 8
+    Top = 48
     Width = 66
     Height = 15
     Caption = 'Winkelnaam'
   end
   object lblEditUserEmail: TLabel
-    Left = 56
-    Top = 117
+    Left = 8
+    Top = 77
     Width = 29
     Height = 15
     Caption = 'Email'
   end
   object lblEditUserTelephone: TLabel
-    Left = 56
-    Top = 146
+    Left = 8
+    Top = 106
     Width = 91
     Height = 15
     Caption = 'Telefoonnummer'
   end
   object lblEditUserUserName: TLabel
-    Left = 56
-    Top = 175
+    Left = 8
+    Top = 135
     Width = 86
     Height = 15
     Caption = 'Gebruikersnaam'
   end
   object lblEditUserPassword: TLabel
-    Left = 56
-    Top = 204
+    Left = 8
+    Top = 164
     Width = 68
     Height = 15
     Caption = 'Wachtwoord'
   end
   object lblEditUserProfilePicture: TLabel
-    Left = 56
-    Top = 233
+    Left = 8
+    Top = 193
     Width = 56
     Height = 15
     Caption = 'Profielfoto'
   end
   object imgEditProfilePicture: TImage
-    Left = 301
-    Top = 230
-    Width = 75
-    Height = 75
+    Left = 253
+    Top = 190
+    Width = 77
+    Height = 71
+    Anchors = [akLeft, akTop, akRight, akBottom]
+    Proportional = True
     Stretch = True
+    ExplicitWidth = 75
+    ExplicitHeight = 75
   end
   object lblEditUserError: TLabel
     Left = 8
-    Top = 385
+    Top = 261
     Width = 28
     Height = 15
+    Anchors = [akLeft, akBottom]
     Caption = 'Error'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clCrimson
@@ -81,53 +89,66 @@ object frmUserEdit: TfrmUserEdit
     Font.Name = 'Segoe UI'
     Font.Style = [fsBold]
     ParentFont = False
+    ExplicitTop = 299
   end
   object edtEditUserName: TEdit
-    Left = 176
-    Top = 56
-    Width = 200
+    Left = 128
+    Top = 16
+    Width = 202
     Height = 23
+    Anchors = [akLeft, akTop, akRight]
     TabOrder = 0
+    ExplicitWidth = 200
   end
   object edtEditStoreName: TEdit
-    Left = 176
-    Top = 85
-    Width = 200
+    Left = 128
+    Top = 45
+    Width = 202
     Height = 23
+    Anchors = [akLeft, akTop, akRight]
     TabOrder = 1
+    ExplicitWidth = 200
   end
   object edtEditUserEmail: TEdit
-    Left = 176
-    Top = 114
-    Width = 200
+    Left = 128
+    Top = 74
+    Width = 202
     Height = 23
+    Anchors = [akLeft, akTop, akRight]
     TabOrder = 2
+    ExplicitWidth = 200
   end
   object edtEditUserTelephone: TEdit
-    Left = 176
-    Top = 143
-    Width = 200
+    Left = 128
+    Top = 103
+    Width = 202
     Height = 23
+    Anchors = [akLeft, akTop, akRight]
     TabOrder = 3
+    ExplicitWidth = 200
   end
   object edtEditUserNickName: TEdit
-    Left = 176
-    Top = 172
-    Width = 200
+    Left = 128
+    Top = 132
+    Width = 202
     Height = 23
+    Anchors = [akLeft, akTop, akRight]
     TabOrder = 4
+    ExplicitWidth = 200
   end
   object edtEditUserPassword: TEdit
-    Left = 176
-    Top = 201
-    Width = 200
+    Left = 128
+    Top = 161
+    Width = 202
     Height = 23
+    Anchors = [akLeft, akTop, akRight]
     PasswordChar = #8226
     TabOrder = 5
+    ExplicitWidth = 200
   end
   object sbtnEditUserProfilePicture: TAdvSmoothButton
-    Left = 176
-    Top = 230
+    Left = 128
+    Top = 190
     Width = 119
     Height = 27
     Appearance.SimpleLayout = True
@@ -156,9 +177,10 @@ object frmUserEdit: TfrmUserEdit
   end
   object sbtnEditUser: TAdvSmoothButton
     Left = 8
-    Top = 406
+    Top = 282
     Width = 125
     Height = 27
+    Anchors = [akLeft, akBottom]
     Appearance.Font.Charset = DEFAULT_CHARSET
     Appearance.Font.Color = clWhite
     Appearance.Font.Height = -12
@@ -187,13 +209,15 @@ object frmUserEdit: TfrmUserEdit
     TabOrder = 7
     Version = '2.2.3.1'
     OnClick = sbtnEditUserClick
+    ExplicitTop = 320
     TMSStyle = 8
   end
   object AdvSmoothButton3: TAdvSmoothButton
-    Left = 139
-    Top = 406
+    Left = 209
+    Top = 282
     Width = 125
     Height = 27
+    Anchors = [akRight, akBottom]
     Appearance.Font.Charset = DEFAULT_CHARSET
     Appearance.Font.Color = clWhite
     Appearance.Font.Height = -12

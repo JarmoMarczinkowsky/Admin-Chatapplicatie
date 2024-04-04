@@ -2,8 +2,8 @@ object frmGroupAdd: TfrmGroupAdd
   Left = 0
   Top = 0
   Caption = 'Voeg groep toe'
-  ClientHeight = 463
-  ClientWidth = 711
+  ClientHeight = 408
+  ClientWidth = 628
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -12,45 +12,48 @@ object frmGroupAdd: TfrmGroupAdd
   Font.Style = []
   FormStyle = fsStayOnTop
   OnShow = FormShow
+  DesignSize = (
+    628
+    408)
   TextHeight = 15
   object Label2: TLabel
-    Left = 56
-    Top = 59
+    Left = 8
+    Top = 19
     Width = 32
     Height = 15
     Caption = 'Naam'
   end
   object Label4: TLabel
-    Left = 56
-    Top = 88
+    Left = 8
+    Top = 48
     Width = 64
     Height = 15
     Caption = 'Beschrijving'
   end
   object Label5: TLabel
-    Left = 56
-    Top = 194
+    Left = 8
+    Top = 154
     Width = 45
     Height = 15
     Caption = 'Eigenaar'
   end
   object imgAddGroupProfile: TImage
-    Left = 301
-    Top = 220
+    Left = 221
+    Top = 180
     Width = 75
     Height = 75
     Stretch = True
   end
   object Label13: TLabel
-    Left = 56
-    Top = 223
+    Left = 8
+    Top = 183
     Width = 56
     Height = 15
     Caption = 'Profielfoto'
   end
   object lblAddGroupError: TLabel
     Left = 8
-    Top = 407
+    Top = 338
     Width = 28
     Height = 15
     Caption = 'Error'
@@ -62,24 +65,26 @@ object frmGroupAdd: TfrmGroupAdd
     ParentFont = False
   end
   object edtGroupName: TEdit
-    Left = 176
-    Top = 56
+    Left = 96
+    Top = 16
     Width = 200
     Height = 23
     TabOrder = 0
   end
   object edtAddGroupSearchUser: TEdit
-    Left = 424
-    Top = 56
+    Left = 344
+    Top = 16
     Width = 200
     Height = 23
+    Anchors = [akTop, akRight]
     TabOrder = 4
   end
   object sbtnagSearchUser: TAdvSmoothButton
-    Left = 630
-    Top = 56
+    Left = 549
+    Top = 16
     Width = 65
     Height = 23
+    Anchors = [akTop, akRight]
     Appearance.SimpleLayout = True
     Appearance.Rounding = 5
     Status.Caption = '0'
@@ -102,19 +107,20 @@ object frmGroupAdd: TfrmGroupAdd
     TabOrder = 5
     Version = '2.2.3.1'
     OnClick = sbtnagSearchUserClick
+    ExplicitLeft = 550
     TMSStyle = 8
   end
   object edtGroupDescription: TEdit
-    Left = 176
-    Top = 85
+    Left = 96
+    Top = 45
     Width = 200
     Height = 100
     AutoSize = False
     TabOrder = 1
   end
   object slsbUser: TAdvSmoothListBox
-    Left = 424
-    Top = 85
+    Left = 344
+    Top = 45
     Width = 200
     Height = 151
     Cursor = crDefault
@@ -343,14 +349,16 @@ object frmGroupAdd: TfrmGroupAdd
     DefaultItem.NotesSelectedFont.Style = []
     DefaultItem.ProgressMaximum = 100.000000000000000000
     Categories = <>
+    Anchors = [akTop, akRight]
     TabOrder = 6
     TMSStyle = 0
   end
   object sbtnAddUserToGroup: TAdvSmoothButton
-    Left = 630
-    Top = 85
+    Left = 549
+    Top = 45
     Width = 67
     Height = 23
+    Anchors = [akTop, akRight]
     Appearance.Font.Charset = DEFAULT_CHARSET
     Appearance.Font.Color = clWindowText
     Appearance.Font.Height = -12
@@ -379,19 +387,20 @@ object frmGroupAdd: TfrmGroupAdd
     TabOrder = 7
     Version = '2.2.3.1'
     OnClick = sbtnAddUserToGroupClick
+    ExplicitLeft = 550
     TMSStyle = 8
   end
   object cboxGroupOwner: TComboBox
-    Left = 176
-    Top = 191
+    Left = 96
+    Top = 151
     Width = 200
     Height = 23
     Style = csDropDownList
     TabOrder = 2
   end
   object slsbGroupAddedUsers: TAdvSmoothListBox
-    Left = 424
-    Top = 242
+    Left = 344
+    Top = 202
     Width = 200
     Height = 151
     Cursor = crDefault
@@ -620,14 +629,16 @@ object frmGroupAdd: TfrmGroupAdd
     DefaultItem.NotesSelectedFont.Style = []
     DefaultItem.ProgressMaximum = 100.000000000000000000
     Categories = <>
+    Anchors = [akTop, akRight]
     TabOrder = 8
     TMSStyle = 0
   end
   object sbtnRemoveUserFromGroup: TAdvSmoothButton
-    Left = 630
-    Top = 242
+    Left = 549
+    Top = 202
     Width = 67
     Height = 23
+    Anchors = [akTop, akRight]
     Appearance.Font.Charset = DEFAULT_CHARSET
     Appearance.Font.Color = clWindowText
     Appearance.Font.Height = -12
@@ -656,11 +667,12 @@ object frmGroupAdd: TfrmGroupAdd
     TabOrder = 9
     Version = '2.2.3.1'
     OnClick = sbtnRemoveUserFromGroupClick
+    ExplicitLeft = 550
     TMSStyle = 8
   end
   object sbtnAddGroupProfile: TAdvSmoothButton
-    Left = 176
-    Top = 220
+    Left = 96
+    Top = 180
     Width = 119
     Height = 27
     Appearance.SimpleLayout = True
@@ -689,9 +701,10 @@ object frmGroupAdd: TfrmGroupAdd
   end
   object sbtnAddGroup: TAdvSmoothButton
     Left = 8
-    Top = 428
+    Top = 364
     Width = 125
     Height = 27
+    Anchors = [akLeft, akBottom]
     Appearance.Font.Charset = DEFAULT_CHARSET
     Appearance.Font.Color = clWhite
     Appearance.Font.Height = -12
@@ -720,13 +733,15 @@ object frmGroupAdd: TfrmGroupAdd
     TabOrder = 10
     Version = '2.2.3.1'
     OnClick = sbtnAddGroupClick
+    ExplicitTop = 359
     TMSStyle = 8
   end
   object sbtnBackToGroupOverview: TAdvSmoothButton
-    Left = 139
-    Top = 428
+    Left = 495
+    Top = 364
     Width = 125
     Height = 27
+    Anchors = [akRight, akBottom]
     Appearance.Font.Charset = DEFAULT_CHARSET
     Appearance.Font.Color = clWhite
     Appearance.Font.Height = -12
@@ -755,6 +770,8 @@ object frmGroupAdd: TfrmGroupAdd
     TabOrder = 11
     Version = '2.2.3.1'
     OnClick = sbtnBackToGroupOverviewClick
+    ExplicitLeft = 496
+    ExplicitTop = 359
     TMSStyle = 8
   end
 end

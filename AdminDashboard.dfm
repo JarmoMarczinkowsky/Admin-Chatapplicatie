@@ -1,43 +1,50 @@
 object frmAdminDashboard: TfrmAdminDashboard
-  Left = 0
-  Top = 0
+  Left = 468
+  Top = 245
   Caption = 'Administrator dashboard'
-  ClientHeight = 567
-  ClientWidth = 939
+  ClientHeight = 522
+  ClientWidth = 930
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -12
   Font.Name = 'Segoe UI'
   Font.Style = []
-  OnResize = FormResize
+  Position = poDesigned
   OnShow = FormShow
   TextHeight = 15
   object pcPages: TPageControl
     Left = 0
     Top = 50
-    Width = 939
-    Height = 517
-    ActivePage = tbsUserOverview
+    Width = 930
+    Height = 472
+    ActivePage = tbsGroupOverview
     Align = alClient
     TabOrder = 0
     OnChange = pcPagesChange
-    ExplicitWidth = 937
-    ExplicitHeight = 509
+    ExplicitWidth = 939
+    ExplicitHeight = 517
     object tbsUserOverview: TTabSheet
       Caption = 'Gebruikers'
+      DesignSize = (
+        922
+        442)
       object lblUserOverviewAmount: TLabel
-        Left = 32
-        Top = 430
+        Left = 477
+        Top = 15
         Width = 120
-        Height = 15
+        Height = 25
+        Alignment = taRightJustify
+        Anchors = [akTop, akRight]
         Caption = '0 gebruikers gevonden'
+        ExplicitLeft = 461
       end
       object sbtnAddUser: TAdvSmoothButton
-        Left = 828
-        Top = 44
+        Left = 603
+        Top = 5
         Width = 100
         Height = 35
+        Anchors = [akTop, akRight]
         Appearance.Font.Charset = DEFAULT_CHARSET
         Appearance.Font.Color = clBlack
         Appearance.Font.Height = -12
@@ -66,13 +73,15 @@ object frmAdminDashboard: TfrmAdminDashboard
         TabOrder = 0
         Version = '2.2.3.1'
         OnClick = sbtnAddUserClick
+        ExplicitLeft = 612
         TMSStyle = 8
       end
       object sbtnDeleteUser: TAdvSmoothButton
-        Left = 828
-        Top = 126
+        Left = 815
+        Top = 5
         Width = 100
         Height = 35
+        Anchors = [akTop, akRight]
         Appearance.Font.Charset = DEFAULT_CHARSET
         Appearance.Font.Color = clBlack
         Appearance.Font.Height = -12
@@ -101,21 +110,26 @@ object frmAdminDashboard: TfrmAdminDashboard
         TabOrder = 1
         Version = '2.2.3.1'
         OnClick = sbtnDeleteUserClick
+        ExplicitLeft = 824
         TMSStyle = 8
       end
       object sgrUsers: TStringGrid
-        Left = 32
-        Top = 44
-        Width = 777
-        Height = 375
+        Left = 3
+        Top = 46
+        Width = 912
+        Height = 388
+        Anchors = [akLeft, akTop, akRight, akBottom]
         TabOrder = 2
         OnDrawCell = sgrGroupsDrawCell
+        ExplicitWidth = 921
+        ExplicitHeight = 377
       end
       object sbtnGoToEditUser: TAdvSmoothButton
-        Left = 828
-        Top = 85
+        Left = 709
+        Top = 5
         Width = 100
         Height = 35
+        Anchors = [akTop, akRight]
         Appearance.Font.Charset = DEFAULT_CHARSET
         Appearance.Font.Color = clBlack
         Appearance.Font.Height = -12
@@ -144,11 +158,12 @@ object frmAdminDashboard: TfrmAdminDashboard
         TabOrder = 3
         Version = '2.2.3.1'
         OnClick = sbtnGoToEditUserClick
+        ExplicitLeft = 718
         TMSStyle = 8
       end
       object sbtnRefreshUser: TAdvSmoothButton
-        Left = 32
-        Top = 3
+        Left = 3
+        Top = 5
         Width = 65
         Height = 35
         Appearance.Font.Charset = DEFAULT_CHARSET
@@ -182,8 +197,8 @@ object frmAdminDashboard: TfrmAdminDashboard
         TMSStyle = 8
       end
       object cbxShowDeletedUser: TCheckBox
-        Left = 103
-        Top = 13
+        Left = 74
+        Top = 15
         Width = 178
         Height = 17
         Caption = 'Toon verwijderde gebruikers'
@@ -193,18 +208,25 @@ object frmAdminDashboard: TfrmAdminDashboard
     object tbsGroupOverview: TTabSheet
       Caption = 'Groepen'
       ImageIndex = 2
+      DesignSize = (
+        922
+        442)
       object lblGroupOverviewAmount: TLabel
-        Left = 32
-        Top = 430
+        Left = 488
+        Top = 15
         Width = 109
         Height = 15
+        Alignment = taRightJustify
+        Anchors = [akTop, akRight]
         Caption = '0 groepen gevonden'
+        ExplicitLeft = 472
       end
       object sbtnDeleteGroup: TAdvSmoothButton
-        Left = 687
-        Top = 126
+        Left = 815
+        Top = 5
         Width = 100
         Height = 35
+        Anchors = [akTop, akRight]
         Appearance.Font.Charset = DEFAULT_CHARSET
         Appearance.Font.Color = clBlack
         Appearance.Font.Height = -12
@@ -233,15 +255,19 @@ object frmAdminDashboard: TfrmAdminDashboard
         TabOrder = 1
         Version = '2.2.3.1'
         OnClick = sbtnDeleteGroupClick
+        ExplicitLeft = 824
         TMSStyle = 8
       end
       object sgrGroups: TStringGrid
-        Left = 32
-        Top = 44
-        Width = 649
-        Height = 375
+        Left = 3
+        Top = 46
+        Width = 912
+        Height = 388
+        Anchors = [akLeft, akTop, akRight, akBottom]
         TabOrder = 3
         OnDrawCell = sgrGroupsDrawCell
+        ExplicitWidth = 921
+        ExplicitHeight = 377
         ColWidths = (
           64
           64
@@ -250,10 +276,11 @@ object frmAdminDashboard: TfrmAdminDashboard
           64)
       end
       object sbtnGoToEditGroup: TAdvSmoothButton
-        Left = 687
-        Top = 85
+        Left = 709
+        Top = 5
         Width = 100
         Height = 35
+        Anchors = [akTop, akRight]
         Appearance.Font.Charset = DEFAULT_CHARSET
         Appearance.Font.Color = clBlack
         Appearance.Font.Height = -12
@@ -282,11 +309,12 @@ object frmAdminDashboard: TfrmAdminDashboard
         TabOrder = 2
         Version = '2.2.3.1'
         OnClick = sbtnGoToEditGroupClick
+        ExplicitLeft = 718
         TMSStyle = 8
       end
       object sbtnRefreshGroup: TAdvSmoothButton
-        Left = 32
-        Top = 3
+        Left = 3
+        Top = 5
         Width = 65
         Height = 35
         Appearance.Font.Charset = DEFAULT_CHARSET
@@ -320,18 +348,19 @@ object frmAdminDashboard: TfrmAdminDashboard
         TMSStyle = 8
       end
       object cbxShowDeletedGroups: TCheckBox
-        Left = 103
-        Top = 13
+        Left = 74
+        Top = 15
         Width = 170
         Height = 17
         Caption = 'Toon verwijderde groepen'
         TabOrder = 5
       end
       object sbtnGoToAddGroup: TAdvSmoothButton
-        Left = 687
-        Top = 44
+        Left = 603
+        Top = 5
         Width = 100
         Height = 35
+        Anchors = [akTop, akRight]
         Appearance.Font.Charset = DEFAULT_CHARSET
         Appearance.Font.Color = clWindowText
         Appearance.Font.Height = -12
@@ -360,22 +389,26 @@ object frmAdminDashboard: TfrmAdminDashboard
         TabOrder = 0
         Version = '2.2.3.1'
         OnClick = sbtnGoToAddGroupClick
+        ExplicitLeft = 612
         TMSStyle = 8
       end
     end
     object tbsOptions: TTabSheet
       Caption = 'Opties'
       ImageIndex = 6
+      DesignSize = (
+        922
+        442)
       object Label18: TLabel
-        Left = 56
-        Top = 59
+        Left = 17
+        Top = 27
         Width = 111
         Height = 15
         Caption = 'Seconden per refresh'
       end
       object numRefreshRate: TRzNumericEdit
-        Left = 184
-        Top = 56
+        Left = 168
+        Top = 24
         Width = 193
         Height = 23
         Alignment = taLeftJustify
@@ -383,10 +416,11 @@ object frmAdminDashboard: TfrmAdminDashboard
         DisplayFormat = ',0;(,0)'
       end
       object sbtnCancelOptions: TAdvSmoothButton
-        Left = 134
-        Top = 457
+        Left = 795
+        Top = 412
         Width = 125
         Height = 27
+        Anchors = [akRight, akBottom]
         Appearance.Font.Charset = DEFAULT_CHARSET
         Appearance.Font.Color = clWhite
         Appearance.Font.Height = -12
@@ -414,13 +448,16 @@ object frmAdminDashboard: TfrmAdminDashboard
         ParentFont = False
         TabOrder = 1
         Version = '2.2.3.1'
+        ExplicitLeft = 804
+        ExplicitTop = 401
         TMSStyle = 8
       end
       object sbtnChangeOption: TAdvSmoothButton
-        Left = 3
-        Top = 457
+        Left = 4
+        Top = 412
         Width = 125
         Height = 27
+        Anchors = [akLeft, akBottom]
         Appearance.Font.Charset = DEFAULT_CHARSET
         Appearance.Font.Color = clWhite
         Appearance.Font.Height = -12
@@ -449,40 +486,7 @@ object frmAdminDashboard: TfrmAdminDashboard
         TabOrder = 2
         Version = '2.2.3.1'
         OnClick = sbtnChangeOptionClick
-        TMSStyle = 8
-      end
-      object sbtnBackButton: TAdvSmoothButton
-        Left = 637
-        Top = 3
-        Width = 125
-        Height = 27
-        Appearance.Font.Charset = DEFAULT_CHARSET
-        Appearance.Font.Color = clWhite
-        Appearance.Font.Height = -12
-        Appearance.Font.Name = 'Segoe UI'
-        Appearance.Font.Style = [fsBold]
-        Appearance.SimpleLayout = True
-        Appearance.Rounding = 5
-        Status.Caption = '0'
-        Status.Appearance.Fill.Color = clRed
-        Status.Appearance.Fill.ColorMirror = clNone
-        Status.Appearance.Fill.ColorMirrorTo = clNone
-        Status.Appearance.Fill.GradientType = gtSolid
-        Status.Appearance.Fill.GradientMirrorType = gtSolid
-        Status.Appearance.Fill.BorderColor = clGray
-        Status.Appearance.Fill.Rounding = 0
-        Status.Appearance.Fill.ShadowOffset = 0
-        Status.Appearance.Fill.Glow = gmNone
-        Status.Appearance.Font.Charset = DEFAULT_CHARSET
-        Status.Appearance.Font.Color = clWhite
-        Status.Appearance.Font.Height = -11
-        Status.Appearance.Font.Name = 'Segoe UI'
-        Status.Appearance.Font.Style = []
-        Caption = 'Terug'
-        Color = 12698049
-        ParentFont = False
-        TabOrder = 3
-        Version = '2.2.3.1'
+        ExplicitTop = 401
         TMSStyle = 8
       end
     end
@@ -490,7 +494,7 @@ object frmAdminDashboard: TfrmAdminDashboard
   object spnlMenu: TAdvSmoothPanel
     Left = 0
     Top = 0
-    Width = 939
+    Width = 930
     Height = 50
     Cursor = crDefault
     Caption.HTMLFont.Charset = DEFAULT_CHARSET
@@ -9880,10 +9884,13 @@ object frmAdminDashboard: TfrmAdminDashboard
     Align = alTop
     TabOrder = 1
     ExplicitWidth = 937
+    DesignSize = (
+      930
+      50)
     TMSStyle = 0
     object slblWelcomeMessage: TAdvSmoothLabel
-      Left = 560
-      Top = 0
+      Left = 548
+      Top = 3
       Width = 245
       Height = 50
       Fill.ColorMirror = clNone
@@ -9910,12 +9917,15 @@ object frmAdminDashboard: TfrmAdminDashboard
       CaptionShadow.Font.Name = 'Segoe UI'
       CaptionShadow.Font.Style = []
       Version = '1.6.1.2'
+      Anchors = [akTop, akRight]
+      ExplicitLeft = 532
     end
     object sbtnLogout: TAdvSmoothButton
-      Left = 811
+      Left = 799
       Top = 7
       Width = 120
       Height = 35
+      Anchors = [akTop, akRight]
       Appearance.Font.Charset = DEFAULT_CHARSET
       Appearance.Font.Color = clWindowText
       Appearance.Font.Height = -12
@@ -9945,6 +9955,7 @@ object frmAdminDashboard: TfrmAdminDashboard
       TabOrder = 0
       Version = '2.2.3.1'
       OnClick = sbtnLogOutClick
+      ExplicitLeft = 806
       TMSStyle = 8
     end
   end

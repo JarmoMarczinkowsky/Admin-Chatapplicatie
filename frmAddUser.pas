@@ -24,16 +24,15 @@ type
     Label19: TLabel;
     sbtnAddUserProfilePicture: TAdvSmoothButton;
     imgAddUserProfilePicture: TImage;
-    AdvSmoothButton1: TAdvSmoothButton;
+    sbtnAddUser: TAdvSmoothButton;
     sbtnBackToUserOverview: TAdvSmoothButton;
     lblAddUserError: TLabel;
     edtUserPassword: TEdit;
     lblUserPassword: TLabel;
     procedure sbtnAddUserProfilePictureClick(Sender: TObject);
-    procedure AdvSmoothButton1Click(Sender: TObject);
+    procedure sbtnAddUserClick(Sender: TObject);
     procedure sbtnBackToUserOverviewClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure FormResize(Sender: TObject);
   private
     { Private declarations }
 //    function HashString(const Input: string): string;
@@ -49,15 +48,10 @@ implementation
 
 {$R *.dfm}
 
-procedure TForm3.AdvSmoothButton1Click(Sender: TObject);
+procedure TForm3.sbtnAddUserClick(Sender: TObject);
 var
   pgqAddUser: TPgQuery;
-//  testHash : string;
   AStream : TMemoryStream;
-//  BlobField: TBlobField;
-
-//  stream: TMemoryStream;
-//  niceBytes: TBytes;
 begin
   pgqAddUser := TPgQuery.Create(nil);
 
@@ -148,14 +142,19 @@ begin
   end;
 end;
 
-procedure TForm3.FormResize(Sender: TObject);
-begin
-  //tomorrow.
-end;
-
 procedure TForm3.FormShow(Sender: TObject);
+var
+  getWIdth, getHieght: integer;
 begin
   lblAddUserError.Caption := '';
+
+  getWIdth:= self.Width;
+  getHieght := Self.Height;
+
+  Form3.PixelsPerInch := 96;
+
+  Form3.Left := (Form3.Monitor.Width  - Form3.Width)  div 2;
+  Form3.Top  := (Form3.Monitor.Height - Form3.Height) div 2;
 end;
 
 procedure TForm3.sbtnAddUserProfilePictureClick(Sender: TObject);

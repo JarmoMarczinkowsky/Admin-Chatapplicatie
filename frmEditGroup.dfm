@@ -2,8 +2,8 @@ object frmGroupEdit: TfrmGroupEdit
   Left = 0
   Top = 0
   Caption = 'Wijzig groep'
-  ClientHeight = 463
-  ClientWidth = 711
+  ClientHeight = 407
+  ClientWidth = 634
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -12,54 +12,58 @@ object frmGroupEdit: TfrmGroupEdit
   Font.Style = []
   FormStyle = fsStayOnTop
   OnShow = FormShow
+  DesignSize = (
+    634
+    407)
   TextHeight = 15
   object Label15: TLabel
-    Left = 56
-    Top = 59
+    Left = 8
+    Top = 16
     Width = 32
     Height = 15
     Caption = 'Naam'
   end
   object Label16: TLabel
-    Left = 56
-    Top = 88
+    Left = 8
+    Top = 45
     Width = 64
     Height = 15
     Caption = 'Beschrijving'
   end
   object imgEditGroupProfile: TImage
-    Left = 301
-    Top = 243
+    Left = 221
+    Top = 200
     Width = 75
     Height = 75
     Stretch = True
   end
   object Label17: TLabel
-    Left = 56
-    Top = 194
+    Left = 8
+    Top = 151
     Width = 45
     Height = 15
     Caption = 'Eigenaar'
   end
   object Label1: TLabel
-    Left = 56
-    Top = 223
+    Left = 8
+    Top = 180
     Width = 55
     Height = 15
     Caption = 'Verwijderd'
   end
   object Label14: TLabel
-    Left = 56
-    Top = 252
+    Left = 8
+    Top = 209
     Width = 56
     Height = 15
     Caption = 'Profielfoto'
   end
   object lblEditGroupError: TLabel
-    Left = 60
-    Top = 344
+    Left = 8
+    Top = 351
     Width = 28
     Height = 15
+    Anchors = [akLeft, akBottom]
     Caption = 'Error'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clCrimson
@@ -67,34 +71,37 @@ object frmGroupEdit: TfrmGroupEdit
     Font.Name = 'Segoe UI'
     Font.Style = [fsBold]
     ParentFont = False
+    ExplicitTop = 395
   end
   object edtEditGroupName: TEdit
-    Left = 176
-    Top = 56
+    Left = 96
+    Top = 13
     Width = 200
     Height = 23
     TabOrder = 0
   end
   object edtEditGroupDescription: TEdit
-    Left = 176
-    Top = 85
+    Left = 96
+    Top = 42
     Width = 200
     Height = 100
     AutoSize = False
     TabOrder = 1
   end
   object edtEditGroupSearch: TEdit
-    Left = 422
-    Top = 56
+    Left = 340
+    Top = 13
     Width = 200
     Height = 23
+    Anchors = [akTop, akRight]
     TabOrder = 2
   end
   object sbtnEditSearchUser: TAdvSmoothButton
-    Left = 630
-    Top = 56
+    Left = 548
+    Top = 13
     Width = 65
     Height = 23
+    Anchors = [akTop, akRight]
     Appearance.SimpleLayout = True
     Appearance.Rounding = 5
     Status.Caption = '0'
@@ -120,10 +127,11 @@ object frmGroupEdit: TfrmGroupEdit
     TMSStyle = 8
   end
   object slsbEditAddUserToGroup: TAdvSmoothButton
-    Left = 628
-    Top = 85
+    Left = 546
+    Top = 42
     Width = 67
     Height = 23
+    Anchors = [akTop, akRight]
     Appearance.Font.Charset = DEFAULT_CHARSET
     Appearance.Font.Color = clWindowText
     Appearance.Font.Height = -12
@@ -155,8 +163,8 @@ object frmGroupEdit: TfrmGroupEdit
     TMSStyle = 8
   end
   object slsbEditSearchUser: TAdvSmoothListBox
-    Left = 422
-    Top = 85
+    Left = 340
+    Top = 42
     Width = 200
     Height = 151
     Cursor = crDefault
@@ -385,12 +393,13 @@ object frmGroupEdit: TfrmGroupEdit
     DefaultItem.NotesSelectedFont.Style = []
     DefaultItem.ProgressMaximum = 100.000000000000000000
     Categories = <>
+    Anchors = [akTop, akRight]
     TabOrder = 5
     TMSStyle = 0
   end
   object slsbEditGroupUsers: TAdvSmoothListBox
-    Left = 422
-    Top = 242
+    Left = 340
+    Top = 199
     Width = 200
     Height = 151
     Cursor = crDefault
@@ -619,14 +628,16 @@ object frmGroupEdit: TfrmGroupEdit
     DefaultItem.NotesSelectedFont.Style = []
     DefaultItem.ProgressMaximum = 100.000000000000000000
     Categories = <>
+    Anchors = [akTop, akRight]
     TabOrder = 6
     TMSStyle = 0
   end
   object sbtnEditRemoveGroupUser: TAdvSmoothButton
-    Left = 628
-    Top = 242
+    Left = 546
+    Top = 199
     Width = 67
     Height = 23
+    Anchors = [akTop, akRight]
     Appearance.Font.Charset = DEFAULT_CHARSET
     Appearance.Font.Color = clWindowText
     Appearance.Font.Height = -12
@@ -658,8 +669,8 @@ object frmGroupEdit: TfrmGroupEdit
     TMSStyle = 8
   end
   object sbtnEditGroupProfilePicture: TAdvSmoothButton
-    Left = 176
-    Top = 243
+    Left = 96
+    Top = 200
     Width = 119
     Height = 27
     Appearance.SimpleLayout = True
@@ -687,15 +698,15 @@ object frmGroupEdit: TfrmGroupEdit
     TMSStyle = 8
   end
   object cbxGroupDeleted: TCheckBox
-    Left = 176
-    Top = 220
+    Left = 96
+    Top = 177
     Width = 97
     Height = 17
     TabOrder = 9
   end
   object cboxEditGroupOwner: TComboBox
-    Left = 176
-    Top = 191
+    Left = 96
+    Top = 148
     Width = 200
     Height = 23
     Style = csDropDownList
@@ -703,9 +714,10 @@ object frmGroupEdit: TfrmGroupEdit
   end
   object sbtnEditGroup: TAdvSmoothButton
     Left = 8
-    Top = 428
+    Top = 372
     Width = 125
     Height = 27
+    Anchors = [akLeft, akBottom]
     Appearance.Font.Charset = DEFAULT_CHARSET
     Appearance.Font.Color = clWhite
     Appearance.Font.Height = -12
@@ -734,13 +746,15 @@ object frmGroupEdit: TfrmGroupEdit
     TabOrder = 11
     Version = '2.2.3.1'
     OnClick = sbtnEditGroupClick
+    ExplicitTop = 416
     TMSStyle = 8
   end
   object sbtnEditGroupCancel: TAdvSmoothButton
-    Left = 139
-    Top = 428
+    Left = 501
+    Top = 372
     Width = 125
     Height = 27
+    Anchors = [akRight, akBottom]
     Appearance.Font.Charset = DEFAULT_CHARSET
     Appearance.Font.Color = clWhite
     Appearance.Font.Height = -12
@@ -769,6 +783,8 @@ object frmGroupEdit: TfrmGroupEdit
     TabOrder = 12
     Version = '2.2.3.1'
     OnClick = sbtnEditGroupCancelClick
+    ExplicitLeft = 511
+    ExplicitTop = 416
     TMSStyle = 8
   end
 end

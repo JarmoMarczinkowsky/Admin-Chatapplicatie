@@ -2,8 +2,8 @@ object frmLogin: TfrmLogin
   Left = 0
   Top = 0
   Caption = 'Login'
-  ClientHeight = 477
-  ClientWidth = 534
+  ClientHeight = 303
+  ClientWidth = 453
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -11,13 +11,18 @@ object frmLogin: TfrmLogin
   Font.Name = 'Segoe UI'
   Font.Style = []
   OnCreate = FormCreate
+  OnResize = FormResize
   OnShow = FormShow
+  DesignSize = (
+    453
+    303)
   TextHeight = 15
   object Label1: TLabel
-    Left = 175
-    Top = 277
+    Left = 8
+    Top = 175
     Width = 115
     Height = 13
+    Anchors = [akLeft, akBottom]
     Caption = 'Gebruikersnaam/Email'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -25,12 +30,14 @@ object frmLogin: TfrmLogin
     Font.Name = 'Segoe UI'
     Font.Style = []
     ParentFont = False
+    ExplicitTop = 189
   end
   object Label2: TLabel
-    Left = 175
-    Top = 330
+    Left = 240
+    Top = 175
     Width = 67
     Height = 13
+    Anchors = [akRight, akBottom]
     Caption = 'Wachtwoord'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -38,12 +45,15 @@ object frmLogin: TfrmLogin
     Font.Name = 'Segoe UI'
     Font.Style = []
     ParentFont = False
+    ExplicitLeft = 232
+    ExplicitTop = 189
   end
   object lblError: TLabel
-    Left = 175
-    Top = 443
+    Left = 8
+    Top = 272
     Width = 9
     Height = 15
+    Anchors = [akLeft, akBottom]
     Caption = '...'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clRed
@@ -52,11 +62,12 @@ object frmLogin: TfrmLogin
     Font.Style = [fsBold]
     ParentFont = False
   end
-  object Image1: TImage
-    Left = 175
-    Top = 37
-    Width = 200
-    Height = 200
+  object imgLogo: TImage
+    Left = 155
+    Top = 8
+    Width = 150
+    Height = 150
+    Anchors = [akLeft, akTop, akRight, akBottom]
     Picture.Data = {
       0954506E67496D61676589504E470D0A1A0A0000000D49484452000001F40000
       01F40806000000CBD6DF8A000000017352474200AECE1CE90000FFFF49444154
@@ -8838,13 +8849,15 @@ object frmLogin: TfrmLogin
       0472C5AAB5EC68155B9E9CD0372EB5F31AB7A93E05403B08CE60B001181C47D1
       7214AFC0BF300C61DC112557AE5CC161004E899E50535F2C261D274E1E607180
       EEC48913274E9CDC07F2FF0178F5B45A97B43A2C0000000049454E44AE426082}
+    Proportional = True
     Stretch = True
   end
   object sbtnLogin: TAdvSmoothButton
-    Left = 175
-    Top = 394
+    Left = 8
+    Top = 231
     Width = 200
     Height = 35
+    Anchors = [akLeft, akBottom]
     Appearance.Font.Charset = DEFAULT_CHARSET
     Appearance.Font.Color = clWhite
     Appearance.Font.Height = -12
@@ -8873,21 +8886,63 @@ object frmLogin: TfrmLogin
     TabOrder = 0
     Version = '2.2.3.1'
     OnClick = sbtnLoginClick
+    ExplicitTop = 245
     TMSStyle = 8
   end
   object edtUser: TEdit
-    Left = 175
-    Top = 296
+    Left = 8
+    Top = 194
     Width = 200
     Height = 23
+    Anchors = [akLeft, akBottom]
     TabOrder = 1
+    ExplicitTop = 208
   end
   object edtPassword: TEdit
-    Left = 175
-    Top = 349
+    Left = 240
+    Top = 194
     Width = 200
     Height = 23
+    Anchors = [akRight, akBottom]
     PasswordChar = #8226
     TabOrder = 2
+    ExplicitLeft = 232
+    ExplicitTop = 208
+  end
+  object AdvSmoothButton1: TAdvSmoothButton
+    Left = 240
+    Top = 231
+    Width = 200
+    Height = 35
+    Anchors = [akRight, akBottom]
+    Appearance.Font.Charset = DEFAULT_CHARSET
+    Appearance.Font.Color = clWhite
+    Appearance.Font.Height = -12
+    Appearance.Font.Name = 'Segoe UI'
+    Appearance.Font.Style = [fsBold]
+    Appearance.SimpleLayout = True
+    Appearance.Rounding = 10
+    Status.Caption = '0'
+    Status.Appearance.Fill.Color = clRed
+    Status.Appearance.Fill.ColorMirror = clNone
+    Status.Appearance.Fill.ColorMirrorTo = clNone
+    Status.Appearance.Fill.GradientType = gtSolid
+    Status.Appearance.Fill.GradientMirrorType = gtSolid
+    Status.Appearance.Fill.BorderColor = clGray
+    Status.Appearance.Fill.Rounding = 0
+    Status.Appearance.Fill.ShadowOffset = 0
+    Status.Appearance.Fill.Glow = gmNone
+    Status.Appearance.Font.Charset = DEFAULT_CHARSET
+    Status.Appearance.Font.Color = clWhite
+    Status.Appearance.Font.Height = -11
+    Status.Appearance.Font.Name = 'Segoe UI'
+    Status.Appearance.Font.Style = []
+    Caption = 'Cancel'
+    Color = clMedGray
+    ParentFont = False
+    TabOrder = 3
+    Version = '2.2.3.1'
+    OnClick = AdvSmoothButton1Click
+    TMSStyle = 8
   end
 end

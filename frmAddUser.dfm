@@ -2,8 +2,8 @@ object Form3: TForm3
   Left = 0
   Top = 0
   Caption = 'Voeg gebruiker toe'
-  ClientHeight = 354
-  ClientWidth = 361
+  ClientHeight = 332
+  ClientWidth = 347
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -11,61 +11,65 @@ object Form3: TForm3
   Font.Name = 'Segoe UI'
   Font.Style = []
   FormStyle = fsStayOnTop
-  OnResize = FormResize
   OnShow = FormShow
+  DesignSize = (
+    347
+    332)
   TextHeight = 15
   object lblName: TLabel
-    Left = 19
-    Top = 27
+    Left = 11
+    Top = 19
     Width = 32
     Height = 15
     Caption = 'Naam'
   end
   object lblStoreName: TLabel
-    Left = 19
-    Top = 56
+    Left = 11
+    Top = 48
     Width = 66
     Height = 15
     Caption = 'Winkelnaam'
   end
   object lblEmail: TLabel
-    Left = 19
-    Top = 85
+    Left = 11
+    Top = 77
     Width = 29
     Height = 15
     Caption = 'Email'
   end
   object lblTelephone: TLabel
-    Left = 19
-    Top = 114
+    Left = 11
+    Top = 106
     Width = 91
     Height = 15
     Caption = 'Telefoonnummer'
   end
   object lblNickname: TLabel
-    Left = 19
-    Top = 143
+    Left = 11
+    Top = 135
     Width = 86
     Height = 15
     Caption = 'Gebruikersnaam'
   end
   object Label19: TLabel
-    Left = 19
-    Top = 201
+    Left = 11
+    Top = 193
     Width = 56
     Height = 15
     Caption = 'Profielfoto'
   end
   object imgAddUserProfilePicture: TImage
-    Left = 264
-    Top = 198
+    Left = 257
+    Top = 190
     Width = 75
     Height = 75
+    Anchors = [akLeft, akTop, akRight, akBottom]
+    Proportional = True
     Stretch = True
   end
   object lblAddUserError: TLabel
-    Left = 8
-    Top = 273
+    Left = 0
+    Top = 250
     Width = 28
     Height = 15
     Caption = 'Error'
@@ -77,52 +81,53 @@ object Form3: TForm3
     ParentFont = False
   end
   object lblUserPassword: TLabel
-    Left = 19
-    Top = 172
+    Left = 11
+    Top = 164
     Width = 68
     Height = 15
     Caption = 'Wachtwoord'
   end
   object edtUserName: TEdit
-    Left = 139
-    Top = 24
-    Width = 200
+    Left = 131
+    Top = 16
+    Width = 201
     Height = 23
     TabOrder = 0
   end
   object edtUserStoreName: TEdit
-    Left = 139
-    Top = 53
-    Width = 200
+    Left = 131
+    Top = 45
+    Width = 201
     Height = 23
     TabOrder = 1
   end
   object edtUserEmail: TEdit
-    Left = 139
-    Top = 82
-    Width = 200
+    Left = 131
+    Top = 74
+    Width = 201
     Height = 23
     TabOrder = 2
   end
   object edtUserTelephone: TEdit
-    Left = 139
-    Top = 111
-    Width = 200
+    Left = 131
+    Top = 103
+    Width = 201
     Height = 23
     TabOrder = 3
   end
   object edtUserNickName: TEdit
-    Left = 139
-    Top = 140
-    Width = 200
+    Left = 131
+    Top = 132
+    Width = 201
     Height = 23
     TabOrder = 4
   end
   object sbtnAddUserProfilePicture: TAdvSmoothButton
-    Left = 139
-    Top = 198
+    Left = 131
+    Top = 190
     Width = 119
     Height = 27
+    Anchors = [akTop, akRight]
     Appearance.SimpleLayout = True
     Appearance.Rounding = 5
     Status.Caption = '0'
@@ -147,11 +152,12 @@ object Form3: TForm3
     OnClick = sbtnAddUserProfilePictureClick
     TMSStyle = 8
   end
-  object AdvSmoothButton1: TAdvSmoothButton
-    Left = 8
-    Top = 319
+  object sbtnAddUser: TAdvSmoothButton
+    Left = 0
+    Top = 294
     Width = 125
     Height = 27
+    Anchors = [akRight, akBottom]
     Appearance.Font.Charset = DEFAULT_CHARSET
     Appearance.Font.Color = clWhite
     Appearance.Font.Height = -12
@@ -179,14 +185,16 @@ object Form3: TForm3
     ParentFont = False
     TabOrder = 7
     Version = '2.2.3.1'
-    OnClick = AdvSmoothButton1Click
+    OnClick = sbtnAddUserClick
+    ExplicitTop = 287
     TMSStyle = 8
   end
   object sbtnBackToUserOverview: TAdvSmoothButton
-    Left = 139
-    Top = 319
+    Left = 214
+    Top = 294
     Width = 125
     Height = 27
+    Anchors = [akRight, akBottom]
     Appearance.Font.Charset = DEFAULT_CHARSET
     Appearance.Font.Color = clWhite
     Appearance.Font.Height = -12
@@ -218,9 +226,9 @@ object Form3: TForm3
     TMSStyle = 8
   end
   object edtUserPassword: TEdit
-    Left = 139
-    Top = 169
-    Width = 200
+    Left = 131
+    Top = 161
+    Width = 201
     Height = 23
     PasswordChar = #8226
     TabOrder = 5
