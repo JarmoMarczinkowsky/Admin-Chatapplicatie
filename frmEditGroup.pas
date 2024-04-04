@@ -69,6 +69,9 @@ begin
   slsbEditSearchUser.Items.Clear;
   slsbEditGroupUsers.Items.Clear;
 
+  frmGroupEdit.Left := (frmGroupEdit.Monitor.Width  - frmGroupEdit.Width)  div 2;
+  frmGroupEdit.Top  := (frmGroupEdit.Monitor.Height - frmGroupEdit.Height) div 2;
+
   with DataModule2 do
   begin
     edtEditGroupName.Text := pgqGetSelectedGroup.FieldByName('gro_naam').AsString;

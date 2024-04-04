@@ -61,6 +61,9 @@ begin
   edtAddGroupSearchUser.Text := '';
   imgAddGroupProfile.Picture := nil;
 
+  frmGroupAdd.Left := (frmGroupAdd.Monitor.Width  - frmGroupAdd.Width)  div 2;
+  frmGroupAdd.Top  := (frmGroupAdd.Monitor.Height - frmGroupAdd.Height) div 2;
+
   with DataModule2 do
   begin
     cboxGroupOwner.Items.Add(pgqGetLoggedInUser.FieldByName('gbr_nicknaam').AsString);

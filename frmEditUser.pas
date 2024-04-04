@@ -72,6 +72,9 @@ begin
       stream := pgqCheckExistingUser.CreateBlobStream(pgqCheckExistingUser.FieldByName('gbr_profielfoto'), bmRead);
       stream.Position := 0;
       imgEditProfilePicture.Picture.LoadFromStream(stream);
+
+      frmUserEdit.Left := (frmUserEdit.Monitor.Width  - frmUserEdit.Width)  div 2;
+      frmUserEdit.Top  := (frmUserEdit.Monitor.Height - frmUserEdit.Height) div 2;
     end;
 end;
 
