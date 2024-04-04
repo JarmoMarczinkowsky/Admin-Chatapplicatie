@@ -138,7 +138,7 @@
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
         <DCCReference Include="frmAddUser.pas">
-            <Form>Form3</Form>
+            <Form>frmUserAdd</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="frmEditUser.pas">
