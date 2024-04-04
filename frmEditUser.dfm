@@ -241,7 +241,7 @@ object frmUserEdit: TfrmUserEdit
     Status.Appearance.Font.Name = 'Segoe UI'
     Status.Appearance.Font.Style = []
     Caption = 'Annuleren'
-    Color = 16764551
+    Color = clCrimson
     ParentFont = False
     TabOrder = 8
     Version = '2.2.3.1'

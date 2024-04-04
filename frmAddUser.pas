@@ -10,7 +10,7 @@ uses
   Vcl.StdCtrls, Data.DB, MemDS, DBAccess, PgAccess;
 
 type
-  TForm3 = class(TForm)
+  TfrmUserAdd = class(TForm)
     lblName: TLabel;
     edtUserName: TEdit;
     lblStoreName: TLabel;
@@ -41,14 +41,14 @@ type
   end;
 
 var
-  Form3: TForm3;
+  frmUserAdd: TfrmUserAdd;
 
 implementation
   uses DMdatabaseInfo;
 
 {$R *.dfm}
 
-procedure TForm3.sbtnAddUserClick(Sender: TObject);
+procedure TfrmUserAdd.sbtnAddUserClick(Sender: TObject);
 var
   pgqAddUser: TPgQuery;
   AStream : TMemoryStream;
@@ -142,7 +142,7 @@ begin
   end;
 end;
 
-procedure TForm3.FormShow(Sender: TObject);
+procedure TfrmUserAdd.FormShow(Sender: TObject);
 var
   getWIdth, getHieght: integer;
 begin
@@ -151,13 +151,13 @@ begin
   getWIdth:= self.Width;
   getHieght := Self.Height;
 
-  Form3.PixelsPerInch := 96;
+//  Form3.PixelsPerInch := 96;
 
-  Form3.Left := (Form3.Monitor.Width  - Form3.Width)  div 2;
-  Form3.Top  := (Form3.Monitor.Height - Form3.Height) div 2;
+  frmUserAdd.Left := (frmUserAdd.Monitor.Width  - frmUserAdd.Width)  div 2;
+  frmUserAdd.Top  := (frmUserAdd.Monitor.Height - frmUserAdd.Height) div 2;
 end;
 
-procedure TForm3.sbtnAddUserProfilePictureClick(Sender: TObject);
+procedure TfrmUserAdd.sbtnAddUserProfilePictureClick(Sender: TObject);
 var
 //  testing: TBitmap;
   getFile: TFileStream;
@@ -187,7 +187,7 @@ begin
   end;
 end;
 
-procedure TForm3.sbtnBackToUserOverviewClick(Sender: TObject);
+procedure TfrmUserAdd.sbtnBackToUserOverviewClick(Sender: TObject);
 begin
   Self.Close;
 end;

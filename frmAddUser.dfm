@@ -1,4 +1,4 @@
-object Form3: TForm3
+object frmUserAdd: TfrmUserAdd
   Left = 0
   Top = 0
   Caption = 'Voeg gebruiker toe'
@@ -218,7 +218,7 @@ object Form3: TForm3
     Status.Appearance.Font.Name = 'Segoe UI'
     Status.Appearance.Font.Style = []
     Caption = 'Annuleren'
-    Color = 16764551
+    Color = clCrimson
     ParentFont = False
     TabOrder = 8
     Version = '2.2.3.1'

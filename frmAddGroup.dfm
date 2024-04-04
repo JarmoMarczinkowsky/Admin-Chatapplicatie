@@ -2,7 +2,7 @@ object frmGroupAdd: TfrmGroupAdd
   Left = 0
   Top = 0
   Caption = 'Voeg groep toe'
-  ClientHeight = 408
+  ClientHeight = 402
   ClientWidth = 628
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -14,7 +14,7 @@ object frmGroupAdd: TfrmGroupAdd
   OnShow = FormShow
   DesignSize = (
     628
-    408)
+    402)
   TextHeight = 15
   object Label2: TLabel
     Left = 8
@@ -53,7 +53,7 @@ object frmGroupAdd: TfrmGroupAdd
   end
   object lblAddGroupError: TLabel
     Left = 8
-    Top = 338
+    Top = 346
     Width = 28
     Height = 15
     Caption = 'Error'
@@ -701,7 +701,7 @@ object frmGroupAdd: TfrmGroupAdd
   end
   object sbtnAddGroup: TAdvSmoothButton
     Left = 8
-    Top = 364
+    Top = 367
     Width = 125
     Height = 27
     Anchors = [akLeft, akBottom]
@@ -733,12 +733,12 @@ object frmGroupAdd: TfrmGroupAdd
     TabOrder = 10
     Version = '2.2.3.1'
     OnClick = sbtnAddGroupClick
-    ExplicitTop = 359
+    ExplicitTop = 373
     TMSStyle = 8
   end
   object sbtnBackToGroupOverview: TAdvSmoothButton
     Left = 495
-    Top = 364
+    Top = 367
     Width = 125
     Height = 27
     Anchors = [akRight, akBottom]
@@ -765,13 +765,12 @@ object frmGroupAdd: TfrmGroupAdd
     Status.Appearance.Font.Name = 'Segoe UI'
     Status.Appearance.Font.Style = []
     Caption = 'Annuleren'
-    Color = 16764551
+    Color = clCrimson
     ParentFont = False
     TabOrder = 11
     Version = '2.2.3.1'
     OnClick = sbtnBackToGroupOverviewClick
-    ExplicitLeft = 496
-    ExplicitTop = 359
+    ExplicitTop = 373
     TMSStyle = 8
   end
 end

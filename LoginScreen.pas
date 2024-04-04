@@ -17,10 +17,10 @@ type
     Label2: TLabel;
     lblError: TLabel;
     imgLogo: TImage;
-    AdvSmoothButton1: TAdvSmoothButton;    procedure sbtnLoginClick(Sender: TObject);
+    sbtnCancel: TAdvSmoothButton;    procedure sbtnLoginClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure AdvSmoothButton1Click(Sender: TObject);
+    procedure sbtnCancelClick(Sender: TObject);
     procedure FormResize(Sender: TObject);
   private
     { Private declarations }
@@ -36,7 +36,7 @@ implementation
 
 {$R *.dfm}
 
-procedure TfrmLogin.AdvSmoothButton1Click(Sender: TObject);
+procedure TfrmLogin.sbtnCancelClick(Sender: TObject);
 begin
   Self.Close;
 end;

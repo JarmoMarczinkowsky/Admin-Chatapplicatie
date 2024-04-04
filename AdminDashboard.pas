@@ -250,7 +250,7 @@ end;
 
 procedure TfrmAdminDashboard.sbtnAddUserClick(Sender: TObject);
 begin
-  Form3.Show;
+  frmUserAdd.Show;
 end;
 
 procedure TfrmAdminDashboard.sbtnChangeOptionClick(Sender: TObject);
