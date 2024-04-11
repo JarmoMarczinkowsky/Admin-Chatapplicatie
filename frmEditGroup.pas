@@ -96,6 +96,7 @@ begin
     cboxEditGroupOwner.ItemIndex := 0;
     pgqGetSelectedGroupOwner.Close;
 
+    slsbEditGroupUsers.BeginUpdate;
     //loops through every found group members
     for i := 1 to pgqGetGroupMembers.RecordCount do
     begin
@@ -106,6 +107,7 @@ begin
       with slsbEditGroupUsers.Items.Add do
       begin
         Caption := pgqCheckExistingUser.FieldByName('gbr_nicknaam').AsString;
+        Tag := pgqCheckExistingUser.FieldByName('gbr_id').AsInteger;
       end;
 
       //duplicate check for owner combobox
@@ -116,6 +118,7 @@ begin
 
       pgqGetGroupMembers.Next;
     end;
+    slsbEditGroupUsers.EndUpdate;
 
     pgqGetGroupMembers.Close;
 
@@ -132,6 +135,7 @@ begin
 
     FillListBox;
   end;
+
 end;
 
 procedure TfrmGroupEdit.FillListBox;
@@ -145,14 +149,17 @@ begin
       pgqGetUsers.SQL.Text := 'SELECT * FROM tbl_gebruikers WHERE gbr_del = false ORDER BY gbr_nicknaam';
       pgqGetUsers.Open;
 
+      slsbEditSearchUser.BeginUpdate;
       for i := 1 to pgqGetUsers.RecordCount do
       begin
         with slsbEditSearchUser.Items.Add do
         begin
           Caption := pgqGetUsers.FieldByName('gbr_nicknaam').AsString;
+          Tag := pgqGetUsers.FieldByName('gbr_id').AsInteger;
         end;
         pgqGetUsers.Next;
       end;
+      slsbEditSearchUser.EndUpdate;
     end;
   end;
 end;
@@ -333,6 +340,7 @@ begin
       with slsbEditGroupUsers.Items.Add do
       begin
         Caption := slsbEditSearchUser.Items[slsbEditSearchUser.SelectedItemIndex].Caption;
+        Tag := slsbEditSearchUser.Items[slsbEditSearchUser.SelectedItemIndex].Tag;
       end;
 
       if(cboxEditGroupOwner.Items.IndexOf(slsbEditSearchUser.Items[slsbEditSearchUser.SelectedItemIndex].Caption) = -1) then
@@ -370,16 +378,16 @@ begin
 
     for I := 1 to slsbEditGroupUsers.Items.Count do
     begin
-      pgqCheckExistingUser.SQL.Text := 'SELECT gbr_id FROM tbl_gebruikers';
-      pgqCheckExistingUser.SQL.Add('WHERE LOWER(gbr_nicknaam)=:currentUser');
-      pgqCheckExistingUser.ParamByName('currentUser').AsString := LowerCase(Trim(slsbEditGroupUsers.Items[i - 1].Caption));
-      pgqCheckExistingUser.Open;
+//      pgqCheckExistingUser.SQL.Text := 'SELECT gbr_id FROM tbl_gebruikers';
+//      pgqCheckExistingUser.SQL.Add('WHERE LOWER(gbr_nicknaam)=:currentUser');
+//      pgqCheckExistingUser.ParamByName('currentUser').AsString := LowerCase(Trim(slsbEditGroupUsers.Items[i - 1].Caption));
+//      pgqCheckExistingUser.Open;
 
       pgqCheckDuplicateUser.SQL.Text := 'SELECT * FROM tbl_groepleden';
       pgqCheckDuplicateUser.SQL.Add('WHERE grl_groep = :currentGroup');
       pgqCheckDuplicateUser.SQL.Add('AND grl_gebruiker = :currentUser');
       pgqCheckDuplicateUser.ParamByName('currentGroup').AsInteger := selectedGroupId;
-      pgqCheckDuplicateUser.ParamByName('currentUser').AsInteger := pgqCheckExistingUser.FieldByName('gbr_id').AsInteger;
+      pgqCheckDuplicateUser.ParamByName('currentUser').AsInteger := slsbEditGroupUsers.Items[i - 1].Tag; {pgqCheckExistingUser.FieldByName('gbr_id').AsInteger;}
       pgqCheckDuplicateUser.Open;
 
       if(pgqCheckDuplicateUser.RecordCount > 0) then userIsDuplicate := true
@@ -400,7 +408,7 @@ begin
       begin
         pgqGroepsLeden.SQL.Text := 'INSERT INTO tbl_groepleden (grl_gebruiker, grl_groep, grl_aangemaakt, grl_del)';
         pgqGroepsLeden.SQL.Add('VALUES (:userId, :groupId, :timeUserAdded, :groupMemberDeleted)');
-        pgqGroepsleden.ParamByName('userId').AsInteger := pgqCheckExistingUser.FieldByName('gbr_id').AsInteger;
+        pgqGroepsleden.ParamByName('userId').AsInteger := slsbEditGroupUsers.Items[i - 1].Tag; {pgqCheckExistingUser.FieldByName('gbr_id').AsInteger;}
         pgqGroepsleden.ParamByName('groupId').AsInteger := selectedGroupId;
         pgqGroepsleden.ParamByName('timeUserAdded').AsDateTime := now;
         pgqGroepsleden.ParamByName('groupMemberDeleted').AsBoolean := false;

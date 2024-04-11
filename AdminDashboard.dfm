@@ -18,29 +18,29 @@ object frmAdminDashboard: TfrmAdminDashboard
     Top = 50
     Width = 930
     Height = 472
-    ActivePage = tbsOptions
+    ActivePage = tbsGroupOverview
     Align = alClient
     TabOrder = 0
     OnChange = pcPagesChange
-    ExplicitWidth = 939
-    ExplicitHeight = 517
+    ExplicitWidth = 928
+    ExplicitHeight = 464
     object tbsUserOverview: TTabSheet
       Caption = 'Gebruikers'
       DesignSize = (
         922
         442)
       object lblUserOverviewAmount: TLabel
-        Left = 477
+        Left = 475
         Top = 15
         Width = 120
-        Height = 25
+        Height = 15
         Alignment = taRightJustify
         Anchors = [akTop, akRight]
         Caption = '0 gebruikers gevonden'
-        ExplicitLeft = 461
+        ExplicitLeft = 477
       end
       object sbtnAddUser: TAdvSmoothButton
-        Left = 603
+        Left = 601
         Top = 5
         Width = 100
         Height = 35
@@ -73,11 +73,10 @@ object frmAdminDashboard: TfrmAdminDashboard
         TabOrder = 0
         Version = '2.2.3.1'
         OnClick = sbtnAddUserClick
-        ExplicitLeft = 612
         TMSStyle = 8
       end
       object sbtnDeleteUser: TAdvSmoothButton
-        Left = 815
+        Left = 813
         Top = 5
         Width = 100
         Height = 35
@@ -110,22 +109,19 @@ object frmAdminDashboard: TfrmAdminDashboard
         TabOrder = 1
         Version = '2.2.3.1'
         OnClick = sbtnDeleteUserClick
-        ExplicitLeft = 824
         TMSStyle = 8
       end
       object sgrUsers: TStringGrid
         Left = 3
         Top = 46
-        Width = 912
+        Width = 910
         Height = 388
         Anchors = [akLeft, akTop, akRight, akBottom]
         TabOrder = 2
         OnDrawCell = sgrGroupsDrawCell
-        ExplicitWidth = 921
-        ExplicitHeight = 377
       end
       object sbtnGoToEditUser: TAdvSmoothButton
-        Left = 709
+        Left = 707
         Top = 5
         Width = 100
         Height = 35
@@ -158,7 +154,6 @@ object frmAdminDashboard: TfrmAdminDashboard
         TabOrder = 3
         Version = '2.2.3.1'
         OnClick = sbtnGoToEditUserClick
-        ExplicitLeft = 718
         TMSStyle = 8
       end
       object sbtnRefreshUser: TAdvSmoothButton
@@ -212,7 +207,7 @@ object frmAdminDashboard: TfrmAdminDashboard
         922
         442)
       object lblGroupOverviewAmount: TLabel
-        Left = 488
+        Left = 486
         Top = 15
         Width = 109
         Height = 15
@@ -222,7 +217,7 @@ object frmAdminDashboard: TfrmAdminDashboard
         ExplicitLeft = 472
       end
       object sbtnDeleteGroup: TAdvSmoothButton
-        Left = 815
+        Left = 813
         Top = 5
         Width = 100
         Height = 35
@@ -255,19 +250,16 @@ object frmAdminDashboard: TfrmAdminDashboard
         TabOrder = 1
         Version = '2.2.3.1'
         OnClick = sbtnDeleteGroupClick
-        ExplicitLeft = 824
         TMSStyle = 8
       end
       object sgrGroups: TStringGrid
         Left = 3
         Top = 46
-        Width = 912
+        Width = 910
         Height = 388
         Anchors = [akLeft, akTop, akRight, akBottom]
         TabOrder = 3
         OnDrawCell = sgrGroupsDrawCell
-        ExplicitWidth = 921
-        ExplicitHeight = 377
         ColWidths = (
           64
           64
@@ -276,7 +268,7 @@ object frmAdminDashboard: TfrmAdminDashboard
           64)
       end
       object sbtnGoToEditGroup: TAdvSmoothButton
-        Left = 709
+        Left = 707
         Top = 5
         Width = 100
         Height = 35
@@ -309,7 +301,6 @@ object frmAdminDashboard: TfrmAdminDashboard
         TabOrder = 2
         Version = '2.2.3.1'
         OnClick = sbtnGoToEditGroupClick
-        ExplicitLeft = 718
         TMSStyle = 8
       end
       object sbtnRefreshGroup: TAdvSmoothButton
@@ -356,7 +347,7 @@ object frmAdminDashboard: TfrmAdminDashboard
         TabOrder = 5
       end
       object sbtnGoToAddGroup: TAdvSmoothButton
-        Left = 603
+        Left = 601
         Top = 5
         Width = 100
         Height = 35
@@ -389,7 +380,6 @@ object frmAdminDashboard: TfrmAdminDashboard
         TabOrder = 0
         Version = '2.2.3.1'
         OnClick = sbtnGoToAddGroupClick
-        ExplicitLeft = 612
         TMSStyle = 8
       end
     end
@@ -416,7 +406,7 @@ object frmAdminDashboard: TfrmAdminDashboard
         DisplayFormat = ',0;(,0)'
       end
       object sbtnCancelOptions: TAdvSmoothButton
-        Left = 795
+        Left = 793
         Top = 412
         Width = 125
         Height = 27
@@ -448,8 +438,8 @@ object frmAdminDashboard: TfrmAdminDashboard
         ParentFont = False
         TabOrder = 1
         Version = '2.2.3.1'
-        ExplicitLeft = 804
-        ExplicitTop = 401
+        ExplicitLeft = 791
+        ExplicitTop = 404
         TMSStyle = 8
       end
       object sbtnChangeOption: TAdvSmoothButton
@@ -486,7 +476,7 @@ object frmAdminDashboard: TfrmAdminDashboard
         TabOrder = 2
         Version = '2.2.3.1'
         OnClick = sbtnChangeOptionClick
-        ExplicitTop = 401
+        ExplicitTop = 404
         TMSStyle = 8
       end
     end
@@ -9883,13 +9873,13 @@ object frmAdminDashboard: TfrmAdminDashboard
     Version = '1.7.1.6'
     Align = alTop
     TabOrder = 1
-    ExplicitWidth = 937
+    ExplicitWidth = 928
     DesignSize = (
       930
       50)
     TMSStyle = 0
     object slblWelcomeMessage: TAdvSmoothLabel
-      Left = 548
+      Left = 546
       Top = 3
       Width = 245
       Height = 50
@@ -9921,7 +9911,7 @@ object frmAdminDashboard: TfrmAdminDashboard
       ExplicitLeft = 532
     end
     object sbtnLogout: TAdvSmoothButton
-      Left = 799
+      Left = 797
       Top = 7
       Width = 120
       Height = 35
@@ -9955,7 +9945,7 @@ object frmAdminDashboard: TfrmAdminDashboard
       TabOrder = 0
       Version = '2.2.3.1'
       OnClick = sbtnLogOutClick
-      ExplicitLeft = 806
+      ExplicitLeft = 795
       TMSStyle = 8
     end
   end
