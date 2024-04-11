@@ -6,7 +6,8 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls,
   Data.DB,
-  AdvSmoothListBox, AdvSmoothButton, MemDS, DBAccess, PgAccess;
+  AdvSmoothListBox, AdvSmoothButton, MemDS, DBAccess, PgAccess, AdvCombo,
+  ColCombo, AdvSmoothComboBox;
 
 type
   TfrmGroupAdd = class(TForm)
@@ -74,15 +75,18 @@ begin
       pgqGetUsers.SQL.Text := 'SELECT * FROM tbl_gebruikers WHERE gbr_del = false ORDER BY gbr_nicknaam';
       pgqGetUsers.Open;
 
+      slsbUser.BeginUpdate;
       for i := 1 to pgqGetUsers.RecordCount do
       begin
         with slsbUser.Items.Add do
         begin
           Caption := pgqGetUsers.FieldByName('gbr_nicknaam').AsString;
+          Tag := pgqGetUsers.FieldByName('gbr_id').AsInteger;
         end;
-
         pgqGetUsers.Next;
       end;
+
+      slsbUser.EndUpdate;
     end;
   end;
 
@@ -112,13 +116,15 @@ begin
         pgqCheckExistingUser := TPgQuery.Create(nil);
         pgqCheckExistingUser.Connection := pgcDBconnection;
       end;
-      pgqCheckExistingUser.SQL.Text := 'SELECT * FROM tbl_gebruikers WHERE gbr_nicknaam=:groupOwner';
+      pgqCheckExistingUser.SQL.Text := 'SELECT * FROM tbl_gebruikers';
+      pgqCheckExistingUser.SQL.Add('WHERE gbr_nicknaam=:groupOwner');
       pgqCheckExistingUser.ParamByName('groupOwner').AsString := cboxGroupOwner.Text;
       pgqCheckExistingUser.Open;
 
       //prepares the sql statement to insert into groups table
       pgqGetGroups.SQL.Text := 'INSERT INTO tbl_groepen (gro_naam, gro_igenaar, gro_aangemaakt, gro_del, gro_beschrijving, gro_profielfoto)';
       pgqGetGroups.SQL.Add('VALUES (:groupName, :groupOwner, :groupCreated, :groupDeleted, :groupDescription, :groupProfilePicture)');
+      pgqGetGroups.SQL.Add('RETURNING *');
       pgqGetGroups.ParamByName('groupName').AsString := Trim(edtGroupName.Text);
       pgqGetGroups.ParamByName('groupOwner').AsInteger := StrToInt(Trim(pgqCheckExistingUser.FieldByName('gbr_id').AsString));
       pgqGetGroups.ParamByName('groupCreated').AsDateTime := now;
@@ -131,14 +137,15 @@ begin
       pgqGetGroups.ParamByName('groupProfilePicture').LoadFromStream(AStream, ftGraphic);
 
       //executes the insert sql statement and closes it to preserve memory
-      pgqGetGroups.Execute;
-      pgqGetGroups.Close;
-
-      //gets last added group so it could be used for adding the group members to the correct table
-      pgqGetGroups.SQL.Text := 'SELECT * FROM tbl_groepen ORDER BY gro_id DESC LIMIT 1';
       pgqGetGroups.Open;
       idLastCreatedGroup := pgqGetGroups.FieldByName('gro_id').AsInteger;
       pgqGetGroups.Close;
+
+      //gets last added group so it could be used for adding the group members to the correct table
+//      pgqGetGroups.SQL.Text := 'SELECT * FROM tbl_groepen ORDER BY gro_id DESC LIMIT 1';
+//      pgqGetGroups.Open;
+//      idLastCreatedGroup := pgqGetGroups.FieldByName('gro_id').AsInteger;
+//      pgqGetGroups.Close;
 
       //will add the user to the last added group
       AddUserToGroup(idLastCreatedGroup);
@@ -168,16 +175,15 @@ begin
     begin
       //get user id from user table from the current user it is looping through
       //will be used later for adding to the group member table
-      pgqCheckExistingUser.SQL.Text := '';
-      pgqCheckExistingUser.SQL.Add('SELECT gbr_id FROM tbl_gebruikers');
-      pgqCheckExistingUser.SQL.Add('WHERE LOWER(gbr_nicknaam)=:currentUser');
-      pgqCheckExistingUser.ParamByName('currentUser').AsString := LowerCase(Trim(slsbGroupAddedUsers.Items[i - 1].Caption));
-      pgqCheckExistingUser.Open;
+//      pgqCheckExistingUser.SQL.Text := 'SELECT gbr_id FROM tbl_gebruikers';
+//      pgqCheckExistingUser.SQL.Add('WHERE LOWER(gbr_nicknaam)=:currentUser');
+//      pgqCheckExistingUser.ParamByName('currentUser').AsString := LowerCase(Trim(slsbGroupAddedUsers.Items[i - 1].Caption));
+//      pgqCheckExistingUser.Open;
 
       //inserts the group member into the table
       pgqGroepsLeden.SQL.Text := 'INSERT INTO tbl_groepleden (grl_gebruiker, grl_groep, grl_aangemaakt, grl_del)';
       pgqGroepsLeden.SQL.Add('VALUES (:userId, :groupId, :timeUserAdded, :groupMemberDeleted)');
-      pgqGroepsleden.ParamByName('userId').AsInteger := pgqCheckExistingUser.FieldByName('gbr_id').AsInteger;
+      pgqGroepsleden.ParamByName('userId').AsInteger := slsbGroupAddedUsers.Items[i - 1].Tag; {pgqCheckExistingUser.FieldByName('gbr_id').AsInteger;}
       pgqGroepsleden.ParamByName('groupId').AsInteger := selectedGroupId;
       pgqGroepsleden.ParamByName('timeUserAdded').AsDateTime := now;
       pgqGroepsleden.ParamByName('groupMemberDeleted').AsBoolean := false;
@@ -185,7 +191,7 @@ begin
     end;
 
     if(pgqGroepsLeden.Active) then pgqGroepsLeden.Close;
-    pgqCheckExistingUser.Close;
+    if(pgqCheckExistingUser.Active) then pgqCheckExistingUser.Close;
   end;
 
 end;
@@ -206,9 +212,8 @@ end;
 
 procedure TfrmGroupAdd.sbtnAddUserToGroupClick(Sender: TObject);
 var
-  temp: integer;
+  temp, location: integer;
 begin
-
   if(slsbUser.Items.CountSelected > 0) then
   begin
     temp := slsbGroupAddedUsers.Items.IndexOfCaption(slsbUser.Items[slsbUser.SelectedItemIndex].Caption);
@@ -217,10 +222,23 @@ begin
       with slsbGroupAddedUsers.Items.Add do
       begin
         Caption := slsbUser.Items[slsbUser.SelectedItemIndex].Caption;
+        Tag := slsbUser.Items[slsbUser.SelectedItemIndex].Tag;
       end;
 
       if(cboxGroupOwner.Items.IndexOf(slsbUser.Items[slsbUser.SelectedItemIndex].Caption) = -1) then
         cboxGroupOwner.Items.Add(slsbUser.Items[slsbUser.SelectedItemIndex].Caption);
+
+      //add to combobox when it isn't already in the list
+//      location := scboxGroupOwner.Items.IndexOf(slsbUser.Items[slsbUser.SelectedItemIndex].Caption);
+//      if(location = -1) then
+//      begin
+//        with scboxGroupOwner.ComboItems.Add do
+//        begin
+//          Caption := slsbUser.Items[slsbUser.SelectedItemIndex].Caption;
+//          Tag := slsbUser.Items[slsbUser.SelectedItemIndex].Tag;
+//        end;
+//      end;
+
     end
     else lblAddGroupError.Caption := 'Gebruiker al in lijst';
   end;
@@ -256,6 +274,7 @@ begin
     with slsbUser.Items.Add do
     begin
       Caption := searchQuery.FieldByName('gbr_nicknaam').AsString;
+      Tag := searchQuery.FieldByName('gbr_id').AsInteger;
       searchQuery.Next;
     end;
   end;
@@ -270,8 +289,9 @@ end;
 
 procedure TfrmGroupAdd.sbtnRemoveUserFromGroupClick(Sender: TObject);
 var
-  indexDeletedUser, i: integer;
+  indexDeletedUser, i, j, test: integer;
   getText: string;
+  getLocation: TPoint;
 begin
   if(slsbGroupAddedUsers.Items.Count > 0) then
   begin
@@ -279,10 +299,25 @@ begin
     begin
       getText := slsbGroupAddedUsers.Items[slsbGroupAddedUsers.SelectedItemIndex].Caption;
       indexDeletedUser := cboxGroupOwner.Items.IndexOf(getText);
+
+//      test := scboxGroupOwner.ComboItems.IndexOf(getText).Y;
     end;
+
+//    if(getText = scboxGroupOwner.Text) then
+//    begin
+//      for j := 0 to scboxGroupOwner.ComboItems.Count - 1 do
+//      begin
+//        if(j <> indexDeletedUser) then
+//        begin
+//          scboxGroupOwner.ItemIndex := i;
+//          break;
+//        end;
+//      end;
+//    end;
 
     if(getText = cboxGroupOwner.Text) then
     begin
+      //select random item so it does not select the deleted row
       for i := 1 to cboxGroupOwner.Items.Count do
       begin
         if(i - 1 <> indexDeletedUser) then
@@ -292,6 +327,7 @@ begin
         end;
       end;
     end;
+
 
     slsbGroupAddedUsers.Items.Delete(slsbGroupAddedUsers.SelectedItemIndex);
 

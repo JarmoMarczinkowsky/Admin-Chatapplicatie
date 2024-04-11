@@ -195,8 +195,7 @@ begin
       pgqGetDeletedUserId.ParamByName('currentUser').AsString := RemovedUsersList[i - 1];
       pgqGetDeletedUserId.Open;
 
-      pgqEditGroupMember.SQL.Text := '';
-      pgqEditGroupMember.SQL.Add('SELECT * FROM tbl_groepleden');
+      pgqEditGroupMember.SQL.Text := 'SELECT * FROM tbl_groepleden';
       pgqEditGroupMember.SQL.Add('WHERE grl_groep = :selectedGroup');
       pgqEditGroupMember.SQL.Add('AND grl_gebruiker = :currentUser');
       pgqEditGroupMember.ParamByName('selectedGroup').AsInteger := groupId;

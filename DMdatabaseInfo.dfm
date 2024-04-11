@@ -69,6 +69,7 @@ object DataModule2: TDataModule2
     Connection = pgcDBconnection
     SQL.Strings = (
       'SELECT * FROM tbl_groepen')
+    Options.ReturnParams = True
     Left = 224
     Top = 272
     object pgqGetGroupsgro_id: TIntegerField
