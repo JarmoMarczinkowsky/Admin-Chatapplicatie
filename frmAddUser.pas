@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages,
-  System.SysUtils, System.Variants, System.Classes, System.RegularExpressions,
+  System.SysUtils, System.Variants, System.Classes, System.RegularExpressions, System.IOUtils,
   Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, AdvSmoothButton,
   Vcl.StdCtrls, Data.DB, MemDS, DBAccess, PgAccess;
@@ -162,6 +162,7 @@ var
 //  testing: TBitmap;
   getFile: TFileStream;
   getSize: Double;
+  fileExtension: string;
 begin
 //  testing := TBitmap.Create;
 
@@ -178,6 +179,7 @@ begin
       if(getSize < 2) then
       begin
         imgAddUserProfilePicture.Picture.LoadFromFile(FileName);
+        fileExtension := TPath.GetExtension(FileName);
       end
       else lblAddUserError.Caption :=  'Afbeelding is te groot (moet kleiner dan 2 mb zijn)';
     end;
