@@ -59,6 +59,7 @@ type
     procedure sbtnLogOutClick(Sender: TObject);
 //    procedure tmrRemoveErrorTimer(Sender: TObject);
     procedure sbtnChangeOptionClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     { Private declarations }
     getGroup, pgqGetSettings: TPgQuery;
@@ -94,6 +95,12 @@ begin
   if (Text = 'Overzicht gebruikers') then pcPages.ActivePage := tbsUserOverview
   else if (Text = 'Overzicht groepen') then pcPages.ActivePage := tbsGroupOverview
   else if (Text = 'Uitloggen') then Self.Close;
+end;
+
+procedure TfrmAdminDashboard.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  frmLogin.Close;
 end;
 
 procedure TfrmAdminDashboard.FormShow(Sender: TObject);
