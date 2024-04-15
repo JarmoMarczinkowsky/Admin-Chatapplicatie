@@ -5,7 +5,8 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, Data.DB,
-  AdvSmoothListBox, AdvSmoothButton, MemDS, DBAccess, PgAccess;
+  AdvSmoothListBox, AdvSmoothButton, MemDS, DBAccess, PgAccess,
+  AdvSmoothComboBox;
 
 type
   TfrmGroupEdit = class(TForm)
@@ -197,16 +198,16 @@ begin
 
     for i := 1 to RemovedUsersList.Count do
     begin
-      pgqGetDeletedUserId.SQL.Text := 'SELECT * FROM tbl_gebruikers';
-      pgqGetDeletedUserId.SQL.Add('WHERE gbr_nicknaam = :currentUser');
-      pgqGetDeletedUserId.ParamByName('currentUser').AsString := RemovedUsersList[i - 1];
-      pgqGetDeletedUserId.Open;
+//      pgqGetDeletedUserId.SQL.Text := 'SELECT * FROM tbl_gebruikers';
+//      pgqGetDeletedUserId.SQL.Add('WHERE gbr_nicknaam = :currentUser');
+//      pgqGetDeletedUserId.ParamByName('currentUser').AsString := RemovedUsersList[i - 1];
+//      pgqGetDeletedUserId.Open;
 
       pgqEditGroupMember.SQL.Text := 'SELECT * FROM tbl_groepleden';
       pgqEditGroupMember.SQL.Add('WHERE grl_groep = :selectedGroup');
       pgqEditGroupMember.SQL.Add('AND grl_gebruiker = :currentUser');
       pgqEditGroupMember.ParamByName('selectedGroup').AsInteger := groupId;
-      pgqEditGroupMember.ParamByName('currentUser').AsInteger := pgqGetDeletedUserId.FieldByName('gbr_id').AsInteger;
+      pgqEditGroupMember.ParamByName('currentUser').AsInteger := StrToInt(RemovedUsersList[i - 1]); {pgqGetDeletedUserId.FieldByName('gbr_id').AsInteger;}
       pgqEditGroupMember.Open;
 
       pgqEditGroupMember.Edit;
@@ -216,11 +217,13 @@ begin
 
     AddUserToGroup(groupId);
 
+    //gets id from group owner
     pgqCheckExistingUser.SQL.Text := 'SELECT gbr_id FROM tbl_gebruikers';
     pgqCheckExistingUser.SQL.Add('WHERE gbr_nicknaam=:newGroupOwner');
     pgqCheckExistingUser.ParamByName('newGroupOwner').AsString := cboxEditGroupOwner.Text;
     pgqCheckExistingUser.Open;
 
+    //
     pgqGetSelectedGroup.Edit;
     pgqGetSelectedGroup.FieldByName('gro_naam').AsString := edtEditGroupName.Text;
     pgqGetSelectedGroup.FieldByName('gro_beschrijving').AsString := edtEditGroupDescription.Text;
@@ -263,9 +266,13 @@ var
 begin
   if(slsbEditGroupUsers.Items.CountSelected > 0) then
   begin
+    //get the caption of the currently selected group member
+    //so it could get the position of the group member in the combobox
     getText := slsbEditGroupUsers.Items[slsbEditGroupUsers.SelectedItemIndex].Caption;
     indexDeletedUser := cboxEditGroupOwner.Items.IndexOf(getText);
 
+    //if the selected user that you want to delete is also the group owner
+    //go through the combobox and select the first instance that is not the group owner
     if(getText = cboxEditGroupOwner.Text) then
     begin
       for i := 1 to cboxEditGroupOwner.Items.Count do
@@ -278,11 +285,13 @@ begin
       end;
     end;
 
-    editDuplicateLocation := RemovedUsersList.IndexOf(getText);
+    //checks if the id of the user you want to remove is already in the list
+    editDuplicateLocation := RemovedUsersList.IndexOf(IntToStr(slsbEditGroupUsers.Items[slsbEditGroupUsers.SelectedItemIndex].Tag));
 
+    //if it isn't in the list, it will be added to the list
     if(editDuplicateLocation = -1) then
     begin
-      RemovedUsersList.Add(getText);
+      RemovedUsersList.Add(IntToStr(slsbEditGroupUsers.Items[slsbEditGroupUsers.SelectedItemIndex].Tag));
     end;
   end;
 
@@ -330,23 +339,25 @@ end;
 
 procedure TfrmGroupEdit.slsbEditAddUserToGroupClick(Sender: TObject);
 var
-  temp, editDuplicateLocation: integer;
+  temp, editDuplicateLocation, edtSearchUserIndex: integer;
 begin
   if(slsbEditSearchUser.Items.CountSelected > 0) then
   begin
-    temp := slsbEditGroupUsers.Items.IndexOfCaption(slsbEditSearchUser.Items[slsbEditSearchUser.SelectedItemIndex].Caption);
+    edtSearchUserIndex := slsbEditSearchUser.SelectedItemIndex;
+    temp := slsbEditGroupUsers.Items.IndexOfCaption(slsbEditSearchUser.Items[edtSearchUserIndex].Caption);
     if(temp = -1) then
     begin
       with slsbEditGroupUsers.Items.Add do
       begin
-        Caption := slsbEditSearchUser.Items[slsbEditSearchUser.SelectedItemIndex].Caption;
-        Tag := slsbEditSearchUser.Items[slsbEditSearchUser.SelectedItemIndex].Tag;
+        Caption := slsbEditSearchUser.Items[edtSearchUserIndex].Caption;
+        Tag := slsbEditSearchUser.Items[edtSearchUserIndex].Tag;
       end;
 
-      if(cboxEditGroupOwner.Items.IndexOf(slsbEditSearchUser.Items[slsbEditSearchUser.SelectedItemIndex].Caption) = -1) then
-        cboxEditGroupOwner.Items.Add(slsbEditSearchUser.Items[slsbEditSearchUser.SelectedItemIndex].Caption);
+      if(cboxEditGroupOwner.Items.IndexOf(slsbEditSearchUser.Items[edtSearchUserIndex].Caption) = -1) then
+        cboxEditGroupOwner.Items.Add(slsbEditSearchUser.Items[edtSearchUserIndex].Caption);
 
-      editDuplicateLocation := RemovedUsersList.IndexOf(slsbEditSearchUser.Items[slsbEditSearchUser.SelectedItemIndex].Caption);
+//      editDuplicateLocation := RemovedUsersList.IndexOf(slsbEditSearchUser.Items[edtSearchUserIndex].Caption);
+      editDuplicateLocation := RemovedUsersList.IndexOf(IntToStr(slsbEditSearchUser.Items[edtSearchUserIndex].Tag));
 
       if(editDuplicateLocation > -1) then
       begin
