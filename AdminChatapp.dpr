@@ -16,9 +16,9 @@ begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
   Application.ShowMainForm := false;
-  Application.CreateForm(TfrmLogin, frmLogin);
-  Application.CreateForm(TfrmAdminDashboard, frmAdminDashboard);
   Application.CreateForm(TDataModule2, DataModule2);
+  Application.CreateForm(TfrmAdminDashboard, frmAdminDashboard);
+  Application.CreateForm(TfrmLogin, frmLogin);
   Application.CreateForm(TfrmUserAdd, frmUserAdd);
   Application.CreateForm(TfrmUserEdit, frmUserEdit);
   Application.CreateForm(TfrmGroupAdd, frmGroupAdd);
