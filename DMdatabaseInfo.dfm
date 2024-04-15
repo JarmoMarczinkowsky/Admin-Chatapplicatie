@@ -1,4 +1,5 @@
 object DataModule2: TDataModule2
+  OnCreate = DataModuleCreate
   OnDestroy = DataModuleDestroy
   Height = 614
   Width = 930
@@ -119,5 +120,11 @@ object DataModule2: TDataModule2
     Connection = pgcDBconnection
     Left = 224
     Top = 536
+  end
+  object tmrLogin: TTimer
+    Interval = 1
+    OnTimer = tmrLoginTimer
+    Left = 232
+    Top = 8
   end
 end

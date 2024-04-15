@@ -15,6 +15,7 @@ uses
 begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
+  Application.ShowMainForm := false;
   Application.CreateForm(TfrmLogin, frmLogin);
   Application.CreateForm(TfrmAdminDashboard, frmAdminDashboard);
   Application.CreateForm(TDataModule2, DataModule2);

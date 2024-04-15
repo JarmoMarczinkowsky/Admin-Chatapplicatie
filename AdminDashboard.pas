@@ -69,6 +69,7 @@ type
     procedure AutoSizeCol(grid: TStringGrid; Column: integer);
   public
     { Public declarations }
+    procedure StartUpApp;
   end;
 
 var
@@ -100,10 +101,10 @@ end;
 procedure TfrmAdminDashboard.FormClose(Sender: TObject;
   var Action: TCloseAction);
 begin
-  frmLogin.Close;
+//  frmLogin.Close;
 end;
 
-procedure TfrmAdminDashboard.FormShow(Sender: TObject);
+procedure TfrmAdminDashboard.StartUpApp;
 begin
   pcPages.ActivePage := tbsUserOverview;
 
@@ -139,6 +140,44 @@ begin
   //center form on startup
   frmAdminDashboard.Left := (frmAdminDashboard.Monitor.Width  - frmAdminDashboard.Width)  div 2;
   frmAdminDashboard.Top  := (frmAdminDashboard.Monitor.Height - frmAdminDashboard.Height) div 2;
+end;
+
+procedure TfrmAdminDashboard.FormShow(Sender: TObject);
+begin
+//  pcPages.ActivePage := tbsUserOverview;
+//
+//  with DataModule2 do
+//  begin
+//    sgrUsers.ColCount := 6;
+//    sgrUsers.Cells[0, 0] := 'Id';
+//    sgrUsers.Cells[1, 0] := 'Naam';
+//    sgrUsers.Cells[2, 0] := 'Winkelnaam';
+//    sgrUsers.Cells[3, 0] := 'Telefoon';
+//    sgrUsers.Cells[4, 0] := 'Email';
+//    sgrUsers.Cells[5, 0] := 'Gebruikersnaam';
+//
+//    sgrGroups.ColCount := 6;
+//    sgrGroups.Cells[0, 0] := 'Id';
+//    sgrGroups.Cells[1, 0] := 'Naam';
+//    sgrGroups.Cells[2, 0] := 'Eigenaar';
+//    sgrGroups.Cells[3, 0] := 'Aangemaakt';
+//    sgrGroups.Cells[4, 0] := 'Verwijderd';
+//    sgrGroups.Cells[5, 0] := 'Beschrijving';
+//
+//    pgqGetSettings := TPgQuery.Create(nil);
+//    pgqGetSettings.Connection := pgcDBconnection;
+//    pgqGetSettings.SQL.Text := 'SELECT * FROM tbl_appopties WHERE opt_id = 1';
+//    pgqGetSettings.Open;
+//    numRefreshRate.Value := pgqGetSettings.FieldByName('opt_refreshrate').AsInteger;
+//  end;
+//
+//  slblWelcomeMessage.Caption.Text := 'Welkom, ' + DataModule2.pgqGetLoggedInUser.FieldByName('gbr_naam').AsString;
+//
+////  Self.PixelsPerInch := 96;
+//
+//  //center form on startup
+//  frmAdminDashboard.Left := (frmAdminDashboard.Monitor.Width  - frmAdminDashboard.Width)  div 2;
+//  frmAdminDashboard.Top  := (frmAdminDashboard.Monitor.Height - frmAdminDashboard.Height) div 2;
 end;
 
 procedure TfrmAdminDashboard.pcPagesChange(Sender: TObject);

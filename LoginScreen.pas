@@ -44,6 +44,8 @@ end;
 procedure TfrmLogin.FormCreate(Sender: TObject);
 begin
   lblError.Caption := '';
+
+  DataModule2.tmrLogin.Enabled := true;
 end;
 
 procedure TfrmLogin.FormResize(Sender: TObject);
@@ -84,8 +86,9 @@ begin
       begin
         edtUser.Text := '';
         edtPassword.Text := '';
-        frmAdminDashboard.Show;
-        frmLogin.Visible := false;
+        frmAdminDashboard.StartUpApp;
+        frmAdminDashboard.Visible := true;
+        frmLogin.Close;
       end
       else
       begin

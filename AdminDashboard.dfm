@@ -74,7 +74,6 @@ object frmAdminDashboard: TfrmAdminDashboard
         TabOrder = 0
         Version = '2.2.3.1'
         OnClick = sbtnAddUserClick
-        ExplicitLeft = 601
         TMSStyle = 8
       end
       object sbtnDeleteUser: TAdvSmoothButton
@@ -111,7 +110,6 @@ object frmAdminDashboard: TfrmAdminDashboard
         TabOrder = 1
         Version = '2.2.3.1'
         OnClick = sbtnDeleteUserClick
-        ExplicitLeft = 813
         TMSStyle = 8
       end
       object sgrUsers: TStringGrid
@@ -122,7 +120,6 @@ object frmAdminDashboard: TfrmAdminDashboard
         Anchors = [akLeft, akTop, akRight, akBottom]
         TabOrder = 2
         OnDrawCell = sgrGroupsDrawCell
-        ExplicitWidth = 910
       end
       object sbtnGoToEditUser: TAdvSmoothButton
         Left = 705
@@ -158,7 +155,6 @@ object frmAdminDashboard: TfrmAdminDashboard
         TabOrder = 3
         Version = '2.2.3.1'
         OnClick = sbtnGoToEditUserClick
-        ExplicitLeft = 707
         TMSStyle = 8
       end
       object sbtnRefreshUser: TAdvSmoothButton
@@ -448,7 +444,6 @@ object frmAdminDashboard: TfrmAdminDashboard
         ParentFont = False
         TabOrder = 1
         Version = '2.2.3.1'
-        ExplicitTop = 404
         TMSStyle = 8
       end
       object sbtnChangeOption: TAdvSmoothButton
@@ -485,7 +480,6 @@ object frmAdminDashboard: TfrmAdminDashboard
         TabOrder = 2
         Version = '2.2.3.1'
         OnClick = sbtnChangeOptionClick
-        ExplicitTop = 404
         TMSStyle = 8
       end
     end

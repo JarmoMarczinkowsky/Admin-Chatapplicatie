@@ -3,7 +3,8 @@ unit DMdatabaseInfo;
 interface
 
 uses
-  System.SysUtils, System.Classes, Data.DB, DBAccess, PgAccess, MemDS, System.Hash;
+  System.SysUtils, System.Classes, Data.DB, DBAccess, PgAccess, MemDS, System.Hash,
+  Vcl.ExtCtrls;
 
 type
   TDataModule2 = class(TDataModule)
@@ -30,9 +31,12 @@ type
     pgqGetSelectedGroup: TPgQuery;
     pgqGetSelectedGroupOwner: TPgQuery;
     pgqGetGroupMembers: TPgQuery;
+    tmrLogin: TTimer;
     procedure DataModuleDestroy(Sender: TObject);
     function HashString(const Input: string): string;
     procedure pgcDBconnectionAfterDisconnect(Sender: TObject);
+    procedure tmrLoginTimer(Sender: TObject);
+    procedure DataModuleCreate(Sender: TObject);
   private
     { Private declarations }
   public
@@ -43,7 +47,7 @@ var
   DataModule2: TDataModule2;
 
 implementation
-
+  uses LoginScreen, AdminDashboard;
 
 {%CLASSGROUP 'Vcl.Controls.TControl'}
 
@@ -57,6 +61,21 @@ end;
 procedure TDataModule2.pgcDBconnectionAfterDisconnect(Sender: TObject);
 begin
   pgcDBconnection.Open;
+end;
+
+procedure TDataModule2.tmrLoginTimer(Sender: TObject);
+begin
+  tmrLogin.Enabled := false;
+
+  frmAdminDashboard.Visible := false;
+  frmLogin.Show;
+  frmLogin.Visible := true;
+
+end;
+
+procedure TDataModule2.DataModuleCreate(Sender: TObject);
+begin
+  if(not pgcDBconnection.Connected) then pgcDBconnection.Open;
 end;
 
 procedure TDataModule2.DataModuleDestroy(Sender: TObject);
