@@ -126,6 +126,7 @@ begin
 
             AStream := TMemoryStream.Create;
             imgEditProfilePicture.Picture.SaveToStream(AStream);
+            AStream.Position := 0;
             BlobField := pgqCheckExistingUser.FieldByName('gbr_profielfoto') as TBlobField;
             BlobField.LoadFromStream(AStream);
 

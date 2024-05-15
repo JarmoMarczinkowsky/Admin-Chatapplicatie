@@ -73,16 +73,16 @@ object frmGroupAdd: TfrmGroupAdd
     TabOrder = 0
   end
   object edtAddGroupSearchUser: TEdit
-    Left = 340
+    Left = 336
     Top = 16
     Width = 200
     Height = 23
     Anchors = [akTop, akRight]
     TabOrder = 4
-    ExplicitLeft = 338
+    ExplicitLeft = 334
   end
   object sbtnagSearchUser: TAdvSmoothButton
-    Left = 545
+    Left = 541
     Top = 16
     Width = 65
     Height = 23
@@ -109,7 +109,7 @@ object frmGroupAdd: TfrmGroupAdd
     TabOrder = 5
     Version = '2.2.3.1'
     OnClick = sbtnagSearchUserClick
-    ExplicitLeft = 543
+    ExplicitLeft = 539
     TMSStyle = 8
   end
   object edtGroupDescription: TEdit
@@ -121,7 +121,7 @@ object frmGroupAdd: TfrmGroupAdd
     TabOrder = 1
   end
   object slsbUser: TAdvSmoothListBox
-    Left = 339
+    Left = 335
     Top = 45
     Width = 200
     Height = 151
@@ -353,11 +353,11 @@ object frmGroupAdd: TfrmGroupAdd
     Categories = <>
     Anchors = [akTop, akRight]
     TabOrder = 6
-    ExplicitLeft = 337
+    ExplicitLeft = 333
     TMSStyle = 0
   end
   object sbtnAddUserToGroup: TAdvSmoothButton
-    Left = 546
+    Left = 542
     Top = 45
     Width = 67
     Height = 23
@@ -390,7 +390,7 @@ object frmGroupAdd: TfrmGroupAdd
     TabOrder = 7
     Version = '2.2.3.1'
     OnClick = sbtnAddUserToGroupClick
-    ExplicitLeft = 544
+    ExplicitLeft = 540
     TMSStyle = 8
   end
   object cboxGroupOwner: TComboBox
@@ -402,7 +402,7 @@ object frmGroupAdd: TfrmGroupAdd
     TabOrder = 2
   end
   object slsbGroupAddedUsers: TAdvSmoothListBox
-    Left = 340
+    Left = 336
     Top = 202
     Width = 200
     Height = 151
@@ -634,11 +634,11 @@ object frmGroupAdd: TfrmGroupAdd
     Categories = <>
     Anchors = [akTop, akRight]
     TabOrder = 8
-    ExplicitLeft = 338
+    ExplicitLeft = 334
     TMSStyle = 0
   end
   object sbtnRemoveUserFromGroup: TAdvSmoothButton
-    Left = 545
+    Left = 541
     Top = 202
     Width = 67
     Height = 23
@@ -671,7 +671,7 @@ object frmGroupAdd: TfrmGroupAdd
     TabOrder = 9
     Version = '2.2.3.1'
     OnClick = sbtnRemoveUserFromGroupClick
-    ExplicitLeft = 543
+    ExplicitLeft = 539
     TMSStyle = 8
   end
   object sbtnAddGroupProfile: TAdvSmoothButton
@@ -741,7 +741,7 @@ object frmGroupAdd: TfrmGroupAdd
     TMSStyle = 8
   end
   object sbtnBackToGroupOverview: TAdvSmoothButton
-    Left = 491
+    Left = 487
     Top = 367
     Width = 125
     Height = 27
@@ -774,7 +774,7 @@ object frmGroupAdd: TfrmGroupAdd
     TabOrder = 11
     Version = '2.2.3.1'
     OnClick = sbtnBackToGroupOverviewClick
-    ExplicitLeft = 489
+    ExplicitLeft = 485
     ExplicitTop = 359
     TMSStyle = 8
   end

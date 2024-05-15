@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages,
   System.SysUtils, System.Variants, System.Classes, System.RegularExpressions, System.IOUtils,
-  Vcl.Graphics,
+  Vcl.Graphics, Vcl.Imaging.jpeg,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, AdvSmoothButton,
   Vcl.StdCtrls, Data.DB, MemDS, DBAccess, PgAccess;
 
@@ -52,6 +52,7 @@ procedure TfrmUserAdd.sbtnAddUserClick(Sender: TObject);
 var
   pgqAddUser: TPgQuery;
   AStream : TMemoryStream;
+//  tempImage, getFile: TPicture;
 begin
   pgqAddUser := TPgQuery.Create(nil);
 
@@ -103,8 +104,9 @@ begin
 
             AStream := TMemoryStream.Create;
             imgAddUserProfilePicture.Picture.SaveToStream(AStream);
+            AStream.Position := 0;
 
-            pgqAddUser.ParamByName('userProfilePicture').LoadFromStream(AStream, ftGraphic);
+            pgqAddUser.ParamByName('userProfilePicture').LoadFromStream(AStream, ftBlob);
   //          BlobField := pgqAddUser.FieldByName('gbr_profielfoto') as TBlobField;
   //          BlobField.LoadFromStream(AStream);
 
@@ -120,6 +122,7 @@ begin
             edtUserStoreName.Text := '';
             edtUserTelephone.Text := '';
             edtUserNickName.Text := '';
+            edtUserPassword.Text := '';
             edtUserEmail.Text := '';
             imgAddUserProfilePicture.Picture := nil;
 

@@ -134,7 +134,7 @@ begin
       //saves the image to a format that is used by the database
       AStream := TMemoryStream.Create;
       imgAddGroupProfile.Picture.SaveToStream(AStream);
-      pgqGetGroups.ParamByName('groupProfilePicture').LoadFromStream(AStream, ftGraphic);
+      pgqGetGroups.ParamByName('groupProfilePicture').LoadFromStream(AStream, ftBlob);
 
       //executes the insert sql statement and closes it to preserve memory
       pgqGetGroups.Open;
