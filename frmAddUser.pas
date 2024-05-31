@@ -35,7 +35,7 @@ type
     procedure FormShow(Sender: TObject);
   private
     { Private declarations }
-//    function HashString(const Input: string): string;
+    fileExtension: string;
   public
     { Public declarations }
   end;
@@ -86,13 +86,10 @@ begin
             pgqCheckExistingUser.Close;
 
             pgqAddUser.SQL.Text := '';
-            pgqAddUser.SQL.Text := 'INSERT INTO tbl_gebruikers (gbr_naam, gbr_winkelnaam, gbr_tel, gbr_email, gbr_nicknaam, gbr_wachtwoord, gbr_profielfoto)';
-            pgqAddUser.SQL.Add('VALUES (:username, :userStoreName, :userTel, :userEmail, :userNickname, :userPassword, :userProfilePicture)');
+            pgqAddUser.SQL.Text := 'INSERT INTO tbl_gebruikers (gbr_naam, gbr_winkelnaam, gbr_tel, gbr_email, gbr_nicknaam, gbr_wachtwoord, gbr_profielfoto, gbr_pf_ext)';
+            pgqAddUser.SQL.Add('VALUES (:username, :userStoreName, :userTel, :userEmail, :userNickname, :userPassword, :userProfilePicture, :userPfExtension)');
 
-  //          pgqAddUser.SQL.Text := '';
-  //          pgqAddUser.SQL.Add('SELECT * FROM tbl_gebruikers');
-  //          pgqAddUser.Open;
-  //          pgqAddUser.Append;
+
             pgqAddUser.ParamByName('username').AsString := Trim(edtUserName.Text);
             pgqAddUser.ParamByName('userStoreName').AsString := Trim(edtUserStoreName.Text);
             pgqAddUser.ParamByName('userTel').AsString := Trim(edtUserTelephone.Text);
@@ -107,6 +104,7 @@ begin
             AStream.Position := 0;
 
             pgqAddUser.ParamByName('userProfilePicture').LoadFromStream(AStream, ftBlob);
+            pgqAddUser.ParamByName('userPfExtension').AsString := fileExtension;//
   //          BlobField := pgqAddUser.FieldByName('gbr_profielfoto') as TBlobField;
   //          BlobField.LoadFromStream(AStream);
 
@@ -165,13 +163,13 @@ var
 //  testing: TBitmap;
   getFile: TFileStream;
   getSize: Double;
-  fileExtension: string;
+
 begin
 //  testing := TBitmap.Create;
 
   with TOpenDialog.Create(self) do
   try
-    Caption := 'Open afbeelding';
+//    Caption := 'Open afbeelding';
     Filter := 'Image Files (*.jpg;*.jpeg;*.png)|*.jpg;*.jpeg;*.png';
     Options := [TOpenOption.ofPathMustExist, TOpenOption.ofPathMustExist];
     if (Execute) then

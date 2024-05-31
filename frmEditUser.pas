@@ -3,7 +3,8 @@ unit frmEditUser;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, System.RegularExpressions,
+  Winapi.Windows, Winapi.Messages,
+  System.SysUtils, System.Variants, System.Classes, System.RegularExpressions, System.IOUtils,
   Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, AdvSmoothButton,
   Data.DB,
@@ -35,6 +36,7 @@ type
     procedure sbtnEditUserClick(Sender: TObject);
   private
     { Private declarations }
+    fileExtension: string;
   public
     { Public declarations }
   end;
@@ -57,6 +59,7 @@ var
   stream: TStream;
 begin
   lblEditUserError.Caption := '';
+  fileExtension := '';
 
   with DataModule2 do
     begin
@@ -130,6 +133,8 @@ begin
             BlobField := pgqCheckExistingUser.FieldByName('gbr_profielfoto') as TBlobField;
             BlobField.LoadFromStream(AStream);
 
+            pgqCheckExistingUser.FieldByName('gbr_pf_ext').AsString := fileExtension;
+
             if(Length(edtEditUserPassword.Text) > 0) then
             begin
               pgqCheckExistingUser.FieldByName('gbr_wachtwoord').AsString := HashString(edtEditUserPassword.Text);
@@ -163,10 +168,13 @@ procedure TfrmUserEdit.sbtnEditUserProfilePictureClick(Sender: TObject);
 begin
   with TOpenDialog.Create(self) do
     try
-      Caption := 'Open afbeelding';
+//      Caption := 'Open afbeelding';
       Filter := 'Image Files (*.jpg;*.jpeg;*.png)|*.jpg;*.jpeg;*.png';
       Options := [TOpenOption.ofPathMustExist, TOpenOption.ofPathMustExist];
       if (Execute) then imgEditProfilePicture.Picture.LoadFromFile(FileName);
+      begin
+        fileExtension := TPath.GetExtension(FileName);
+      end;
 
     finally
       Free;

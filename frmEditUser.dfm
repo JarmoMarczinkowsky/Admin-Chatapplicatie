@@ -68,11 +68,12 @@ object frmUserEdit: TfrmUserEdit
   object imgEditProfilePicture: TImage
     Left = 253
     Top = 190
-    Width = 75
+    Width = 69
     Height = 71
     Anchors = [akLeft, akTop, akRight, akBottom]
     Proportional = True
     Stretch = True
+    ExplicitWidth = 75
     ExplicitHeight = 75
   end
   object lblEditUserError: TLabel
@@ -93,57 +94,57 @@ object frmUserEdit: TfrmUserEdit
   object edtEditUserName: TEdit
     Left = 128
     Top = 16
-    Width = 200
+    Width = 194
     Height = 23
     Anchors = [akLeft, akTop, akRight]
     TabOrder = 0
-    ExplicitWidth = 198
+    ExplicitWidth = 192
   end
   object edtEditStoreName: TEdit
     Left = 128
     Top = 45
-    Width = 200
+    Width = 194
     Height = 23
     Anchors = [akLeft, akTop, akRight]
     TabOrder = 1
-    ExplicitWidth = 198
+    ExplicitWidth = 192
   end
   object edtEditUserEmail: TEdit
     Left = 128
     Top = 74
-    Width = 200
+    Width = 194
     Height = 23
     Anchors = [akLeft, akTop, akRight]
     TabOrder = 2
-    ExplicitWidth = 198
+    ExplicitWidth = 192
   end
   object edtEditUserTelephone: TEdit
     Left = 128
     Top = 103
-    Width = 200
+    Width = 194
     Height = 23
     Anchors = [akLeft, akTop, akRight]
     TabOrder = 3
-    ExplicitWidth = 198
+    ExplicitWidth = 192
   end
   object edtEditUserNickName: TEdit
     Left = 128
     Top = 132
-    Width = 200
+    Width = 194
     Height = 23
     Anchors = [akLeft, akTop, akRight]
     TabOrder = 4
-    ExplicitWidth = 198
+    ExplicitWidth = 192
   end
   object edtEditUserPassword: TEdit
     Left = 128
     Top = 161
-    Width = 200
+    Width = 194
     Height = 23
     Anchors = [akLeft, akTop, akRight]
     PasswordChar = #8226
     TabOrder = 5
-    ExplicitWidth = 198
+    ExplicitWidth = 192
   end
   object sbtnEditUserProfilePicture: TAdvSmoothButton
     Left = 128
@@ -212,7 +213,7 @@ object frmUserEdit: TfrmUserEdit
     TMSStyle = 8
   end
   object AdvSmoothButton3: TAdvSmoothButton
-    Left = 207
+    Left = 201
     Top = 282
     Width = 125
     Height = 27
@@ -245,7 +246,7 @@ object frmUserEdit: TfrmUserEdit
     TabOrder = 8
     Version = '2.2.3.1'
     OnClick = AdvSmoothButton3Click
-    ExplicitLeft = 205
+    ExplicitLeft = 199
     ExplicitTop = 274
     TMSStyle = 8
   end

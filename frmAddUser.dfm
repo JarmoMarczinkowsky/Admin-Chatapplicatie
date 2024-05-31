@@ -61,7 +61,7 @@ object frmUserAdd: TfrmUserAdd
   object imgAddUserProfilePicture: TImage
     Left = 257
     Top = 190
-    Width = 69
+    Width = 65
     Height = 75
     Anchors = [akLeft, akTop, akRight, akBottom]
     Proportional = True
@@ -124,7 +124,7 @@ object frmUserAdd: TfrmUserAdd
     TabOrder = 4
   end
   object sbtnAddUserProfilePicture: TAdvSmoothButton
-    Left = 125
+    Left = 121
     Top = 190
     Width = 119
     Height = 27
@@ -151,11 +151,11 @@ object frmUserAdd: TfrmUserAdd
     TabOrder = 6
     Version = '2.2.3.1'
     OnClick = sbtnAddUserProfilePictureClick
-    ExplicitLeft = 123
+    ExplicitLeft = 119
     TMSStyle = 8
   end
   object sbtnAddUser: TAdvSmoothButton
-    Left = 4
+    Left = 0
     Top = 294
     Width = 125
     Height = 27
@@ -188,12 +188,12 @@ object frmUserAdd: TfrmUserAdd
     TabOrder = 7
     Version = '2.2.3.1'
     OnClick = sbtnAddUserClick
-    ExplicitLeft = 2
+    ExplicitLeft = -2
     ExplicitTop = 286
     TMSStyle = 8
   end
   object sbtnBackToUserOverview: TAdvSmoothButton
-    Left = 208
+    Left = 204
     Top = 294
     Width = 125
     Height = 27
@@ -226,7 +226,7 @@ object frmUserAdd: TfrmUserAdd
     TabOrder = 8
     Version = '2.2.3.1'
     OnClick = sbtnBackToUserOverviewClick
-    ExplicitLeft = 206
+    ExplicitLeft = 202
     ExplicitTop = 286
     TMSStyle = 8
   end

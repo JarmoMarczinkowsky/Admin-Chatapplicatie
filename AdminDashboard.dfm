@@ -19,7 +19,7 @@ object frmAdminDashboard: TfrmAdminDashboard
     Top = 50
     Width = 930
     Height = 472
-    ActivePage = tbsGroupOverview
+    ActivePage = tbsUserOverview
     Align = alClient
     TabOrder = 0
     OnChange = pcPagesChange
