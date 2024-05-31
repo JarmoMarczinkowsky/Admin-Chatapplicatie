@@ -2,7 +2,7 @@ object frmUserEdit: TfrmUserEdit
   Left = 0
   Top = 0
   Caption = 'Wijzig gebruiker'
-  ClientHeight = 317
+  ClientHeight = 390
   ClientWidth = 342
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -14,7 +14,7 @@ object frmUserEdit: TfrmUserEdit
   OnShow = FormShow
   DesignSize = (
     342
-    317)
+    390)
   TextHeight = 15
   object lblEditUserName: TLabel
     Left = 8
@@ -60,25 +60,23 @@ object frmUserEdit: TfrmUserEdit
   end
   object lblEditUserProfilePicture: TLabel
     Left = 8
-    Top = 193
+    Top = 222
     Width = 56
     Height = 15
     Caption = 'Profielfoto'
   end
   object imgEditProfilePicture: TImage
     Left = 253
-    Top = 190
+    Top = 219
     Width = 69
-    Height = 71
-    Anchors = [akLeft, akTop, akRight, akBottom]
+    Height = 69
+    Anchors = [akLeft, akTop, akRight]
     Proportional = True
     Stretch = True
-    ExplicitWidth = 75
-    ExplicitHeight = 75
   end
   object lblEditUserError: TLabel
     Left = 8
-    Top = 261
+    Top = 334
     Width = 28
     Height = 15
     Anchors = [akLeft, akBottom]
@@ -90,6 +88,13 @@ object frmUserEdit: TfrmUserEdit
     Font.Style = [fsBold]
     ParentFont = False
     ExplicitTop = 299
+  end
+  object Verwijderd: TLabel
+    Left = 8
+    Top = 193
+    Width = 55
+    Height = 15
+    Caption = 'Verwijderd'
   end
   object edtEditUserName: TEdit
     Left = 128
@@ -148,7 +153,7 @@ object frmUserEdit: TfrmUserEdit
   end
   object sbtnEditUserProfilePicture: TAdvSmoothButton
     Left = 128
-    Top = 190
+    Top = 219
     Width = 119
     Height = 27
     Appearance.SimpleLayout = True
@@ -177,7 +182,7 @@ object frmUserEdit: TfrmUserEdit
   end
   object sbtnEditUser: TAdvSmoothButton
     Left = 8
-    Top = 282
+    Top = 355
     Width = 125
     Height = 27
     Anchors = [akLeft, akBottom]
@@ -214,7 +219,7 @@ object frmUserEdit: TfrmUserEdit
   end
   object AdvSmoothButton3: TAdvSmoothButton
     Left = 201
-    Top = 282
+    Top = 355
     Width = 125
     Height = 27
     Anchors = [akRight, akBottom]
@@ -249,5 +254,12 @@ object frmUserEdit: TfrmUserEdit
     ExplicitLeft = 199
     ExplicitTop = 274
     TMSStyle = 8
+  end
+  object cbxUserDeleted: TCheckBox
+    Left = 128
+    Top = 190
+    Width = 22
+    Height = 17
+    TabOrder = 9
   end
 end

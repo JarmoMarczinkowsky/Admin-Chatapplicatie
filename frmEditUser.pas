@@ -30,6 +30,8 @@ type
     sbtnEditUser: TAdvSmoothButton;
     AdvSmoothButton3: TAdvSmoothButton;
     lblEditUserError: TLabel;
+    cbxUserDeleted: TCheckBox;
+    Verwijderd: TLabel;
     procedure FormShow(Sender: TObject);
     procedure sbtnEditUserProfilePictureClick(Sender: TObject);
     procedure AdvSmoothButton3Click(Sender: TObject);
@@ -68,6 +70,7 @@ begin
       edtEditUserTelephone.Text := pgqCheckExistingUser.FieldByName('gbr_tel').AsString;
       edtEditUserEmail.Text := pgqCheckExistingUser.FieldByName('gbr_email').AsString;
       edtEditUserNickName.Text := pgqCheckExistingUser.FieldByName('gbr_nicknaam').AsString;
+      cbxUserDeleted.Checked := pgqCheckExistingUser.FieldByName('gbr_del').AsBoolean;
       edtEditUserPassword.Text := '';
 
       //gives error when loading Jan Janssen
@@ -126,6 +129,7 @@ begin
             pgqCheckExistingUser.FieldByName('gbr_email').AsString := edtEditUserEmail.Text;
             pgqCheckExistingUser.FieldByName('gbr_tel').AsString := edtEditUserTelephone.Text;
             pgqCheckExistingUser.FieldByName('gbr_nicknaam').AsString := edtEditUserNickName.Text;
+            pgqCheckExistingUser.FieldByName('gbr_del').AsBoolean := cbxUserDeleted.Checked;
 
             AStream := TMemoryStream.Create;
             imgEditProfilePicture.Picture.SaveToStream(AStream);
