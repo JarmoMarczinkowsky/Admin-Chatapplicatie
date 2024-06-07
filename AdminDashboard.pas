@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages,
-  System.SysUtils, System.Variants, System.Classes, System.RegularExpressions, System.Hash,
+  System.SysUtils, System.Variants, System.Classes, System.RegularExpressions, System.Hash, System.Threading,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Graphics, AdvUtil, Vcl.Grids, AdvObj, BaseGrid,
   AdvGrid, DBAdvGrid, Vcl.ExtCtrls, Data.DB, MemDS, DBAccess, PgAccess,
   AdvSmoothButton, Vcl.StdCtrls, Vcl.ComCtrls, DMdatabaseInfo, AdvSmoothListBox,
@@ -135,8 +135,6 @@ begin
 
   slblWelcomeMessage.Caption.Text := 'Welkom, ' + DataModule2.pgqGetLoggedInUser.FieldByName('gbr_naam').AsString;
 
-//  Self.PixelsPerInch := 96;
-
   //center form on startup
   frmAdminDashboard.Left := (frmAdminDashboard.Monitor.Width  - frmAdminDashboard.Width)  div 2;
   frmAdminDashboard.Top  := (frmAdminDashboard.Monitor.Height - frmAdminDashboard.Height) div 2;
@@ -197,41 +195,61 @@ begin
 end;
 
 procedure TfrmAdminDashboard.RefreshUserOverView;
-var 
-  i: integer;
+//var
+//  i: integer;
 begin
   with DataModule2 do
   begin
+    Screen.Cursor := crHourGlass;
     if(pgqGetUsers = nil) then
     begin
       pgqGetUsers := TPgQuery.Create(nil);
       pgqGetUsers.Connection := pgcDBconnection;
     end;
 
-    if(cbxShowDeletedUser.Checked) then pgqGetUsers.SQL.Text := 'SELECT * FROM tbl_gebruikers ORDER BY gbr_id'
-    else pgqGetUsers.SQL.Text := 'SELECT * FROM tbl_gebruikers WHERE gbr_del = false ORDER BY gbr_id';
-    pgqGetUsers.Open;
+    TTask.Run(
+      procedure
+      begin
+        try
+          if(cbxShowDeletedUser.Checked) then pgqGetUsers.SQL.Text := 'SELECT * FROM tbl_gebruikers ORDER BY gbr_id'
+          else pgqGetUsers.SQL.Text := 'SELECT * FROM tbl_gebruikers WHERE gbr_del = false ORDER BY gbr_id';
+          pgqGetUsers.Open;
+        finally
+          TThread.Synchronize(nil, procedure
+          var
+            i: integer;
+          begin
+            sgrUsers.BeginUpdate;
+            sgrUsers.RowCount := pgqGetUsers.RecordCount + 1;
 
-    sgrUsers.BeginUpdate;
-    sgrUsers.RowCount := pgqGetUsers.RecordCount + 1;
+            for i := 1 to pgqGetUsers.RecordCount do
+            begin
+              sgrUsers.Cells[0, i] := pgqGetUsers.FieldByName('gbr_id').AsString;
+              sgrUsers.Cells[1, i] := pgqGetUsers.FieldByName('gbr_naam').AsString;
+              sgrUsers.Cells[2, i] := pgqGetUsers.FieldByName('gbr_winkelnaam').AsString;
+              sgrUsers.Cells[3, i] := pgqGetUsers.FieldByName('gbr_tel').AsString;
+              sgrUsers.Cells[4, i] := pgqGetUsers.FieldByName('gbr_email').AsString;
+              sgrUsers.Cells[5, i] := pgqGetUsers.FieldByName('gbr_nicknaam').AsString;
+              sgrUsers.Cells[6, i] := pgqGetUsers.FieldByName('gbr_wachtwoord').AsString;
 
-    for i := 1 to pgqGetUsers.RecordCount do
-    begin
-      sgrUsers.Cells[0, i] := pgqGetUsers.FieldByName('gbr_id').AsString;
-      sgrUsers.Cells[1, i] := pgqGetUsers.FieldByName('gbr_naam').AsString;
-      sgrUsers.Cells[2, i] := pgqGetUsers.FieldByName('gbr_winkelnaam').AsString;
-      sgrUsers.Cells[3, i] := pgqGetUsers.FieldByName('gbr_tel').AsString;
-      sgrUsers.Cells[4, i] := pgqGetUsers.FieldByName('gbr_email').AsString;
-      sgrUsers.Cells[5, i] := pgqGetUsers.FieldByName('gbr_nicknaam').AsString;
-      sgrUsers.Cells[6, i] := pgqGetUsers.FieldByName('gbr_wachtwoord').AsString;
+              pgqGetUsers.Next;
+            end;
+            for i := 0 to sgrUsers.ColCount - 1 do AutoSizeCol(sgrUsers, i);
+            sgrUsers.EndUpdate;
 
-      pgqGetUsers.Next;
-    end;
-    for i := 0 to sgrUsers.ColCount - 1 do AutoSizeCol(sgrUsers, i);
-    sgrUsers.EndUpdate;
+            lblUserOverviewAmount.Caption := Format('%d gebruikers gevonden', [pgqGetUsers.RecordCount]);
+            pgqGetUsers.Close;
+            Screen.Cursor := crDefault;
+          end
+          )
 
-    lblUserOverviewAmount.Caption := Format('%d gebruikers gevonden', [pgqGetUsers.RecordCount]);
-    pgqGetUsers.Close;
+        end;
+
+      end
+    );
+
+
+
   end;
 end;
 
@@ -250,42 +268,55 @@ begin
 end;
 
 procedure TfrmAdminDashboard.RefreshGroupOverView;
-var
-  i: integer;
 begin
   with DataModule2 do
   begin
+    Screen.Cursor := crHourGlass;
     if(pgqGetGroups = nil) then
     begin
       pgqGetGroups := TPgQuery.Create(nil);
       pgqGetGroups.Connection := pgcDBconnection;
     end;
 
-    if(cbxShowDeletedGroups.Checked) then
-      pgqGetGroups.SQL.Text := 'SELECT * FROM tbl_groepen ORDER BY gro_id'
-    else
-      pgqGetGroups.SQL.Text := 'SELECT * FROM tbl_groepen WHERE gro_del = false ORDER BY gro_id';
-    pgqGetGroups.Open;
-
-    sgrGroups.BeginUpdate;
-    sgrGroups.RowCount := pgqGetGroups.RecordCount + 1;
-
-    for i := 1 to pgqGetGroups.RecordCount do
+    TTask.Run(
+    procedure
+    var
+      i: integer;
     begin
-      sgrGroups.Cells[0, i] := pgqGetGroups.FieldByName('gro_id').AsString;
-      sgrGroups.Cells[1, i] := pgqGetGroups.FieldByName('gro_naam').AsString;
-      sgrGroups.Cells[2, i] := pgqGetGroups.FieldByName('gro_igenaar').AsString;
-      sgrGroups.Cells[3, i] := pgqGetGroups.FieldByName('gro_aangemaakt').AsString;
-      sgrGroups.Cells[4, i] := pgqGetGroups.FieldByName('gro_del').AsString;
-      sgrGroups.Cells[5, i] := pgqGetGroups.FieldByName('gro_beschrijving').AsString;
+      try
+        if(cbxShowDeletedGroups.Checked) then
+          pgqGetGroups.SQL.Text := 'SELECT * FROM tbl_groepen ORDER BY gro_id'
+        else
+          pgqGetGroups.SQL.Text := 'SELECT * FROM tbl_groepen WHERE gro_del = false ORDER BY gro_id';
+        pgqGetGroups.Open;
 
-      pgqGetGroups.Next;
-    end;
-    for i := 0 to sgrGroups.ColCount - 1 do AutoSizeCol(sgrGroups, i);
-    sgrGroups.EndUpdate;
+      finally
+        sgrGroups.BeginUpdate;
+        sgrGroups.RowCount := pgqGetGroups.RecordCount + 1;
 
-    lblGroupOverviewAmount.Caption := Format('%d groepen gevonden', [pgqGetGroups.RecordCount]);
-    pgqGetGroups.Close;
+        for i := 1 to pgqGetGroups.RecordCount do
+        begin
+          sgrGroups.Cells[0, i] := pgqGetGroups.FieldByName('gro_id').AsString;
+          sgrGroups.Cells[1, i] := pgqGetGroups.FieldByName('gro_naam').AsString;
+          sgrGroups.Cells[2, i] := pgqGetGroups.FieldByName('gro_igenaar').AsString;
+          sgrGroups.Cells[3, i] := pgqGetGroups.FieldByName('gro_aangemaakt').AsString;
+          sgrGroups.Cells[4, i] := pgqGetGroups.FieldByName('gro_del').AsString;
+          sgrGroups.Cells[5, i] := pgqGetGroups.FieldByName('gro_beschrijving').AsString;
+
+          pgqGetGroups.Next;
+        end;
+        for i := 0 to sgrGroups.ColCount - 1 do AutoSizeCol(sgrGroups, i);
+        sgrGroups.EndUpdate;
+
+        lblGroupOverviewAmount.Caption := Format('%d groepen gevonden', [pgqGetGroups.RecordCount]);
+        pgqGetGroups.Close;
+        Screen.Cursor := crDefault;
+
+      end;
+
+    end);
+
+
   end;
 end;
 

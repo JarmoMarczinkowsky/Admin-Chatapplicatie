@@ -3,7 +3,8 @@ unit frmEditGroup;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, System.Threading,
+  Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, Data.DB,
   AdvSmoothListBox, AdvSmoothButton, MemDS, DBAccess, PgAccess,
   AdvSmoothComboBox;
@@ -89,13 +90,24 @@ begin
       pgqGetSelectedGroupOwner := TPgQuery.Create(nil);
       pgqGetSelectedGroupOwner.Connection := pgcDBconnection;
     end;
-    pgqGetSelectedGroupOwner.SQL.Text := 'SELECT * FROM tbl_gebruikers WHERE gbr_id=:groupOwner';
-    pgqGetSelectedGroupOwner.ParamByName('groupOwner').AsInteger := getOwnerId;
-    pgqGetSelectedGroupOwner.Open;
 
-    cboxEditGroupOwner.Items.Add(pgqGetSelectedGroupOwner.FieldByName('gbr_nicknaam').AsString);
-    cboxEditGroupOwner.ItemIndex := 0;
-    pgqGetSelectedGroupOwner.Close;
+    TTask.Run(
+      procedure
+      begin
+        try
+          pgqGetSelectedGroupOwner.SQL.Text := 'SELECT * FROM tbl_gebruikers WHERE gbr_id=:groupOwner';
+          pgqGetSelectedGroupOwner.ParamByName('groupOwner').AsInteger := getOwnerId;
+          pgqGetSelectedGroupOwner.Open;
+
+        finally
+          cboxEditGroupOwner.Items.Add(pgqGetSelectedGroupOwner.FieldByName('gbr_nicknaam').AsString);
+          cboxEditGroupOwner.ItemIndex := 0;
+          pgqGetSelectedGroupOwner.Close;
+
+        end;
+      end
+
+    );
 
     slsbEditGroupUsers.BeginUpdate;
     //loops through every found group members
@@ -140,27 +152,38 @@ begin
 end;
 
 procedure TfrmGroupEdit.FillListBox;
-var
-  i: integer;
 begin
   with DataModule2 do
   begin
     if(slsbEditSearchUser.Items.Count = 0) then
     begin
-      pgqGetUsers.SQL.Text := 'SELECT * FROM tbl_gebruikers WHERE gbr_del = false ORDER BY gbr_nicknaam';
-      pgqGetUsers.Open;
-
-      slsbEditSearchUser.BeginUpdate;
-      for i := 1 to pgqGetUsers.RecordCount do
+      TTask.Run(
+      procedure
       begin
-        with slsbEditSearchUser.Items.Add do
-        begin
-          Caption := pgqGetUsers.FieldByName('gbr_nicknaam').AsString;
-          Tag := pgqGetUsers.FieldByName('gbr_id').AsInteger;
+        try
+          pgqGetUsers.SQL.Text := 'SELECT * FROM tbl_gebruikers WHERE gbr_del = false ORDER BY gbr_nicknaam';
+          pgqGetUsers.Open;
+        finally
+          TThread.Synchronize(nil,
+          procedure
+          var
+            i: integer;
+          begin
+            slsbEditSearchUser.BeginUpdate;
+            for i := 1 to pgqGetUsers.RecordCount do
+            begin
+              with slsbEditSearchUser.Items.Add do
+              begin
+                Caption := pgqGetUsers.FieldByName('gbr_nicknaam').AsString;
+                Tag := pgqGetUsers.FieldByName('gbr_id').AsInteger;
+              end;
+              pgqGetUsers.Next;
+            end;
+            slsbEditSearchUser.EndUpdate;
+          end
+          )
         end;
-        pgqGetUsers.Next;
-      end;
-      slsbEditSearchUser.EndUpdate;
+      end);
     end;
   end;
 end;
@@ -198,11 +221,6 @@ begin
 
     for i := 1 to RemovedUsersList.Count do
     begin
-//      pgqGetDeletedUserId.SQL.Text := 'SELECT * FROM tbl_gebruikers';
-//      pgqGetDeletedUserId.SQL.Add('WHERE gbr_nicknaam = :currentUser');
-//      pgqGetDeletedUserId.ParamByName('currentUser').AsString := RemovedUsersList[i - 1];
-//      pgqGetDeletedUserId.Open;
-
       pgqEditGroupMember.SQL.Text := 'SELECT * FROM tbl_groepleden';
       pgqEditGroupMember.SQL.Add('WHERE grl_groep = :selectedGroup');
       pgqEditGroupMember.SQL.Add('AND grl_gebruiker = :currentUser');

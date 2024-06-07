@@ -29,6 +29,8 @@ type
     lblAddUserError: TLabel;
     edtUserPassword: TEdit;
     lblUserPassword: TLabel;
+    lblFileName: TLabel;
+    lblFileSize: TLabel;
     procedure sbtnAddUserProfilePictureClick(Sender: TObject);
     procedure sbtnAddUserClick(Sender: TObject);
     procedure sbtnBackToUserOverviewClick(Sender: TObject);
@@ -144,13 +146,8 @@ begin
 end;
 
 procedure TfrmUserAdd.FormShow(Sender: TObject);
-var
-  getWIdth, getHieght: integer;
 begin
   lblAddUserError.Caption := '';
-
-  getWIdth:= self.Width;
-  getHieght := Self.Height;
 
 //  Form3.PixelsPerInch := 96;
 
@@ -162,7 +159,12 @@ procedure TfrmUserAdd.sbtnAddUserProfilePictureClick(Sender: TObject);
 var
 //  testing: TBitmap;
   getFile: TFileStream;
+  strGetSize: string;
   getSize: Double;
+  getEncoding: TEncoding;
+  streamReader: TStreamReader;
+  Encoding: TEncoding;
+  encodeName: string;
 
 begin
 //  testing := TBitmap.Create;
@@ -175,12 +177,23 @@ begin
     if (Execute) then
     begin
       getFile := TFileStream.Create(FileName, fmOpenRead or fmShareDenyNone);
-      getSize := Round(getFile.Size / 1048576);
+      strGetSize := FormatFloat('0.00', getFile.Size / (1024 * 1024));
+      getSize := StrToFloat(strGetSize);
+      streamReader := TStreamReader.Create(getFile, TEncoding.Default, True);
+      try
+        Encoding := streamreader.CurrentEncoding;
+        encodeName := Encoding.EncodingName;
+      finally
+        if(Assigned(Encoding)) then streamReader.Free;
+      end;
 
       if(getSize < 2) then
       begin
         imgAddUserProfilePicture.Picture.LoadFromFile(FileName);
         fileExtension := TPath.GetExtension(FileName);
+        lblFileName.Caption := TPath.GetFileName(FileName);
+        lblFileSize.Caption := FloatToStr(getSize) + ' mb';
+//        lblEncoding.Caption := encodeName;
       end
       else lblAddUserError.Caption :=  'Afbeelding is te groot (moet kleiner dan 2 mb zijn)';
     end;

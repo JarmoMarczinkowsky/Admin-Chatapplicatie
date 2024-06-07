@@ -59,18 +59,18 @@ object frmUserAdd: TfrmUserAdd
     Caption = 'Profielfoto'
   end
   object imgAddUserProfilePicture: TImage
-    Left = 257
+    Left = 269
     Top = 190
-    Width = 65
+    Width = 59
     Height = 75
     Anchors = [akLeft, akTop, akRight, akBottom]
     Proportional = True
     Stretch = True
-    ExplicitWidth = 75
+    ExplicitWidth = 63
   end
   object lblAddUserError: TLabel
-    Left = 8
-    Top = 250
+    Left = 11
+    Top = 258
     Width = 28
     Height = 15
     Caption = 'Error'
@@ -87,6 +87,22 @@ object frmUserAdd: TfrmUserAdd
     Width = 68
     Height = 15
     Caption = 'Wachtwoord'
+  end
+  object lblFileName: TLabel
+    Left = 237
+    Top = 223
+    Width = 9
+    Height = 15
+    Alignment = taRightJustify
+    Caption = '...'
+  end
+  object lblFileSize: TLabel
+    Left = 237
+    Top = 244
+    Width = 9
+    Height = 15
+    Alignment = taRightJustify
+    Caption = '...'
   end
   object edtUserName: TEdit
     Left = 131
@@ -124,11 +140,10 @@ object frmUserAdd: TfrmUserAdd
     TabOrder = 4
   end
   object sbtnAddUserProfilePicture: TAdvSmoothButton
-    Left = 121
+    Left = 127
     Top = 190
     Width = 119
     Height = 27
-    Anchors = [akTop, akRight]
     Appearance.SimpleLayout = True
     Appearance.Rounding = 5
     Status.Caption = '0'
@@ -151,12 +166,11 @@ object frmUserAdd: TfrmUserAdd
     TabOrder = 6
     Version = '2.2.3.1'
     OnClick = sbtnAddUserProfilePictureClick
-    ExplicitLeft = 119
     TMSStyle = 8
   end
   object sbtnAddUser: TAdvSmoothButton
-    Left = 0
-    Top = 294
+    Left = 6
+    Top = 297
     Width = 125
     Height = 27
     Anchors = [akRight, akBottom]
@@ -188,13 +202,13 @@ object frmUserAdd: TfrmUserAdd
     TabOrder = 7
     Version = '2.2.3.1'
     OnClick = sbtnAddUserClick
-    ExplicitLeft = -2
-    ExplicitTop = 286
+    ExplicitLeft = 4
+    ExplicitTop = 289
     TMSStyle = 8
   end
   object sbtnBackToUserOverview: TAdvSmoothButton
-    Left = 204
-    Top = 294
+    Left = 210
+    Top = 297
     Width = 125
     Height = 27
     Anchors = [akRight, akBottom]
@@ -226,8 +240,8 @@ object frmUserAdd: TfrmUserAdd
     TabOrder = 8
     Version = '2.2.3.1'
     OnClick = sbtnBackToUserOverviewClick
-    ExplicitLeft = 202
-    ExplicitTop = 286
+    ExplicitLeft = 208
+    ExplicitTop = 289
     TMSStyle = 8
   end
   object edtUserPassword: TEdit

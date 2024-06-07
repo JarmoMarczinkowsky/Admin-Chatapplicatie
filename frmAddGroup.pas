@@ -3,7 +3,8 @@ unit frmAddGroup;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, System.Threading,
+  Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls,
   Data.DB,
   AdvSmoothListBox, AdvSmoothButton, MemDS, DBAccess, PgAccess, AdvCombo,
@@ -52,8 +53,6 @@ implementation
 {$R *.dfm}
 
 procedure TfrmGroupAdd.FormShow(Sender: TObject);
-var
-  i: integer;
 begin
   cboxGroupOwner.Items.Clear;
   slsbGroupAddedUsers.Items.Clear;
@@ -72,21 +71,33 @@ begin
 
     if(slsbUser.Items.Count = 0) then
     begin
-      pgqGetUsers.SQL.Text := 'SELECT * FROM tbl_gebruikers WHERE gbr_del = false ORDER BY gbr_nicknaam';
-      pgqGetUsers.Open;
-
-      slsbUser.BeginUpdate;
-      for i := 1 to pgqGetUsers.RecordCount do
-      begin
-        with slsbUser.Items.Add do
+      TTask.Run(
+        procedure
+        var
+          i: integer;
         begin
-          Caption := pgqGetUsers.FieldByName('gbr_nicknaam').AsString;
-          Tag := pgqGetUsers.FieldByName('gbr_id').AsInteger;
-        end;
-        pgqGetUsers.Next;
-      end;
+          try
+            Screen.Cursor := crHourGlass;
+            pgqGetUsers.SQL.Text := 'SELECT * FROM tbl_gebruikers WHERE gbr_del = false ORDER BY gbr_nicknaam';
+            pgqGetUsers.Open;
+          finally
+            slsbUser.BeginUpdate;
+            for i := 1 to pgqGetUsers.RecordCount do
+            begin
+              with slsbUser.Items.Add do
+              begin
+                Caption := pgqGetUsers.FieldByName('gbr_nicknaam').AsString;
+                Tag := pgqGetUsers.FieldByName('gbr_id').AsInteger;
+              end;
+              pgqGetUsers.Next;
+            end;
 
-      slsbUser.EndUpdate;
+            slsbUser.EndUpdate;
+            Screen.Cursor := crDefault;
+          end;
+        end
+
+      );
     end;
   end;
 
