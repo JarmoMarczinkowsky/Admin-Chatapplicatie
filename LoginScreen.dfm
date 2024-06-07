@@ -20,7 +20,7 @@ object frmLogin: TfrmLogin
   TextHeight = 15
   object Label1: TLabel
     Left = 8
-    Top = 172
+    Top = 196
     Width = 115
     Height = 13
     Anchors = [akLeft, akBottom]
@@ -31,11 +31,10 @@ object frmLogin: TfrmLogin
     Font.Name = 'Segoe UI'
     Font.Style = []
     ParentFont = False
-    ExplicitTop = 189
   end
   object Label2: TLabel
     Left = 228
-    Top = 172
+    Top = 196
     Width = 67
     Height = 13
     Anchors = [akRight, akBottom]
@@ -46,12 +45,10 @@ object frmLogin: TfrmLogin
     Font.Name = 'Segoe UI'
     Font.Style = []
     ParentFont = False
-    ExplicitLeft = 232
-    ExplicitTop = 189
   end
   object lblError: TLabel
     Left = 8
-    Top = 269
+    Top = 167
     Width = 9
     Height = 15
     Anchors = [akLeft, akBottom]
@@ -62,7 +59,6 @@ object frmLogin: TfrmLogin
     Font.Name = 'Segoe UI'
     Font.Style = [fsBold]
     ParentFont = False
-    ExplicitTop = 272
   end
   object imgLogo: TImage
     Left = 155
@@ -8853,12 +8849,10 @@ object frmLogin: TfrmLogin
       EEC48913274E9CDC07F2FF0178F5B45A97B43A2C0000000049454E44AE426082}
     Proportional = True
     Stretch = True
-    ExplicitWidth = 150
-    ExplicitHeight = 150
   end
   object sbtnLogin: TAdvSmoothButton
     Left = 8
-    Top = 228
+    Top = 252
     Width = 200
     Height = 35
     Anchors = [akLeft, akBottom]
@@ -8890,32 +8884,30 @@ object frmLogin: TfrmLogin
     TabOrder = 2
     Version = '2.2.3.1'
     OnClick = sbtnLoginClick
-    ExplicitTop = 245
     TMSStyle = 8
   end
   object edtUser: TEdit
     Left = 8
-    Top = 191
+    Top = 215
     Width = 200
     Height = 23
     Anchors = [akLeft, akBottom]
     TabOrder = 0
-    ExplicitTop = 208
+    OnKeyPress = edtUserKeyPress
   end
   object edtPassword: TEdit
     Left = 228
-    Top = 191
+    Top = 215
     Width = 200
     Height = 23
     Anchors = [akRight, akBottom]
     PasswordChar = #8226
     TabOrder = 1
-    ExplicitLeft = 232
-    ExplicitTop = 208
+    OnKeyPress = edtPasswordKeyPress
   end
   object sbtnCancel: TAdvSmoothButton
     Left = 228
-    Top = 228
+    Top = 252
     Width = 200
     Height = 35
     Anchors = [akRight, akBottom]
@@ -8947,8 +8939,6 @@ object frmLogin: TfrmLogin
     TabOrder = 3
     Version = '2.2.3.1'
     OnClick = sbtnCancelClick
-    ExplicitLeft = 240
-    ExplicitTop = 231
     TMSStyle = 8
   end
 end

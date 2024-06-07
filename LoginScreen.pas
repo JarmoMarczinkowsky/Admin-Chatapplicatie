@@ -22,8 +22,11 @@ type
     procedure FormShow(Sender: TObject);
     procedure sbtnCancelClick(Sender: TObject);
     procedure FormResize(Sender: TObject);
+    procedure edtPasswordKeyPress(Sender: TObject; var Key: Char);
+    procedure edtUserKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
+    procedure _login;
   public
     { Public declarations }
   end;
@@ -41,6 +44,16 @@ begin
   Self.Close;
 end;
 
+procedure TfrmLogin.edtPasswordKeyPress(Sender: TObject; var Key: Char);
+begin
+  if(Key = #13) then _login;
+end;
+
+procedure TfrmLogin.edtUserKeyPress(Sender: TObject; var Key: Char);
+begin
+  if(Key = #13) then _login;
+end;
+
 procedure TfrmLogin.FormCreate(Sender: TObject);
 begin
   lblError.Caption := '';
@@ -49,8 +62,13 @@ begin
 end;
 
 procedure TfrmLogin.FormResize(Sender: TObject);
+var
+  widthOfRightSpace : integer;
 begin
   imgLogo.Left := Round(Self.ClientWidth / 2 - imgLogo.Width / 2);
+  if(edtPassword.Left <= edtUser.Left + edtUser.Width) then
+  begin
+  end;
 end;
 
 procedure TfrmLogin.FormShow(Sender: TObject);
@@ -58,7 +76,7 @@ begin
   edtUser.SetFocus;
 end;
 
-procedure TfrmLogin.sbtnLoginClick(Sender: TObject);
+procedure TfrmLogin._login;
 begin
   with DataModule2 do
   begin
@@ -95,13 +113,17 @@ begin
         if(ContainsText(edtUser.Text, '@')) then lblError.Caption := 'Email of wachtwoord is incorrect'
         else lblError.Caption := 'Gebruikersnaam of wachtwoord is incorrect';
       end;
-    end //end of if 
+    end //end of if
     else
     begin
       lblError.Caption := 'Gebruikersnaam of wachtwoord is leeg';
     end;
   end;
-  
+end;
+
+procedure TfrmLogin.sbtnLoginClick(Sender: TObject);
+begin
+  _login;
 end;
 
 end.
