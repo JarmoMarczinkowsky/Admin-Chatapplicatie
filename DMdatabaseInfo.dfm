@@ -9,7 +9,9 @@ object DataModule2: TDataModule2
     Server = '142.132.213.151'
     LoginPrompt = False
     AfterDisconnect = pgcDBconnectionAfterDisconnect
+    OnConnectionLost = pgcDBconnectionConnectionLost
     Database = 'rchat'
+    Options.Charset = 'UTF8'
     Connected = True
     Left = 64
     Top = 8
@@ -124,7 +126,17 @@ object DataModule2: TDataModule2
   object tmrLogin: TTimer
     Interval = 1
     OnTimer = tmrLoginTimer
-    Left = 232
+    Left = 224
     Top = 8
+  end
+  object pgqGetSelectedLog: TPgQuery
+    Connection = pgcDBconnection
+    Left = 224
+    Top = 184
+  end
+  object pgqGetAllLogs: TPgQuery
+    Connection = pgcDBconnection
+    Left = 224
+    Top = 88
   end
 end

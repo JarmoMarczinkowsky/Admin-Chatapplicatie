@@ -4,7 +4,7 @@ interface
 
 uses
   System.SysUtils, System.Classes, Data.DB, DBAccess, PgAccess, MemDS, System.Hash,
-  Vcl.ExtCtrls;
+  Vcl.ExtCtrls, MemData, Vcl.Forms, Vcl.Dialogs, Winapi.Windows;
 
 type
   TDataModule2 = class(TDataModule)
@@ -32,11 +32,16 @@ type
     pgqGetSelectedGroupOwner: TPgQuery;
     pgqGetGroupMembers: TPgQuery;
     tmrLogin: TTimer;
+    pgqGetSelectedLog: TPgQuery;
+    pgqGetAllLogs: TPgQuery;
     procedure DataModuleDestroy(Sender: TObject);
     function HashString(const Input: string): string;
-    procedure pgcDBconnectionAfterDisconnect(Sender: TObject);
     procedure tmrLoginTimer(Sender: TObject);
     procedure DataModuleCreate(Sender: TObject);
+    procedure pgcDBconnectionConnectionLost(Sender: TObject;
+      Component: TComponent; ConnLostCause: TConnLostCause;
+      var RetryMode: TRetryMode);
+    procedure pgcDBconnectionAfterDisconnect(Sender: TObject);
   private
     { Private declarations }
   public
@@ -60,7 +65,20 @@ end;
 
 procedure TDataModule2.pgcDBconnectionAfterDisconnect(Sender: TObject);
 begin
-  pgcDBconnection.Open;
+  ShowMessage('Disconnected');
+end;
+
+procedure TDataModule2.pgcDBconnectionConnectionLost(Sender: TObject;
+  Component: TComponent; ConnLostCause: TConnLostCause;
+  var RetryMode: TRetryMode);
+var
+  userChoice : integer;
+  getChoice : string;
+begin
+  userChoice := Application.MessageBox(PWideChar('Geen verbinding gevonden, wil je opnieuw verbinding maken?') , 'Geen verbinding gevonden', MB_OKCANCEL );
+  if(userChoice = 1) then getChoice := 'ok'
+  else if userchoice = 2 then getChoice := 'cancel';
+
 end;
 
 procedure TDataModule2.tmrLoginTimer(Sender: TObject);
@@ -70,7 +88,6 @@ begin
   frmAdminDashboard.Visible := false;
   frmLogin.Show;
   frmLogin.Visible := true;
-
 end;
 
 procedure TDataModule2.DataModuleCreate(Sender: TObject);
