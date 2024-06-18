@@ -11,6 +11,7 @@ object frmLogin: TfrmLogin
   Font.Name = 'Segoe UI'
   Font.Style = []
   ShowInTaskBar = True
+  OnClose = FormClose
   OnCreate = FormCreate
   OnResize = FormResize
   OnShow = FormShow
@@ -33,7 +34,7 @@ object frmLogin: TfrmLogin
     ParentFont = False
   end
   object Label2: TLabel
-    Left = 228
+    Left = 226
     Top = 196
     Width = 67
     Height = 13
@@ -45,6 +46,7 @@ object frmLogin: TfrmLogin
     Font.Name = 'Segoe UI'
     Font.Style = []
     ParentFont = False
+    ExplicitLeft = 228
   end
   object lblError: TLabel
     Left = 8
@@ -63,7 +65,7 @@ object frmLogin: TfrmLogin
   object imgLogo: TImage
     Left = 155
     Top = 8
-    Width = 138
+    Width = 136
     Height = 147
     Anchors = [akLeft, akTop, akRight, akBottom]
     Picture.Data = {
@@ -8849,6 +8851,7 @@ object frmLogin: TfrmLogin
       EEC48913274E9CDC07F2FF0178F5B45A97B43A2C0000000049454E44AE426082}
     Proportional = True
     Stretch = True
+    ExplicitWidth = 138
   end
   object sbtnLogin: TAdvSmoothButton
     Left = 8
@@ -8884,6 +8887,7 @@ object frmLogin: TfrmLogin
     TabOrder = 2
     Version = '2.2.3.1'
     OnClick = sbtnLoginClick
+    ExplicitTop = 244
     TMSStyle = 8
   end
   object edtUser: TEdit
@@ -8894,9 +8898,10 @@ object frmLogin: TfrmLogin
     Anchors = [akLeft, akBottom]
     TabOrder = 0
     OnKeyPress = edtUserKeyPress
+    ExplicitTop = 207
   end
   object edtPassword: TEdit
-    Left = 228
+    Left = 226
     Top = 215
     Width = 200
     Height = 23
@@ -8904,9 +8909,11 @@ object frmLogin: TfrmLogin
     PasswordChar = #8226
     TabOrder = 1
     OnKeyPress = edtPasswordKeyPress
+    ExplicitLeft = 224
+    ExplicitTop = 207
   end
   object sbtnCancel: TAdvSmoothButton
-    Left = 228
+    Left = 226
     Top = 252
     Width = 200
     Height = 35
@@ -8939,6 +8946,8 @@ object frmLogin: TfrmLogin
     TabOrder = 3
     Version = '2.2.3.1'
     OnClick = sbtnCancelClick
+    ExplicitLeft = 224
+    ExplicitTop = 244
     TMSStyle = 8
   end
 end

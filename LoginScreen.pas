@@ -24,6 +24,7 @@ type
     procedure FormResize(Sender: TObject);
     procedure edtPasswordKeyPress(Sender: TObject; var Key: Char);
     procedure edtUserKeyPress(Sender: TObject; var Key: Char);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     { Private declarations }
     procedure _login;
@@ -54,6 +55,17 @@ begin
   if(Key = #13) then _login;
 end;
 
+procedure TfrmLogin.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  with DataModule2 do
+  begin
+    if(pgqGetLoggedInUser.RecordCount = 0) then
+    begin
+      frmAdminDashboard.Close;
+    end;
+  end;
+end;
+
 procedure TfrmLogin.FormCreate(Sender: TObject);
 begin
   lblError.Caption := '';
@@ -73,6 +85,9 @@ end;
 
 procedure TfrmLogin.FormShow(Sender: TObject);
 begin
+  Self.Left := (Monitor.Width - Self.Width) div 2;
+  Self.Top := (Monitor.Height - Self.Height) div 2;
+
   edtUser.SetFocus;
 end;
 
