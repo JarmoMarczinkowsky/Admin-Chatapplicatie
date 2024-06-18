@@ -12,19 +12,16 @@ object frmAdminDashboard: TfrmAdminDashboard
   Font.Style = []
   Position = poDesigned
   OnClose = FormClose
-  OnShow = FormShow
   TextHeight = 15
   object pcPages: TPageControl
     Left = 0
     Top = 50
     Width = 930
     Height = 472
-    ActivePage = tbsGroupOverview
+    ActivePage = tbsLogs
     Align = alClient
     TabOrder = 0
     OnChange = pcPagesChange
-    ExplicitWidth = 928
-    ExplicitHeight = 464
     object tbsUserOverview: TTabSheet
       Caption = 'Gebruikers'
       DesignSize = (
@@ -74,7 +71,6 @@ object frmAdminDashboard: TfrmAdminDashboard
         TabOrder = 0
         Version = '2.2.3.1'
         OnClick = sbtnAddUserClick
-        ExplicitLeft = 597
         TMSStyle = 8
       end
       object sbtnDeleteUser: TAdvSmoothButton
@@ -111,7 +107,6 @@ object frmAdminDashboard: TfrmAdminDashboard
         TabOrder = 1
         Version = '2.2.3.1'
         OnClick = sbtnDeleteUserClick
-        ExplicitLeft = 809
         TMSStyle = 8
       end
       object sgrUsers: TStringGrid
@@ -122,8 +117,6 @@ object frmAdminDashboard: TfrmAdminDashboard
         Anchors = [akLeft, akTop, akRight, akBottom]
         TabOrder = 2
         OnDrawCell = sgrGroupsDrawCell
-        ExplicitWidth = 906
-        ExplicitHeight = 380
       end
       object sbtnGoToEditUser: TAdvSmoothButton
         Left = 705
@@ -159,7 +152,6 @@ object frmAdminDashboard: TfrmAdminDashboard
         TabOrder = 3
         Version = '2.2.3.1'
         OnClick = sbtnGoToEditUserClick
-        ExplicitLeft = 703
         TMSStyle = 8
       end
       object sbtnRefreshUser: TAdvSmoothButton
@@ -389,6 +381,102 @@ object frmAdminDashboard: TfrmAdminDashboard
         TMSStyle = 8
       end
     end
+    object tbsLogs: TTabSheet
+      Caption = 'Logs'
+      ImageIndex = 3
+      DesignSize = (
+        922
+        442)
+      object sbtnShowLogs: TAdvSmoothButton
+        Left = 3
+        Top = 5
+        Width = 65
+        Height = 35
+        Appearance.Font.Charset = DEFAULT_CHARSET
+        Appearance.Font.Color = clBlack
+        Appearance.Font.Height = -12
+        Appearance.Font.Name = 'Segoe UI'
+        Appearance.Font.Style = [fsBold]
+        Appearance.SimpleLayout = True
+        Appearance.Rounding = 5
+        Status.Caption = '0'
+        Status.Appearance.Fill.Color = clRed
+        Status.Appearance.Fill.ColorMirror = clNone
+        Status.Appearance.Fill.ColorMirrorTo = clNone
+        Status.Appearance.Fill.GradientType = gtSolid
+        Status.Appearance.Fill.GradientMirrorType = gtSolid
+        Status.Appearance.Fill.BorderColor = clGray
+        Status.Appearance.Fill.Rounding = 0
+        Status.Appearance.Fill.ShadowOffset = 0
+        Status.Appearance.Fill.Glow = gmNone
+        Status.Appearance.Font.Charset = DEFAULT_CHARSET
+        Status.Appearance.Font.Color = clWhite
+        Status.Appearance.Font.Height = -11
+        Status.Appearance.Font.Name = 'Segoe UI'
+        Status.Appearance.Font.Style = []
+        Caption = 'Toon'
+        Color = 12623485
+        ParentFont = False
+        TabOrder = 0
+        Version = '2.2.3.1'
+        OnClick = sbtnShowLogsClick
+        TMSStyle = 8
+      end
+      object sgrLogs: TStringGrid
+        Left = 3
+        Top = 46
+        Width = 908
+        Height = 393
+        Anchors = [akLeft, akTop, akRight, akBottom]
+        TabOrder = 1
+        OnDblClick = sgrLogsDblClick
+        OnDrawCell = sgrLogsDrawCell
+      end
+      object cbxShowReadLogs: TCheckBox
+        Left = 74
+        Top = 15
+        Width = 178
+        Height = 17
+        Caption = 'Toon gelezen logs'
+        TabOrder = 2
+      end
+      object sbtnMarkAsRead: TAdvSmoothButton
+        Left = 752
+        Top = 5
+        Width = 159
+        Height = 35
+        Anchors = [akTop, akRight]
+        Appearance.Font.Charset = DEFAULT_CHARSET
+        Appearance.Font.Color = clBlack
+        Appearance.Font.Height = -12
+        Appearance.Font.Name = 'Segoe UI'
+        Appearance.Font.Style = [fsBold]
+        Appearance.SimpleLayout = True
+        Appearance.Rounding = 5
+        Status.Caption = '0'
+        Status.Appearance.Fill.Color = clRed
+        Status.Appearance.Fill.ColorMirror = clNone
+        Status.Appearance.Fill.ColorMirrorTo = clNone
+        Status.Appearance.Fill.GradientType = gtSolid
+        Status.Appearance.Fill.GradientMirrorType = gtSolid
+        Status.Appearance.Fill.BorderColor = clGray
+        Status.Appearance.Fill.Rounding = 0
+        Status.Appearance.Fill.ShadowOffset = 0
+        Status.Appearance.Fill.Glow = gmNone
+        Status.Appearance.Font.Charset = DEFAULT_CHARSET
+        Status.Appearance.Font.Color = clWhite
+        Status.Appearance.Font.Height = -11
+        Status.Appearance.Font.Name = 'Segoe UI'
+        Status.Appearance.Font.Style = []
+        Caption = 'Markeer als gelezen'
+        Color = 6612379
+        ParentFont = False
+        TabOrder = 3
+        Version = '2.2.3.1'
+        OnClick = sbtnMarkAsReadClick
+        TMSStyle = 8
+      end
+    end
     object tbsOptions: TTabSheet
       Caption = 'Opties'
       ImageIndex = 6
@@ -444,6 +532,8 @@ object frmAdminDashboard: TfrmAdminDashboard
         ParentFont = False
         TabOrder = 1
         Version = '2.2.3.1'
+        ExplicitLeft = 789
+        ExplicitTop = 404
         TMSStyle = 8
       end
       object sbtnChangeOption: TAdvSmoothButton
@@ -480,6 +570,7 @@ object frmAdminDashboard: TfrmAdminDashboard
         TabOrder = 2
         Version = '2.2.3.1'
         OnClick = sbtnChangeOptionClick
+        ExplicitTop = 404
         TMSStyle = 8
       end
     end

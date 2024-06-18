@@ -38,8 +38,11 @@ type
     spnlMenu: TAdvSmoothPanel;
     sbtnLogout: TAdvSmoothButton;
     slblWelcomeMessage: TAdvSmoothLabel;
-
-    procedure FormShow(Sender: TObject);
+    tbsLogs: TTabSheet;
+    sbtnShowLogs: TAdvSmoothButton;
+    sgrLogs: TStringGrid;
+    cbxShowReadLogs: TCheckBox;
+    sbtnMarkAsRead: TAdvSmoothButton;
     procedure sbtnAddUserClick(Sender: TObject);
     procedure pcPagesChange(Sender: TObject);
     procedure sbtnGoToAddGroupClick(Sender: TObject);
@@ -60,6 +63,11 @@ type
 //    procedure tmrRemoveErrorTimer(Sender: TObject);
     procedure sbtnChangeOptionClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure sbtnShowLogsClick(Sender: TObject);
+    procedure sgrLogsDrawCell(Sender: TObject; ACol, ARow: LongInt; Rect: TRect;
+      State: TGridDrawState);
+    procedure sbtnMarkAsReadClick(Sender: TObject);
+    procedure sgrLogsDblClick(Sender: TObject);
   private
     { Private declarations }
     getGroup, pgqGetSettings: TPgQuery;
@@ -76,7 +84,7 @@ var
   frmAdminDashboard: TfrmAdminDashboard;
 
 implementation
-  uses LoginScreen, frmAddUser, frmAddGroup, frmEditUser, frmEditGroup;
+  uses LoginScreen, frmAddUser, frmAddGroup, frmEditUser, frmEditGroup, frmInfoLog;
 
 {$R *.dfm}
 
@@ -126,6 +134,13 @@ begin
     sgrGroups.Cells[4, 0] := 'Verwijderd';
     sgrGroups.Cells[5, 0] := 'Beschrijving';
 
+    sgrLogs.ColCount := 5;
+    sgrLogs.Cells[0, 0] := 'ID';
+    sgrLogs.Cells[1, 0] := 'Gebruiker';
+    sgrLogs.Cells[2, 0] := 'Melding';
+    sgrLogs.Cells[3, 0] := 'Aangemaakt';
+    sgrLogs.Cells[4, 0] := 'Gelezen';
+
     pgqGetSettings := TPgQuery.Create(nil);
     pgqGetSettings.Connection := pgcDBconnection;
     pgqGetSettings.SQL.Text := 'SELECT * FROM tbl_appopties WHERE opt_id = 1';
@@ -138,44 +153,6 @@ begin
   //center form on startup
   frmAdminDashboard.Left := (frmAdminDashboard.Monitor.Width  - frmAdminDashboard.Width)  div 2;
   frmAdminDashboard.Top  := (frmAdminDashboard.Monitor.Height - frmAdminDashboard.Height) div 2;
-end;
-
-procedure TfrmAdminDashboard.FormShow(Sender: TObject);
-begin
-//  pcPages.ActivePage := tbsUserOverview;
-//
-//  with DataModule2 do
-//  begin
-//    sgrUsers.ColCount := 6;
-//    sgrUsers.Cells[0, 0] := 'Id';
-//    sgrUsers.Cells[1, 0] := 'Naam';
-//    sgrUsers.Cells[2, 0] := 'Winkelnaam';
-//    sgrUsers.Cells[3, 0] := 'Telefoon';
-//    sgrUsers.Cells[4, 0] := 'Email';
-//    sgrUsers.Cells[5, 0] := 'Gebruikersnaam';
-//
-//    sgrGroups.ColCount := 6;
-//    sgrGroups.Cells[0, 0] := 'Id';
-//    sgrGroups.Cells[1, 0] := 'Naam';
-//    sgrGroups.Cells[2, 0] := 'Eigenaar';
-//    sgrGroups.Cells[3, 0] := 'Aangemaakt';
-//    sgrGroups.Cells[4, 0] := 'Verwijderd';
-//    sgrGroups.Cells[5, 0] := 'Beschrijving';
-//
-//    pgqGetSettings := TPgQuery.Create(nil);
-//    pgqGetSettings.Connection := pgcDBconnection;
-//    pgqGetSettings.SQL.Text := 'SELECT * FROM tbl_appopties WHERE opt_id = 1';
-//    pgqGetSettings.Open;
-//    numRefreshRate.Value := pgqGetSettings.FieldByName('opt_refreshrate').AsInteger;
-//  end;
-//
-//  slblWelcomeMessage.Caption.Text := 'Welkom, ' + DataModule2.pgqGetLoggedInUser.FieldByName('gbr_naam').AsString;
-//
-////  Self.PixelsPerInch := 96;
-//
-//  //center form on startup
-//  frmAdminDashboard.Left := (frmAdminDashboard.Monitor.Width  - frmAdminDashboard.Width)  div 2;
-//  frmAdminDashboard.Top  := (frmAdminDashboard.Monitor.Height - frmAdminDashboard.Height) div 2;
 end;
 
 procedure TfrmAdminDashboard.pcPagesChange(Sender: TObject);
@@ -208,48 +185,41 @@ begin
     end;
 
     TTask.Run(
-      procedure
-      begin
-        try
-          if(cbxShowDeletedUser.Checked) then pgqGetUsers.SQL.Text := 'SELECT * FROM tbl_gebruikers ORDER BY gbr_id'
-          else pgqGetUsers.SQL.Text := 'SELECT * FROM tbl_gebruikers WHERE gbr_del = false ORDER BY gbr_id';
-          pgqGetUsers.Open;
-        finally
-          TThread.Synchronize(nil, procedure
-          var
-            i: integer;
+    procedure
+    begin
+      try
+        if(cbxShowDeletedUser.Checked) then pgqGetUsers.SQL.Text := 'SELECT * FROM tbl_gebruikers ORDER BY gbr_id'
+        else pgqGetUsers.SQL.Text := 'SELECT * FROM tbl_gebruikers WHERE gbr_del = false ORDER BY gbr_id';
+        pgqGetUsers.Open;
+      finally
+        TThread.Synchronize(nil, procedure
+        var
+          i: integer;
+        begin
+          sgrUsers.BeginUpdate;
+          sgrUsers.RowCount := pgqGetUsers.RecordCount + 1;
+
+          for i := 1 to pgqGetUsers.RecordCount do
           begin
-            sgrUsers.BeginUpdate;
-            sgrUsers.RowCount := pgqGetUsers.RecordCount + 1;
+            sgrUsers.Cells[0, i] := pgqGetUsers.FieldByName('gbr_id').AsString;
+            sgrUsers.Cells[1, i] := pgqGetUsers.FieldByName('gbr_naam').AsString;
+            sgrUsers.Cells[2, i] := pgqGetUsers.FieldByName('gbr_winkelnaam').AsString;
+            sgrUsers.Cells[3, i] := pgqGetUsers.FieldByName('gbr_tel').AsString;
+            sgrUsers.Cells[4, i] := pgqGetUsers.FieldByName('gbr_email').AsString;
+            sgrUsers.Cells[5, i] := pgqGetUsers.FieldByName('gbr_nicknaam').AsString;
+            sgrUsers.Cells[6, i] := pgqGetUsers.FieldByName('gbr_wachtwoord').AsString;
 
-            for i := 1 to pgqGetUsers.RecordCount do
-            begin
-              sgrUsers.Cells[0, i] := pgqGetUsers.FieldByName('gbr_id').AsString;
-              sgrUsers.Cells[1, i] := pgqGetUsers.FieldByName('gbr_naam').AsString;
-              sgrUsers.Cells[2, i] := pgqGetUsers.FieldByName('gbr_winkelnaam').AsString;
-              sgrUsers.Cells[3, i] := pgqGetUsers.FieldByName('gbr_tel').AsString;
-              sgrUsers.Cells[4, i] := pgqGetUsers.FieldByName('gbr_email').AsString;
-              sgrUsers.Cells[5, i] := pgqGetUsers.FieldByName('gbr_nicknaam').AsString;
-              sgrUsers.Cells[6, i] := pgqGetUsers.FieldByName('gbr_wachtwoord').AsString;
+            pgqGetUsers.Next;
+          end;
+          for i := 0 to sgrUsers.ColCount - 1 do AutoSizeCol(sgrUsers, i);
+          sgrUsers.EndUpdate;
 
-              pgqGetUsers.Next;
-            end;
-            for i := 0 to sgrUsers.ColCount - 1 do AutoSizeCol(sgrUsers, i);
-            sgrUsers.EndUpdate;
-
-            lblUserOverviewAmount.Caption := Format('%d gebruikers gevonden', [pgqGetUsers.RecordCount]);
-            pgqGetUsers.Close;
-            Screen.Cursor := crDefault;
-          end
-          )
-
-        end;
-
-      end
-    );
-
-
-
+          lblUserOverviewAmount.Caption := Format('%d gebruikers gevonden', [pgqGetUsers.RecordCount]);
+          pgqGetUsers.Close;
+          Screen.Cursor := crDefault;
+        end)
+      end;
+    end);
   end;
 end;
 
@@ -464,7 +434,6 @@ begin
       pgqCheckExistingUser.SQL.Add('WHERE gbr_id=:selectedId');
       pgqCheckExistingUser.ParamByName('selectedId').AsInteger := getUserId;
       pgqCheckExistingUser.Open;
-
     end;
 
     frmUserEdit.Show;
@@ -478,6 +447,27 @@ begin
   Self.Close;
 end;
 
+procedure TfrmAdminDashboard.sbtnMarkAsReadClick(Sender: TObject);
+var
+  selectedRow: integer;
+  getLogId: integer;
+begin
+  with DataModule2 do
+  begin
+    if(sgrLogs.Cells[0, 1] <> '') then
+    begin
+      selectedRow := sgrLogs.Row;
+      getLogId := StrToInt(sgrLogs.Cells[0, selectedRow]);
+
+      pgqGetSelectedLog.SQL.Text := 'UPDATE tbl_logs';
+      pgqGetSelectedLog.SQL.Add('SET log_gelezen = True');
+      pgqGetSelectedLog.SQL.Add('WHERE log_id = :logId');
+      pgqGetSelectedLog.ParamByName('logId').AsInteger := getLogId;
+      pgqGetSelectedLog.Execute;
+    end;
+  end;
+end;
+
 procedure TfrmAdminDashboard.sbtnRefreshGroupClick(Sender: TObject);
 begin
   RefreshGroupOverView;
@@ -488,8 +478,104 @@ begin
   RefreshUserOverView;
 end;
 
+procedure TfrmAdminDashboard.sbtnShowLogsClick(Sender: TObject);
+begin
+  with DataModule2 do
+  begin
+    TTask.Run(
+    procedure
+    begin
+      try
+        pgqGetAllLogs.SQL.Text := 'SELECT tbl_logs.*, tbl_gebruikers.gbr_id, tbl_gebruikers.gbr_naam, tbl_gebruikers.gbr_nicknaam FROM tbl_logs';
+        pgqGetAllLogs.SQL.Add('LEFT JOIN tbl_gebruikers ON tbl_logs.log_gbr_id = tbl_gebruikers.gbr_id');
+        if(not cbxShowReadLogs.Checked) then pgqGetAllLogs.SQL.Add('WHERE NOT log_gelezen = True');
+
+        pgqGetAllLogs.Open;
+      finally
+        TThread.Synchronize(nil,
+        procedure
+        var
+          i, j: integer;
+        begin
+          sgrLogs.BeginUpdate;
+          sgrLogs.ColCount := 6;
+          sgrLogs.Cells[0, 0] := 'ID';
+          sgrLogs.Cells[1, 0] := 'Gebruiker';
+          sgrLogs.Cells[2, 0] := 'Melding';
+          sgrLogs.Cells[3, 0] := 'Aangemaakt';
+          sgrLogs.Cells[4, 0] := 'Gelezen';
+          sgrLogs.Cells[5, 0] := 'Notitie';
+
+          sgrLogs.RowCount := pgqGetAllLogs.RecordCount + 1;
+
+          for i := 1 to pgqGetAllLogs.RecordCount do
+          begin
+            sgrLogs.Cells[0, i] := pgqGetAllLogs.FieldByName('log_id').AsString;
+            sgrLogs.Cells[1, i] := pgqGetAllLogs.FieldByName('gbr_nicknaam').AsString;
+            sgrLogs.Cells[2, i] := pgqGetAllLogs.FieldByName('log_bericht').AsString;
+            sgrLogs.Cells[3, i] := pgqGetAllLogs.FieldByName('log_aangemaakt').AsString;
+            sgrLogs.Cells[4, i] := pgqGetAllLogs.FieldByName('log_gelezen').AsString;
+            sgrLogs.Cells[5, i] := pgqGetAllLogs.FieldByName('log_notitie').AsString;
+
+            pgqGetAllLogs.Next;
+          end;
+
+          for j := 0 to sgrLogs.ColCount - 1 do AutoSizeCol(sgrLogs, i);
+
+          sgrLogs.EndUpdate;
+        end)
+      end;
+    end);
+  end;
+end;
+
 procedure TfrmAdminDashboard.sgrGroupsDrawCell(Sender: TObject; ACol, ARow: LongInt;
   Rect: TRect; State: TGridDrawState);
+var
+  AGrid : TStringGrid;
+begin
+  AGrid:=TStringGrid(Sender);
+
+  if gdFixed in State then //if is fixed use the clBtnFace color
+    AGrid.Canvas.Brush.Color := clBtnFace
+  else
+  if gdSelected in State then //if is selected use the clAqua color
+    AGrid.Canvas.Brush.Color := rgb(176, 226, 255)
+  else
+    AGrid.Canvas.Brush.Color := clWindow;
+
+  AGrid.Canvas.FillRect(Rect);
+  AGrid.Canvas.TextOut(Rect.Left + 2, Rect.Top + 2, AGrid.Cells[ACol, ARow]);
+end;
+
+procedure TfrmAdminDashboard.sgrLogsDblClick(Sender: TObject);
+var
+  selectedRow: integer;
+  getIdFromRow: integer;
+begin
+  with DataModule2 do
+  begin
+    if(sgrLogs.Cells[0, 1] <> '') then
+    begin
+      selectedRow := sgrLogs.Row;
+      getIdFromRow := StrToInt(sgrLogs.Cells[0, selectedRow]);
+
+      pgqGetSelectedLog.SQL.Text := 'SELECT tbl_logs.*, tbl_gebruikers.gbr_id, tbl_gebruikers.gbr_naam, tbl_gebruikers.gbr_nicknaam FROM tbl_logs';
+      pgqGetSelectedLog.SQL.Add('LEFT JOIN tbl_gebruikers ON tbl_logs.log_gbr_id = tbl_gebruikers.gbr_id');
+      pgqGetSelectedLog.SQL.Add('WHERE log_id = :selectedId');
+      pgqGetSelectedLog.ParamByName('selectedId').AsInteger := getIdFromRow;
+      pgqGetSelectedLog.Open;
+
+      if(pgqGetSelectedLog.RecordCount > 0) then
+      begin
+        frmLogInfo.ShowModal;
+      end;
+    end;
+  end;
+end;
+
+procedure TfrmAdminDashboard.sgrLogsDrawCell(Sender: TObject; ACol,
+  ARow: LongInt; Rect: TRect; State: TGridDrawState);
 var
   AGrid : TStringGrid;
 begin
