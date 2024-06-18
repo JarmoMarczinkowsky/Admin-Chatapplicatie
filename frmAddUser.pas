@@ -87,10 +87,8 @@ begin
           begin
             pgqCheckExistingUser.Close;
 
-            pgqAddUser.SQL.Text := '';
             pgqAddUser.SQL.Text := 'INSERT INTO tbl_gebruikers (gbr_naam, gbr_winkelnaam, gbr_tel, gbr_email, gbr_nicknaam, gbr_wachtwoord, gbr_profielfoto, gbr_pf_ext)';
             pgqAddUser.SQL.Add('VALUES (:username, :userStoreName, :userTel, :userEmail, :userNickname, :userPassword, :userProfilePicture, :userPfExtension)');
-
 
             pgqAddUser.ParamByName('username').AsString := Trim(edtUserName.Text);
             pgqAddUser.ParamByName('userStoreName').AsString := Trim(edtUserStoreName.Text);
