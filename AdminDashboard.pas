@@ -110,6 +110,19 @@ procedure TfrmAdminDashboard.FormClose(Sender: TObject;
   var Action: TCloseAction);
 begin
 //  frmLogin.Close;
+  with DataModule2 do
+  begin
+    if(Assigned(pgqGetLoggedInUser)) then pgqGetLoggedInUser.Free;
+    if(Assigned(pgqDelete)) then pgqDelete.Free;
+    if(Assigned(pgqGetUsers)) then pgqGetUsers.Free;
+    if(Assigned(pgqCheckExistingUser)) then pgqCheckExistingUser.Free;
+    if(Assigned(pgqGetAllLogs)) then pgqGetAllLogs.Free;
+    if(Assigned(pgqGetSelectedLog)) then pgqGetSelectedLog.Free;
+    if(Assigned(pgqGetGroups)) then pgqGetGroups.Free;
+    if(Assigned(pgqGetSelectedGroup)) then pgqGetSelectedGroup.Free;
+    if(Assigned(pgqGetSelectedGroupOwner)) then pgqGetSelectedGroupOwner.Free;
+    if(Assigned(pgqGetGroupMembers)) then pgqGetGroupMembers.Free;
+  end;
 end;
 
 procedure TfrmAdminDashboard.StartUpApp;
@@ -142,10 +155,14 @@ begin
     sgrLogs.Cells[4, 0] := 'Gelezen';
 
     pgqGetSettings := TPgQuery.Create(nil);
-    pgqGetSettings.Connection := pgcDBconnection;
-    pgqGetSettings.SQL.Text := 'SELECT * FROM tbl_appopties WHERE opt_id = 1';
-    pgqGetSettings.Open;
-    numRefreshRate.Value := pgqGetSettings.FieldByName('opt_refreshrate').AsInteger;
+    try
+      pgqGetSettings.Connection := pgcDBconnection;
+      pgqGetSettings.SQL.Text := 'SELECT * FROM tbl_appopties WHERE opt_id = 1';
+      pgqGetSettings.Open;
+      numRefreshRate.Value := pgqGetSettings.FieldByName('opt_refreshrate').AsInteger;
+    finally
+      pgqGetSettings.Free;
+    end;
   end;
 
   slblWelcomeMessage.Caption.Text := 'Welkom, ' + DataModule2.pgqGetLoggedInUser.FieldByName('gbr_naam').AsString;
@@ -178,11 +195,11 @@ begin
   with DataModule2 do
   begin
     Screen.Cursor := crHourGlass;
-    if(pgqGetUsers = nil) then
-    begin
-      pgqGetUsers := TPgQuery.Create(nil);
-      pgqGetUsers.Connection := pgcDBconnection;
-    end;
+//    if(pgqGetUsers = nil) then
+//    begin
+//      pgqGetUsers := TPgQuery.Create(nil);
+//      pgqGetUsers.Connection := pgcDBconnection;
+//    end;
 
     TTask.Run(
     procedure
@@ -520,7 +537,7 @@ begin
             pgqGetAllLogs.Next;
           end;
 
-          for j := 0 to sgrLogs.ColCount - 1 do AutoSizeCol(sgrLogs, i);
+          for i := 0 to sgrLogs.ColCount - 1 do AutoSizeCol(sgrLogs, i);
 
           sgrLogs.EndUpdate;
         end)

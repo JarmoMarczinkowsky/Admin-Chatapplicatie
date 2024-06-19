@@ -22,6 +22,8 @@ object frmAdminDashboard: TfrmAdminDashboard
     Align = alClient
     TabOrder = 0
     OnChange = pcPagesChange
+    ExplicitWidth = 928
+    ExplicitHeight = 464
     object tbsUserOverview: TTabSheet
       Caption = 'Gebruikers'
       DesignSize = (
@@ -431,6 +433,8 @@ object frmAdminDashboard: TfrmAdminDashboard
         TabOrder = 1
         OnDblClick = sgrLogsDblClick
         OnDrawCell = sgrLogsDrawCell
+        ExplicitWidth = 906
+        ExplicitHeight = 385
       end
       object cbxShowReadLogs: TCheckBox
         Left = 74
@@ -474,6 +478,7 @@ object frmAdminDashboard: TfrmAdminDashboard
         TabOrder = 3
         Version = '2.2.3.1'
         OnClick = sbtnMarkAsReadClick
+        ExplicitLeft = 750
         TMSStyle = 8
       end
     end
@@ -532,8 +537,6 @@ object frmAdminDashboard: TfrmAdminDashboard
         ParentFont = False
         TabOrder = 1
         Version = '2.2.3.1'
-        ExplicitLeft = 789
-        ExplicitTop = 404
         TMSStyle = 8
       end
       object sbtnChangeOption: TAdvSmoothButton
@@ -570,7 +573,6 @@ object frmAdminDashboard: TfrmAdminDashboard
         TabOrder = 2
         Version = '2.2.3.1'
         OnClick = sbtnChangeOptionClick
-        ExplicitTop = 404
         TMSStyle = 8
       end
     end

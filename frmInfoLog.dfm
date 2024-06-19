@@ -1,7 +1,7 @@
 object frmLogInfo: TfrmLogInfo
   Left = 0
   Top = 0
-  ClientHeight = 275
+  ClientHeight = 264
   ClientWidth = 376
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -12,79 +12,79 @@ object frmLogInfo: TfrmLogInfo
   OnShow = FormShow
   DesignSize = (
     376
-    275)
+    264)
   TextHeight = 15
   object lblUserName: TLabel
     Left = 8
-    Top = 32
+    Top = 16
     Width = 86
     Height = 15
     Caption = 'Gebruikersnaam'
   end
   object lblLogMessage: TLabel
     Left = 8
-    Top = 61
+    Top = 45
     Width = 75
     Height = 15
     Caption = 'Soort melding'
   end
   object Label1: TLabel
     Left = 8
-    Top = 90
+    Top = 74
     Width = 36
     Height = 15
     Caption = 'Datum'
   end
   object Label2: TLabel
     Left = 8
-    Top = 119
+    Top = 103
     Width = 41
     Height = 15
     Caption = 'Gelezen'
   end
   object Label3: TLabel
     Left = 8
-    Top = 148
+    Top = 132
     Width = 36
     Height = 15
     Caption = 'Notitie'
   end
   object edtUsername: TEdit
     Left = 114
-    Top = 29
-    Width = 247
+    Top = 13
+    Width = 245
     Height = 23
     Anchors = [akLeft, akTop, akRight]
     TabOrder = 0
   end
   object edtLogMessage: TEdit
     Left = 114
-    Top = 58
-    Width = 247
+    Top = 42
+    Width = 245
     Height = 23
     Anchors = [akLeft, akTop, akRight]
     TabOrder = 1
   end
   object edtDate: TEdit
     Left = 114
-    Top = 87
-    Width = 247
+    Top = 71
+    Width = 245
     Height = 23
     Anchors = [akLeft, akTop, akRight]
     TabOrder = 2
   end
   object cbxReadLog: TCheckBox
     Left = 114
-    Top = 119
-    Width = 23
+    Top = 103
+    Width = 21
     Height = 17
     Anchors = [akLeft, akTop, akRight]
     TabOrder = 3
   end
   object memNote: TMemo
     Left = 114
-    Top = 145
-    Width = 247
+    Top = 129
+    Width = 245
     Height = 120
     Anchors = [akLeft, akTop, akRight]
     TabOrder = 4

@@ -2,7 +2,7 @@ object frmUserEdit: TfrmUserEdit
   Left = 0
   Top = 0
   Caption = 'Wijzig gebruiker'
-  ClientHeight = 390
+  ClientHeight = 357
   ClientWidth = 342
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -14,7 +14,7 @@ object frmUserEdit: TfrmUserEdit
   OnShow = FormShow
   DesignSize = (
     342
-    390)
+    357)
   TextHeight = 15
   object lblEditUserName: TLabel
     Left = 8
@@ -66,18 +66,17 @@ object frmUserEdit: TfrmUserEdit
     Caption = 'Profielfoto'
   end
   object imgEditProfilePicture: TImage
-    Left = 253
+    Left = 259
     Top = 219
-    Width = 67
-    Height = 69
+    Width = 75
+    Height = 75
     Anchors = [akLeft, akTop, akRight]
     Proportional = True
     Stretch = True
-    ExplicitWidth = 69
   end
   object lblEditUserError: TLabel
     Left = 8
-    Top = 334
+    Top = 301
     Width = 28
     Height = 15
     Anchors = [akLeft, akBottom]
@@ -100,57 +99,51 @@ object frmUserEdit: TfrmUserEdit
   object edtEditUserName: TEdit
     Left = 128
     Top = 16
-    Width = 192
+    Width = 206
     Height = 23
     Anchors = [akLeft, akTop, akRight]
     TabOrder = 0
-    ExplicitWidth = 190
   end
   object edtEditStoreName: TEdit
     Left = 128
     Top = 45
-    Width = 192
+    Width = 206
     Height = 23
     Anchors = [akLeft, akTop, akRight]
     TabOrder = 1
-    ExplicitWidth = 190
   end
   object edtEditUserEmail: TEdit
     Left = 128
     Top = 74
-    Width = 192
+    Width = 206
     Height = 23
     Anchors = [akLeft, akTop, akRight]
     TabOrder = 2
-    ExplicitWidth = 190
   end
   object edtEditUserTelephone: TEdit
     Left = 128
     Top = 103
-    Width = 192
+    Width = 206
     Height = 23
     Anchors = [akLeft, akTop, akRight]
     TabOrder = 3
-    ExplicitWidth = 190
   end
   object edtEditUserNickName: TEdit
     Left = 128
     Top = 132
-    Width = 192
+    Width = 206
     Height = 23
     Anchors = [akLeft, akTop, akRight]
     TabOrder = 4
-    ExplicitWidth = 190
   end
   object edtEditUserPassword: TEdit
     Left = 128
     Top = 161
-    Width = 192
+    Width = 206
     Height = 23
     Anchors = [akLeft, akTop, akRight]
     PasswordChar = #8226
     TabOrder = 5
-    ExplicitWidth = 190
   end
   object sbtnEditUserProfilePicture: TAdvSmoothButton
     Left = 128
@@ -183,7 +176,7 @@ object frmUserEdit: TfrmUserEdit
   end
   object sbtnEditUser: TAdvSmoothButton
     Left = 8
-    Top = 355
+    Top = 322
     Width = 125
     Height = 27
     Anchors = [akLeft, akBottom]
@@ -219,8 +212,8 @@ object frmUserEdit: TfrmUserEdit
     TMSStyle = 8
   end
   object AdvSmoothButton3: TAdvSmoothButton
-    Left = 199
-    Top = 355
+    Left = 209
+    Top = 322
     Width = 125
     Height = 27
     Anchors = [akRight, akBottom]
@@ -252,8 +245,7 @@ object frmUserEdit: TfrmUserEdit
     TabOrder = 8
     Version = '2.2.3.1'
     OnClick = AdvSmoothButton3Click
-    ExplicitLeft = 197
-    ExplicitTop = 347
+    ExplicitTop = 355
     TMSStyle = 8
   end
   object cbxUserDeleted: TCheckBox

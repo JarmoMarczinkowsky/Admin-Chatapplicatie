@@ -153,6 +153,10 @@
             <Form>frmGroupEdit</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="frmInfoLog.pas">
+            <Form>frmLogInfo</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

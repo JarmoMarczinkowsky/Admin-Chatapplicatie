@@ -104,13 +104,11 @@ begin
             AStream.Position := 0;
 
             pgqAddUser.ParamByName('userProfilePicture').LoadFromStream(AStream, ftBlob);
-            pgqAddUser.ParamByName('userPfExtension').AsString := fileExtension;//
-  //          BlobField := pgqAddUser.FieldByName('gbr_profielfoto') as TBlobField;
-  //          BlobField.LoadFromStream(AStream);
+            pgqAddUser.ParamByName('userPfExtension').AsString := fileExtension;
 
             pgqAddUser.Execute;
 
-            if(pgqAddUser.Active) then pgqAddUser.Close;
+            pgqAddUser.Free;
             AStream.Free;
 
             lblAddUserError.Font.Color := clGreen;
@@ -163,10 +161,7 @@ var
   streamReader: TStreamReader;
   Encoding: TEncoding;
   encodeName: string;
-
 begin
-//  testing := TBitmap.Create;
-
   with TOpenDialog.Create(self) do
   try
 //    Caption := 'Open afbeelding';

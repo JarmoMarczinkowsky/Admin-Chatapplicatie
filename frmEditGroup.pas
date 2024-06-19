@@ -203,34 +203,47 @@ begin
   with DataModule2 do
   begin
     pgqEditGroupMember := TPgQuery.Create(nil);
-    pgqEditGroupMember.Connection := pgcDBconnection;
+    try
+      pgqEditGroupMember.Connection := pgcDBconnection;
 
-    pgqGetDeletedUserId := TPgQuery.Create(nil);
-    pgqGetDeletedUserId.Connection := pgcDBconnection;
+//    pgqGetDeletedUserId := TPgQuery.Create(nil);
+//    pgqGetDeletedUserId.Connection := pgcDBconnection;
 
-    lblEditGroupError.Caption := '';
-    lblEditGroupError.Font.Color := RGB(220, 20, 60);
+      lblEditGroupError.Caption := '';
+      lblEditGroupError.Font.Color := RGB(220, 20, 60);
 
-    if(Length(edtEditGroupName.Text) = 0) then
-    begin
-      lblEditGroupError.Caption := 'Geen groepsnaam ingevoerd';
-      Exit;
-    end;
+      if(Length(edtEditGroupName.Text) = 0) then
+      begin
+        lblEditGroupError.Caption := 'Geen groepsnaam ingevoerd';
+        Exit;
+      end;
 
-    groupId := pgqGetSelectedGroup.FieldByName('gro_id').AsInteger;
+      groupId := pgqGetSelectedGroup.FieldByName('gro_id').AsInteger;
 
-    for i := 1 to RemovedUsersList.Count do
-    begin
-      pgqEditGroupMember.SQL.Text := 'SELECT * FROM tbl_groepleden';
-      pgqEditGroupMember.SQL.Add('WHERE grl_groep = :selectedGroup');
-      pgqEditGroupMember.SQL.Add('AND grl_gebruiker = :currentUser');
-      pgqEditGroupMember.ParamByName('selectedGroup').AsInteger := groupId;
-      pgqEditGroupMember.ParamByName('currentUser').AsInteger := StrToInt(RemovedUsersList[i - 1]); {pgqGetDeletedUserId.FieldByName('gbr_id').AsInteger;}
-      pgqEditGroupMember.Open;
+      for i := 1 to RemovedUsersList.Count do
+      begin
+//        pgqEditGroupMember.SQL.Text := 'SELECT * FROM tbl_groepleden';
+//        pgqEditGroupMember.SQL.Add('WHERE grl_groep = :selectedGroup');
+//        pgqEditGroupMember.SQL.Add('AND grl_gebruiker = :currentUser');
+//        pgqEditGroupMember.ParamByName('selectedGroup').AsInteger := groupId;
+//        pgqEditGroupMember.ParamByName('currentUser').AsInteger := StrToInt(RemovedUsersList[i - 1]); {pgqGetDeletedUserId.FieldByName('gbr_id').AsInteger;}
+//        pgqEditGroupMember.Open;
+//
+//        pgqEditGroupMember.Edit;
+//        pgqEditGroupMember.FieldByName('grl_del').AsBoolean := True;
+//        pgqEditGroupMember.Post;
 
-      pgqEditGroupMember.Edit;
-      pgqEditGroupMember.FieldByName('grl_del').AsBoolean := True;
-      pgqEditGroupMember.Post;
+        pgqEditGroupMember.SQL.Text := 'UPDATE tbl_groepleden';
+        pgqEditGroupMember.SQL.Add('SET grl_del = True');
+        pgqEditGroupMember.SQL.Add('WHERE grl_groep = :selectedGroup');
+        pgqEditGroupMember.SQL.Add('AND grl_gebruiker = :currentUser');
+        pgqEditGroupMember.ParamByName('selectedGroup').AsInteger := groupId;
+        pgqEditGroupMember.ParamByName('currentUser').AsInteger := StrToInt(RemovedUsersList[i - 1]); {pgqGetDeletedUserId.FieldByName('gbr_id').AsInteger;}
+        pgqEditGroupMember.Execute;
+      end;
+
+    finally
+      pgqEditGroupMember.Free;
     end;
 
     AddUserToGroup(groupId);
@@ -327,32 +340,43 @@ begin
   lblEditGroupError.Caption := '';
 
   searchQuery := TPgQuery.Create(nil);
-  searchQuery.Connection := DataModule2.pgcDBconnection;
+  try
+    searchQuery.Connection := DataModule2.pgcDBconnection;
 
-  slsbEditSearchUser.Items.Clear;
-  searchQuery.SQL.Text := 'SELECT * FROM tbl_gebruikers';
-  if(Length(edtEditGroupSearch.Text) > 0) then
-  begin
-    searchQuery.SQL.Add('WHERE LOWER(gbr_nicknaam) LIKE :user');
-    searchQuery.SQL.Add('OR LOWER(gbr_email)=:user');
-    searchQuery.SQL.Add('OR LOWER(gbr_naam)=:user');
-    searchQuery.SQL.Add('ORDER BY gbr_nicknaam');
-    searchQuery.ParamByName('user').AsString := #37 + LowerCase(edtEditGroupSearch.Text) + #37;
-  end
-  else searchQuery.SQL.Add('ORDER BY gbr_nicknaam');
-  searchQuery.Open;
-
-  searchQuery.First;
-  for i := 1 to searchQuery.RecordCount do
-  begin
-    with slsbEditSearchUser.Items.Add do
+    slsbEditSearchUser.Items.Clear;
+    searchQuery.SQL.Text := 'SELECT * FROM tbl_gebruikers';
+    if(Length(edtEditGroupSearch.Text) > 0) then
     begin
-      Caption := searchQuery.FieldByName('gbr_nicknaam').AsString;
-      searchQuery.Next;
+      searchQuery.SQL.Add('WHERE LOWER(gbr_nicknaam) LIKE :user');
+      searchQuery.SQL.Add('OR LOWER(gbr_email)=:user');
+      searchQuery.SQL.Add('OR LOWER(gbr_naam)=:user');
+      searchQuery.SQL.Add('ORDER BY gbr_nicknaam');
+      searchQuery.ParamByName('user').AsString := #37 + LowerCase(edtEditGroupSearch.Text) + #37;
+    end
+    else
+    begin
+      searchQuery.SQL.Add('ORDER BY gbr_nicknaam');
     end;
+
+    searchQuery.Open;
+
+    searchQuery.First;
+    for i := 1 to searchQuery.RecordCount do
+    begin
+      with slsbEditSearchUser.Items.Add do
+      begin
+        Caption := searchQuery.FieldByName('gbr_nicknaam').AsString;
+        searchQuery.Next;
+      end;
+    end;
+
+  finally
+    searchQuery.Free;
+
   end;
 
-  searchQuery.Close;
+
+//  searchQuery.Close;
 end;
 
 procedure TfrmGroupEdit.slsbEditAddUserToGroupClick(Sender: TObject);
@@ -398,58 +422,55 @@ begin
     deletedUserStatus := false;
 
     pgqGroepsLeden := TPgQuery.Create(nil);
-    pgqGroepsLeden.Connection := pgcDBconnection;
+    try
+      pgqGroepsLeden.Connection := pgcDBconnection;
 
-    pgqCheckDuplicateUser := TPgQuery.Create(nil);
-    pgqCheckDuplicateUser.Connection := pgcDBconnection;
+      pgqCheckDuplicateUser := TPgQuery.Create(nil);
+      try
+        pgqCheckDuplicateUser.Connection := pgcDBconnection;
 
-    userIsDuplicate := false;
+        userIsDuplicate := false;
 
-    for I := 1 to slsbEditGroupUsers.Items.Count do
-    begin
-//      pgqCheckExistingUser.SQL.Text := 'SELECT gbr_id FROM tbl_gebruikers';
-//      pgqCheckExistingUser.SQL.Add('WHERE LOWER(gbr_nicknaam)=:currentUser');
-//      pgqCheckExistingUser.ParamByName('currentUser').AsString := LowerCase(Trim(slsbEditGroupUsers.Items[i - 1].Caption));
-//      pgqCheckExistingUser.Open;
-
-      pgqCheckDuplicateUser.SQL.Text := 'SELECT * FROM tbl_groepleden';
-      pgqCheckDuplicateUser.SQL.Add('WHERE grl_groep = :currentGroup');
-      pgqCheckDuplicateUser.SQL.Add('AND grl_gebruiker = :currentUser');
-      pgqCheckDuplicateUser.ParamByName('currentGroup').AsInteger := selectedGroupId;
-      pgqCheckDuplicateUser.ParamByName('currentUser').AsInteger := slsbEditGroupUsers.Items[i - 1].Tag; {pgqCheckExistingUser.FieldByName('gbr_id').AsInteger;}
-      pgqCheckDuplicateUser.Open;
-
-      if(pgqCheckDuplicateUser.RecordCount > 0) then userIsDuplicate := true
-      else userIsDuplicate := false;
-
-      if(userIsDuplicate = true) then
-      begin
-        deletedUserStatus := pgqCheckDuplicateUser.FieldByName('grl_del').AsBoolean;
-        if(deletedUserStatus = true) then
+        for I := 1 to slsbEditGroupUsers.Items.Count do
         begin
-          pgqCheckDuplicateUser.Edit;
-          pgqCheckDuplicateUser.FieldByName('grl_del').AsBoolean := false;
-          pgqCheckDuplicateUser.Post;
+          pgqCheckDuplicateUser.SQL.Text := 'SELECT * FROM tbl_groepleden';
+          pgqCheckDuplicateUser.SQL.Add('WHERE grl_groep = :currentGroup');
+          pgqCheckDuplicateUser.SQL.Add('AND grl_gebruiker = :currentUser');
+          pgqCheckDuplicateUser.ParamByName('currentGroup').AsInteger := selectedGroupId;
+          pgqCheckDuplicateUser.ParamByName('currentUser').AsInteger := slsbEditGroupUsers.Items[i - 1].Tag; {pgqCheckExistingUser.FieldByName('gbr_id').AsInteger;}
+          pgqCheckDuplicateUser.Open;
+
+          if(pgqCheckDuplicateUser.RecordCount > 0) then userIsDuplicate := true
+          else userIsDuplicate := false;
+
+          if(userIsDuplicate = true) then
+          begin
+            deletedUserStatus := pgqCheckDuplicateUser.FieldByName('grl_del').AsBoolean;
+            if(deletedUserStatus) then
+            begin
+              pgqCheckDuplicateUser.Edit;
+              pgqCheckDuplicateUser.FieldByName('grl_del').AsBoolean := false;
+              pgqCheckDuplicateUser.Post;
+            end;
+
+          end
+          else if(userIsDuplicate = false) then
+          begin
+            pgqGroepsLeden.SQL.Text := 'INSERT INTO tbl_groepleden (grl_gebruiker, grl_groep, grl_aangemaakt, grl_del)';
+            pgqGroepsLeden.SQL.Add('VALUES (:userId, :groupId, :timeUserAdded, :groupMemberDeleted)');
+            pgqGroepsleden.ParamByName('userId').AsInteger := slsbEditGroupUsers.Items[i - 1].Tag; {pgqCheckExistingUser.FieldByName('gbr_id').AsInteger;}
+            pgqGroepsleden.ParamByName('groupId').AsInteger := selectedGroupId;
+            pgqGroepsleden.ParamByName('timeUserAdded').AsDateTime := now;
+            pgqGroepsleden.ParamByName('groupMemberDeleted').AsBoolean := false;
+            pgqGroepsleden.Execute;
+          end;
         end;
-
-      end
-      else if(userIsDuplicate = false) then
-      begin
-        pgqGroepsLeden.SQL.Text := 'INSERT INTO tbl_groepleden (grl_gebruiker, grl_groep, grl_aangemaakt, grl_del)';
-        pgqGroepsLeden.SQL.Add('VALUES (:userId, :groupId, :timeUserAdded, :groupMemberDeleted)');
-        pgqGroepsleden.ParamByName('userId').AsInteger := slsbEditGroupUsers.Items[i - 1].Tag; {pgqCheckExistingUser.FieldByName('gbr_id').AsInteger;}
-        pgqGroepsleden.ParamByName('groupId').AsInteger := selectedGroupId;
-        pgqGroepsleden.ParamByName('timeUserAdded').AsDateTime := now;
-        pgqGroepsleden.ParamByName('groupMemberDeleted').AsBoolean := false;
-        pgqGroepsleden.Execute;
+      finally
+        pgqCheckDuplicateUser.Free;
       end;
+    finally
+      pgqGroepsLeden.Free;
     end;
-
-    if(pgqCheckDuplicateUser.Active) then pgqCheckDuplicateUser.Close;
-    if(pgqGroepsLeden.Active) then pgqGroepsLeden.Close;
-
   end;
-
 end;
-
 end.

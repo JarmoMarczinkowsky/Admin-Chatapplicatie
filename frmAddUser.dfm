@@ -59,14 +59,13 @@ object frmUserAdd: TfrmUserAdd
     Caption = 'Profielfoto'
   end
   object imgAddUserProfilePicture: TImage
-    Left = 269
+    Left = 257
     Top = 190
-    Width = 59
+    Width = 75
     Height = 75
     Anchors = [akLeft, akTop, akRight, akBottom]
     Proportional = True
     Stretch = True
-    ExplicitWidth = 63
   end
   object lblAddUserError: TLabel
     Left = 11
@@ -169,7 +168,7 @@ object frmUserAdd: TfrmUserAdd
     TMSStyle = 8
   end
   object sbtnAddUser: TAdvSmoothButton
-    Left = 6
+    Left = 2
     Top = 297
     Width = 125
     Height = 27
@@ -202,12 +201,12 @@ object frmUserAdd: TfrmUserAdd
     TabOrder = 7
     Version = '2.2.3.1'
     OnClick = sbtnAddUserClick
-    ExplicitLeft = 4
+    ExplicitLeft = 0
     ExplicitTop = 289
     TMSStyle = 8
   end
   object sbtnBackToUserOverview: TAdvSmoothButton
-    Left = 210
+    Left = 214
     Top = 297
     Width = 125
     Height = 27
@@ -240,8 +239,6 @@ object frmUserAdd: TfrmUserAdd
     TabOrder = 8
     Version = '2.2.3.1'
     OnClick = sbtnBackToUserOverviewClick
-    ExplicitLeft = 208
-    ExplicitTop = 289
     TMSStyle = 8
   end
   object edtUserPassword: TEdit

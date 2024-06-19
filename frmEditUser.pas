@@ -92,9 +92,6 @@ var
 begin
   with DataModule2 do
   begin
-    pgqDuplicateNameCheck := TPgQuery.Create(nil);
-    pgqDuplicateNameCheck.Connection := pgcDBconnection;
-
     lblEditUserError.Font.Color := RGB(220, 20, 60);
     lblEditUserError.Caption := '';
 
@@ -108,10 +105,10 @@ begin
       begin
         if(TRegEx.IsMatch(edtEditUserTelephone.Text, '^[0-9+\-]{10,}$')) then
         begin
-          pgqDuplicateNameCheck.Close;
+          pgqDuplicateNameCheck := TPgQuery.Create(nil);
+          pgqDuplicateNameCheck.Connection := pgcDBconnection;
 
-          pgqDuplicateNameCheck.SQL.Text := '';
-          pgqDuplicateNameCheck.SQL.Add('SELECT * FROM tbl_gebruikers');
+          pgqDuplicateNameCheck.SQL.Text := 'SELECT * FROM tbl_gebruikers';
           pgqDuplicateNameCheck.SQL.Add('WHERE (LOWER(gbr_email)=:CheckDuplicateEmail');
           pgqDuplicateNameCheck.SQL.Add('OR LOWER(gbr_nicknaam)=:CheckDuplicateUserName)');
           pgqDuplicateNameCheck.SQL.Add('AND NOT gbr_id=:selectedUserId');
@@ -132,8 +129,9 @@ begin
             pgqCheckExistingUser.FieldByName('gbr_del').AsBoolean := cbxUserDeleted.Checked;
 
             AStream := TMemoryStream.Create;
-            imgEditProfilePicture.Picture.SaveToStream(AStream);
             AStream.Position := 0;
+            imgEditProfilePicture.Picture.SaveToStream(AStream);
+
             BlobField := pgqCheckExistingUser.FieldByName('gbr_profielfoto') as TBlobField;
             BlobField.LoadFromStream(AStream);
 
@@ -146,12 +144,13 @@ begin
 
             pgqCheckExistingUser.Post;
 
-            if(not pgqDuplicateNameCheck.IsEmpty) then pgqDuplicateNameCheck.Close;
+            pgqDuplicateNameCheck.Free;
             Self.Close;
           end
           else
           begin
             lblEditUserError.Caption := 'Email of gebruikersnaam is al in gebruik';
+            pgqDuplicateNameCheck.Free;
           end;
         end
         else lblEditUserError.Caption := 'Telefoonnummer is niet correct geformatteerd' + #13#10 +
@@ -164,25 +163,24 @@ begin
       lblEditUserError.Caption := 'Vul alle velden in';
     end;
 
-    if(not pgqDuplicateNameCheck.IsEmpty) then pgqDuplicateNameCheck.Close;
   end;
 end;
 
 procedure TfrmUserEdit.sbtnEditUserProfilePictureClick(Sender: TObject);
+var
+  getPic: TMemoryStream;
 begin
   with TOpenDialog.Create(self) do
-    try
-//      Caption := 'Open afbeelding';
-      Filter := 'Image Files (*.jpg;*.jpeg;*.png)|*.jpg;*.jpeg;*.png';
-      Options := [TOpenOption.ofPathMustExist, TOpenOption.ofPathMustExist];
-      if (Execute) then imgEditProfilePicture.Picture.LoadFromFile(FileName);
-      begin
-        fileExtension := TPath.GetExtension(FileName);
-      end;
-
-    finally
-      Free;
+  try
+    Filter := 'Image Files (*.jpg;*.jpeg;*.png)|*.jpg;*.jpeg;*.png';
+    Options := [TOpenOption.ofPathMustExist, TOpenOption.ofPathMustExist];
+    if (Execute) then imgEditProfilePicture.Picture.LoadFromFile(FileName);
+    begin
+      fileExtension := TPath.GetExtension(FileName);
     end;
+  finally
+    Free;
+  end;
 end;
 
 end.

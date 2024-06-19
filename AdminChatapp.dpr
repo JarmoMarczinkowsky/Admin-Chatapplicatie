@@ -8,7 +8,8 @@ uses
   frmAddUser in 'frmAddUser.pas' {frmUserAdd},
   frmEditUser in 'frmEditUser.pas' {frmUserEdit},
   frmAddGroup in 'frmAddGroup.pas' {frmGroupAdd},
-  frmEditGroup in 'frmEditGroup.pas' {frmGroupEdit};
+  frmEditGroup in 'frmEditGroup.pas' {frmGroupEdit},
+  frmInfoLog in 'frmInfoLog.pas' {frmLogInfo};
 
 {$R *.res}
 
@@ -23,5 +24,6 @@ begin
   Application.CreateForm(TfrmUserEdit, frmUserEdit);
   Application.CreateForm(TfrmGroupAdd, frmGroupAdd);
   Application.CreateForm(TfrmGroupEdit, frmGroupEdit);
+  Application.CreateForm(TfrmLogInfo, frmLogInfo);
   Application.Run;
 end.
