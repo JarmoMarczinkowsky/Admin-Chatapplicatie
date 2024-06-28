@@ -18,7 +18,7 @@ object frmAdminDashboard: TfrmAdminDashboard
     Top = 50
     Width = 930
     Height = 472
-    ActivePage = tbsLogs
+    ActivePage = tbsUserOverview
     Align = alClient
     TabOrder = 0
     OnChange = pcPagesChange
@@ -250,6 +250,7 @@ object frmAdminDashboard: TfrmAdminDashboard
         TabOrder = 1
         Version = '2.2.3.1'
         OnClick = sbtnDeleteGroupClick
+        ExplicitLeft = 809
         TMSStyle = 8
       end
       object sgrGroups: TStringGrid
@@ -260,6 +261,8 @@ object frmAdminDashboard: TfrmAdminDashboard
         Anchors = [akLeft, akTop, akRight, akBottom]
         TabOrder = 3
         OnDrawCell = sgrGroupsDrawCell
+        ExplicitWidth = 906
+        ExplicitHeight = 380
         ColWidths = (
           64
           64
@@ -301,6 +304,7 @@ object frmAdminDashboard: TfrmAdminDashboard
         TabOrder = 2
         Version = '2.2.3.1'
         OnClick = sbtnGoToEditGroupClick
+        ExplicitLeft = 703
         TMSStyle = 8
       end
       object sbtnRefreshGroup: TAdvSmoothButton
@@ -380,6 +384,7 @@ object frmAdminDashboard: TfrmAdminDashboard
         TabOrder = 0
         Version = '2.2.3.1'
         OnClick = sbtnGoToAddGroupClick
+        ExplicitLeft = 597
         TMSStyle = 8
       end
     end

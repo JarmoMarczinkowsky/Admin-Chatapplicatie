@@ -3,7 +3,8 @@ unit frmEditGroup;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, System.Threading,
+  Winapi.Windows, Winapi.Messages,
+  System.SysUtils, System.Variants, System.Classes, System.Threading, System.IOUtils,
   Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, Data.DB,
   AdvSmoothListBox, AdvSmoothButton, MemDS, DBAccess, PgAccess,
@@ -38,11 +39,14 @@ type
     procedure sbtnEditGroupCancelClick(Sender: TObject);
     procedure sbtnEditGroupClick(Sender: TObject);
     procedure sbtnEditGroupProfilePictureClick(Sender: TObject);
+    procedure edtEditGroupSearchKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
     RemovedUsersList: TStringList;
+    fileExtension: string;
     procedure FillListBox;
     procedure AddUserToGroup(selectedGroupId: integer);
+    procedure SearchForUser;
 
   public
     { Public declarations }
@@ -151,6 +155,12 @@ begin
 
 end;
 
+procedure TfrmGroupEdit.edtEditGroupSearchKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if(Key = #13) then SearchForUser;
+end;
+
 procedure TfrmGroupEdit.FillListBox;
 begin
   with DataModule2 do
@@ -180,8 +190,7 @@ begin
               pgqGetUsers.Next;
             end;
             slsbEditSearchUser.EndUpdate;
-          end
-          )
+          end)
         end;
       end);
     end;
@@ -222,17 +231,6 @@ begin
 
       for i := 1 to RemovedUsersList.Count do
       begin
-//        pgqEditGroupMember.SQL.Text := 'SELECT * FROM tbl_groepleden';
-//        pgqEditGroupMember.SQL.Add('WHERE grl_groep = :selectedGroup');
-//        pgqEditGroupMember.SQL.Add('AND grl_gebruiker = :currentUser');
-//        pgqEditGroupMember.ParamByName('selectedGroup').AsInteger := groupId;
-//        pgqEditGroupMember.ParamByName('currentUser').AsInteger := StrToInt(RemovedUsersList[i - 1]); {pgqGetDeletedUserId.FieldByName('gbr_id').AsInteger;}
-//        pgqEditGroupMember.Open;
-//
-//        pgqEditGroupMember.Edit;
-//        pgqEditGroupMember.FieldByName('grl_del').AsBoolean := True;
-//        pgqEditGroupMember.Post;
-
         pgqEditGroupMember.SQL.Text := 'UPDATE tbl_groepleden';
         pgqEditGroupMember.SQL.Add('SET grl_del = True');
         pgqEditGroupMember.SQL.Add('WHERE grl_groep = :selectedGroup');
@@ -260,6 +258,7 @@ begin
     pgqGetSelectedGroup.FieldByName('gro_beschrijving').AsString := edtEditGroupDescription.Text;
     pgqGetSelectedGroup.FieldByName('gro_igenaar').AsInteger := pgqCheckExistingUser.FieldByName('gbr_id').AsInteger;
     pgqGetSelectedGroup.FieldByName('gro_del').AsBoolean := cbxGroupDeleted.Checked;
+    pgqGetSelectedGroup.FieldByName('gro_pf_ext').AsString := fileExtension;
 
     pgqCheckExistingUser.Close;
 
@@ -277,13 +276,31 @@ begin
 end;
 
 procedure TfrmGroupEdit.sbtnEditGroupProfilePictureClick(Sender: TObject);
+var
+  getFile: TFileStream;
+  strGetSize: string;
+  getSize: double;
 begin
   with TOpenDialog.Create(self) do
   try
     Caption := 'Open afbeelding';
     Filter := 'Image Files (*.jpg;*.jpeg;*.png)|*.jpg;*.jpeg;*.png';
     Options := [TOpenOption.ofPathMustExist, TOpenOption.ofPathMustExist];
-    if (Execute) then imgEditGroupProfile.Picture.LoadFromFile(FileName);
+    if (Execute) then
+    begin
+      getFile := TFileStream.Create(FileName, fmOpenRead or fmShareDenyNone);
+      fileExtension := LowerCase(TPath.GetExtension(FileName));
+      strGetSize := FormatFloat('0.00', getFile.Size / (1024 * 1024));
+      getSize := StrToFloat(strGetSize);
+
+      if(getSize < 5) then
+      begin
+        imgEditGroupProfile.Picture.LoadFromFile(FileName);
+      end
+      else lblEditGroupError.Caption := 'Afbeelding moet kleiner dan 5mb zijn';
+
+    end;
+
 
   finally
     Free;
@@ -333,50 +350,49 @@ begin
 end;
 
 procedure TfrmGroupEdit.sbtnEditSearchUserClick(Sender: TObject);
+begin
+  SearchForUser;
+end;
+
+procedure TfrmGroupEdit.SearchForUser;
 var
   i: integer;
-  searchQuery: TPgQuery;
 begin
   lblEditGroupError.Caption := '';
 
-  searchQuery := TPgQuery.Create(nil);
-  try
-    searchQuery.Connection := DataModule2.pgcDBconnection;
-
+  with DataModule2 do
+  begin
     slsbEditSearchUser.Items.Clear;
-    searchQuery.SQL.Text := 'SELECT * FROM tbl_gebruikers';
+
     if(Length(edtEditGroupSearch.Text) > 0) then
     begin
-      searchQuery.SQL.Add('WHERE LOWER(gbr_nicknaam) LIKE :user');
-      searchQuery.SQL.Add('OR LOWER(gbr_email)=:user');
-      searchQuery.SQL.Add('OR LOWER(gbr_naam)=:user');
-      searchQuery.SQL.Add('ORDER BY gbr_nicknaam');
-      searchQuery.ParamByName('user').AsString := #37 + LowerCase(edtEditGroupSearch.Text) + #37;
+      pgqSearchUser.SQL.Text := 'SELECT * FROM tbl_gebruikers';
+      pgqSearchUser.SQL.Add('WHERE LOWER(gbr_nicknaam) LIKE :user');
+      pgqSearchUser.SQL.Add('OR LOWER(gbr_email)=:user');
+      pgqSearchUser.SQL.Add('OR LOWER(gbr_naam)=:user');
+      pgqSearchUser.SQL.Add('ORDER BY gbr_nicknaam');
+      pgqSearchUser.ParamByName('user').AsString := #37 + LowerCase(edtEditGroupSearch.Text) + #37;
     end
     else
     begin
-      searchQuery.SQL.Add('ORDER BY gbr_nicknaam');
+      pgqSearchUser.SQL.Text := 'SELECT * FROM tbl_gebruikers';
+      pgqSearchUser.SQL.Add('ORDER BY gbr_nicknaam');
     end;
 
-    searchQuery.Open;
+    pgqSearchUser.Open;
 
-    searchQuery.First;
-    for i := 1 to searchQuery.RecordCount do
+    pgqSearchUser.First;
+    for i := 1 to pgqSearchUser.RecordCount do
     begin
       with slsbEditSearchUser.Items.Add do
       begin
-        Caption := searchQuery.FieldByName('gbr_nicknaam').AsString;
-        searchQuery.Next;
+        Caption := FirstCharUpperCase(pgqSearchUser.FieldByName('gbr_nicknaam').AsString);
+        Tag := pgqSearchUser.FieldByName('gbr_id').AsInteger;
       end;
+      pgqSearchUser.Next;
     end;
-
-  finally
-    searchQuery.Free;
-
+    pgqSearchUser.Close;
   end;
-
-
-//  searchQuery.Close;
 end;
 
 procedure TfrmGroupEdit.slsbEditAddUserToGroupClick(Sender: TObject);
@@ -452,7 +468,6 @@ begin
               pgqCheckDuplicateUser.FieldByName('grl_del').AsBoolean := false;
               pgqCheckDuplicateUser.Post;
             end;
-
           end
           else if(userIsDuplicate = false) then
           begin

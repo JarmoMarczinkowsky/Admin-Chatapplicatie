@@ -59,6 +59,9 @@ end;
 procedure TfrmUserEdit.FormShow(Sender: TObject);
 var
   stream: TStream;
+  getStringStream: TStringStream;
+  getString: string;
+
 begin
   lblEditUserError.Caption := '';
   fileExtension := '';
@@ -73,9 +76,10 @@ begin
       cbxUserDeleted.Checked := pgqCheckExistingUser.FieldByName('gbr_del').AsBoolean;
       edtEditUserPassword.Text := '';
 
-      //gives error when loading Jan Janssen
+      //gives error when loading user with david bowie image
       //loads image from database to TImage
       stream := pgqCheckExistingUser.CreateBlobStream(pgqCheckExistingUser.FieldByName('gbr_profielfoto'), bmRead);
+
       stream.Position := 0;
       imgEditProfilePicture.Picture.LoadFromStream(stream);
 
@@ -176,7 +180,7 @@ begin
     Options := [TOpenOption.ofPathMustExist, TOpenOption.ofPathMustExist];
     if (Execute) then imgEditProfilePicture.Picture.LoadFromFile(FileName);
     begin
-      fileExtension := TPath.GetExtension(FileName);
+      fileExtension := LowerCase(TPath.GetExtension(FileName));
     end;
   finally
     Free;

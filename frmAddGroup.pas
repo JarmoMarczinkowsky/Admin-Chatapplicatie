@@ -3,7 +3,8 @@ unit frmAddGroup;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, System.Threading,
+  Winapi.Windows, Winapi.Messages,
+  System.SysUtils, System.Variants, System.Classes, System.Threading, System.IOUtils,
   Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls,
   Data.DB,
@@ -37,9 +38,12 @@ type
     procedure sbtnagSearchUserClick(Sender: TObject);
     procedure sbtnAddUserToGroupClick(Sender: TObject);
     procedure sbtnRemoveUserFromGroupClick(Sender: TObject);
+    procedure edtAddGroupSearchUserKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
+    fileExtension: string;
     procedure AddUserToGroup(selectedGroupId: integer);
+    procedure SearchForUser;
   public
     { Public declarations }
   end;
@@ -51,6 +55,12 @@ implementation
   uses DMdatabaseInfo;
 
 {$R *.dfm}
+
+procedure TfrmGroupAdd.edtAddGroupSearchUserKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if(Key = #13) then SearchForUser;
+end;
 
 procedure TfrmGroupAdd.FormShow(Sender: TObject);
 begin
@@ -72,32 +82,30 @@ begin
     if(slsbUser.Items.Count = 0) then
     begin
       TTask.Run(
-        procedure
-        var
-          i: integer;
-        begin
-          try
-            Screen.Cursor := crHourGlass;
-            pgqGetUsers.SQL.Text := 'SELECT * FROM tbl_gebruikers WHERE gbr_del = false ORDER BY gbr_nicknaam';
-            pgqGetUsers.Open;
-          finally
-            slsbUser.BeginUpdate;
-            for i := 1 to pgqGetUsers.RecordCount do
+      procedure
+      var
+        i: integer;
+      begin
+        try
+          Screen.Cursor := crHourGlass;
+          pgqGetUsers.SQL.Text := 'SELECT * FROM tbl_gebruikers WHERE gbr_del = false ORDER BY gbr_nicknaam';
+          pgqGetUsers.Open;
+        finally
+          slsbUser.BeginUpdate;
+          for i := 1 to pgqGetUsers.RecordCount do
+          begin
+            with slsbUser.Items.Add do
             begin
-              with slsbUser.Items.Add do
-              begin
-                Caption := pgqGetUsers.FieldByName('gbr_nicknaam').AsString;
-                Tag := pgqGetUsers.FieldByName('gbr_id').AsInteger;
-              end;
-              pgqGetUsers.Next;
+              Caption := FirstCharUpperCase(pgqGetUsers.FieldByName('gbr_nicknaam').AsString);
+              Tag := pgqGetUsers.FieldByName('gbr_id').AsInteger;
             end;
-
-            slsbUser.EndUpdate;
-            Screen.Cursor := crDefault;
+            pgqGetUsers.Next;
           end;
-        end
 
-      );
+          slsbUser.EndUpdate;
+          Screen.Cursor := crDefault;
+        end;
+      end);
     end;
   end;
 
@@ -133,33 +141,33 @@ begin
       pgqCheckExistingUser.Open;
 
       //prepares the sql statement to insert into groups table
-      pgqGetGroups.SQL.Text := 'INSERT INTO tbl_groepen (gro_naam, gro_igenaar, gro_aangemaakt, gro_del, gro_beschrijving, gro_profielfoto)';
-      pgqGetGroups.SQL.Add('VALUES (:groupName, :groupOwner, :groupCreated, :groupDeleted, :groupDescription, :groupProfilePicture)');
+      pgqGetGroups.SQL.Text := 'INSERT INTO tbl_groepen (gro_naam, gro_igenaar, gro_aangemaakt, gro_del, gro_beschrijving, gro_pf_ext, gro_profielfoto)';
+      pgqGetGroups.SQL.Add('VALUES (:groupName, :groupOwner, :groupCreated, :groupDeleted, :groupDescription, :groupProfileExtension, :groupProfilePicture)');
       pgqGetGroups.SQL.Add('RETURNING *');
       pgqGetGroups.ParamByName('groupName').AsString := Trim(edtGroupName.Text);
       pgqGetGroups.ParamByName('groupOwner').AsInteger := StrToInt(Trim(pgqCheckExistingUser.FieldByName('gbr_id').AsString));
       pgqGetGroups.ParamByName('groupCreated').AsDateTime := now;
       pgqGetGroups.ParamByName('groupDeleted').AsBoolean := false;
       pgqGetGroups.ParamByName('groupDescription').AsString := Trim(edtGroupDescription.Text);
+      pgqGetGroups.ParamByName('groupProfileExtension').AsString := fileExtension;
 
       //saves the image to a format that is used by the database
       AStream := TMemoryStream.Create;
-      imgAddGroupProfile.Picture.SaveToStream(AStream);
-      pgqGetGroups.ParamByName('groupProfilePicture').LoadFromStream(AStream, ftBlob);
+      try
+        imgAddGroupProfile.Picture.SaveToStream(AStream);
+        pgqGetGroups.ParamByName('groupProfilePicture').LoadFromStream(AStream, ftBlob);
 
-      //executes the insert sql statement and closes it to preserve memory
-      pgqGetGroups.Open;
-      idLastCreatedGroup := pgqGetGroups.FieldByName('gro_id').AsInteger;
-      pgqGetGroups.Close;
+        //executes the insert sql statement and closes it to preserve memory
+        pgqGetGroups.Open;
+        idLastCreatedGroup := pgqGetGroups.FieldByName('gro_id').AsInteger;
+        pgqGetGroups.Close;
 
-      //gets last added group so it could be used for adding the group members to the correct table
-//      pgqGetGroups.SQL.Text := 'SELECT * FROM tbl_groepen ORDER BY gro_id DESC LIMIT 1';
-//      pgqGetGroups.Open;
-//      idLastCreatedGroup := pgqGetGroups.FieldByName('gro_id').AsInteger;
-//      pgqGetGroups.Close;
+        //will add the user to the last added group
+        AddUserToGroup(idLastCreatedGroup);
 
-      //will add the user to the last added group
-      AddUserToGroup(idLastCreatedGroup);
+      finally
+        AStream.Free;
+      end;
 
       //closes open tab when done
       Self.Close;
@@ -172,25 +180,18 @@ end;
 
 procedure TfrmGroupAdd.AddUserToGroup(selectedGroupId: integer);
 var
-  pgqGroepsLeden: TPgQuery;
+//  pgqGroepsLeden: TPgQuery;
   i: integer;
 //  addedUserLB: TAdvSmoothListBox;
 begin
   with DataModule2 do
   begin
-    pgqGroepsLeden := TPgQuery.Create(nil);
-    pgqGroepsLeden.Connection := pgcDBconnection;
+//    pgqGroepsLeden := TPgQuery.Create(nil);
+//    pgqGroepsLeden.Connection := pgcDBconnection;
 
     //loop through every user in bottom listbox
     for I := 1 to slsbGroupAddedUsers.Items.Count do
     begin
-      //get user id from user table from the current user it is looping through
-      //will be used later for adding to the group member table
-//      pgqCheckExistingUser.SQL.Text := 'SELECT gbr_id FROM tbl_gebruikers';
-//      pgqCheckExistingUser.SQL.Add('WHERE LOWER(gbr_nicknaam)=:currentUser');
-//      pgqCheckExistingUser.ParamByName('currentUser').AsString := LowerCase(Trim(slsbGroupAddedUsers.Items[i - 1].Caption));
-//      pgqCheckExistingUser.Open;
-
       //inserts the group member into the table
       pgqGroepsLeden.SQL.Text := 'INSERT INTO tbl_groepleden (grl_gebruiker, grl_groep, grl_aangemaakt, grl_del)';
       pgqGroepsLeden.SQL.Add('VALUES (:userId, :groupId, :timeUserAdded, :groupMemberDeleted)');
@@ -208,13 +209,29 @@ begin
 end;
 
 procedure TfrmGroupAdd.sbtnAddGroupProfileClick(Sender: TObject);
+var
+  getFile: TFileStream;
+  strGetSize: string;
+  getSize: double;
 begin
   with TOpenDialog.Create(self) do
     try
       Caption := 'Open afbeelding';
       Filter := 'Image Files (*.jpg;*.jpeg;*.png)|*.jpg;*.jpeg;*.png';
       Options := [TOpenOption.ofPathMustExist, TOpenOption.ofPathMustExist];
-      if (Execute) then imgAddGroupProfile.Picture.LoadFromFile(FileName);
+      if (Execute) then
+      begin
+        getFile := TFileStream.Create(FileName, fmOpenRead or fmShareDenyNone);
+        fileExtension := LowerCase(TPath.GetExtension(FileName));
+        strGetSize := FormatFloat('0.00', getFile.Size / (1024 * 1024));
+        getSize := StrToFloat(strGetSize);
+
+        if(getSize < 5) then
+        begin
+          imgAddGroupProfile.Picture.LoadFromFile(FileName);
+        end
+        else lblAddGroupError.Caption := 'Afbeelding is te groot (max 2 mb)';
+      end;
 
     finally
       Free;
@@ -256,41 +273,50 @@ begin
 end;
 
 procedure TfrmGroupAdd.sbtnagSearchUserClick(Sender: TObject);
+begin
+  SearchForUser;
+end;
+
+procedure TfrmGroupAdd.SearchForUser;
 var
   i: integer;
-  searchQuery: TPgQuery;
 begin
-  lblAddGroupError.Caption := '';
+    lblAddGroupError.Caption := '';
 
-  searchQuery := TPgQuery.Create(nil);
-  searchQuery.Connection := DataModule2.pgcDBconnection;
-
-  slsbUser.Items.Clear;
-  searchQuery.SQL.Text := '';
-  searchQuery.SQL.Add('SELECT * FROM tbl_gebruikers');
-  if(Length(edtAddGroupSearchUser.Text) > 0) then
+  with DataModule2 do
   begin
-    searchQuery.SQL.Add('WHERE LOWER(gbr_nicknaam) LIKE :user');
-    searchQuery.SQL.Add('OR LOWER(gbr_email)=:user');
-    searchQuery.SQL.Add('OR LOWER(gbr_naam)=:user');
-    searchQuery.SQL.Add('ORDER BY gbr_nicknaam');
-    searchQuery.ParamByName('user').AsString := #37 + LowerCase(edtAddGroupSearchUser.Text) + #37;
-  end
-  else searchQuery.SQL.Add('ORDER BY gbr_nicknaam');
-  searchQuery.Open;
+    slsbUser.Items.Clear;
 
-  searchQuery.First;
-  for i := 1 to searchQuery.RecordCount do
-  begin
-    with slsbUser.Items.Add do
+    if(Length(edtAddGroupSearchUser.Text) > 0) then
     begin
-      Caption := searchQuery.FieldByName('gbr_nicknaam').AsString;
-      Tag := searchQuery.FieldByName('gbr_id').AsInteger;
-      searchQuery.Next;
+      pgqSearchUser.SQL.Text := 'SELECT * FROM tbl_gebruikers';
+      pgqSearchUser.SQL.Add('WHERE LOWER(gbr_nicknaam) LIKE :user');
+      pgqSearchUser.SQL.Add('OR LOWER(gbr_email)=:user');
+      pgqSearchUser.SQL.Add('OR LOWER(gbr_naam)=:user');
+      pgqSearchUser.SQL.Add('ORDER BY gbr_nicknaam');
+      pgqSearchUser.ParamByName('user').AsString := #37 + LowerCase(edtAddGroupSearchUser.Text) + #37;
+    end
+    else
+    begin
+      pgqSearchUser.SQL.Text := 'SELECT * FROM tbl_gebruikers';
+      pgqSearchUser.SQL.Add('ORDER BY gbr_nicknaam');
     end;
-  end;
 
-  searchQuery.Close;
+    pgqSearchUser.Open;
+
+    pgqSearchUser.First;
+    for i := 1 to pgqSearchUser.RecordCount do
+    begin
+      with slsbUser.Items.Add do
+      begin
+        Caption := FirstCharUpperCase(pgqSearchUser.FieldByName('gbr_nicknaam').AsString);
+        Tag := pgqSearchUser.FieldByName('gbr_id').AsInteger;
+        pgqSearchUser.Next;
+      end;
+    end;
+
+    pgqSearchUser.Close;
+  end;
 end;
 
 procedure TfrmGroupAdd.sbtnBackToGroupOverviewClick(Sender: TObject);
@@ -311,20 +337,7 @@ begin
       getText := slsbGroupAddedUsers.Items[slsbGroupAddedUsers.SelectedItemIndex].Caption;
       indexDeletedUser := cboxGroupOwner.Items.IndexOf(getText);
 
-//      test := scboxGroupOwner.ComboItems.IndexOf(getText).Y;
     end;
-
-//    if(getText = scboxGroupOwner.Text) then
-//    begin
-//      for j := 0 to scboxGroupOwner.ComboItems.Count - 1 do
-//      begin
-//        if(j <> indexDeletedUser) then
-//        begin
-//          scboxGroupOwner.ItemIndex := i;
-//          break;
-//        end;
-//      end;
-//    end;
 
     if(getText = cboxGroupOwner.Text) then
     begin
@@ -339,14 +352,12 @@ begin
       end;
     end;
 
-
     slsbGroupAddedUsers.Items.Delete(slsbGroupAddedUsers.SelectedItemIndex);
 
     if(getText <> DataModule2.pgqGetLoggedInUser.FieldByName('gbr_nicknaam').AsString) then
       if(indexDeletedUser <> -1) then cboxGroupOwner.Items.Delete(indexDeletedUser);
 
   end;
-
 end;
 
 end.

@@ -3,7 +3,7 @@ unit DMdatabaseInfo;
 interface
 
 uses
-  System.SysUtils, System.Classes, Data.DB, DBAccess, PgAccess, MemDS, System.Hash,
+  System.SysUtils, System.Classes, System.Character, Data.DB, DBAccess, PgAccess, MemDS, System.Hash,
   Vcl.ExtCtrls, MemData, Vcl.Forms, Vcl.Dialogs, Winapi.Windows;
 
 type
@@ -34,6 +34,8 @@ type
     tmrLogin: TTimer;
     pgqGetSelectedLog: TPgQuery;
     pgqGetAllLogs: TPgQuery;
+    pgqSearchUser: TPgQuery;
+    pgqGroepsleden: TPgQuery;
     procedure DataModuleDestroy(Sender: TObject);
     function HashString(const Input: string): string;
     procedure tmrLoginTimer(Sender: TObject);
@@ -46,6 +48,7 @@ type
     { Private declarations }
   public
     { Public declarations }
+    function FirstCharUpperCase(myText: string): string;
   end;
 
 var
@@ -99,6 +102,27 @@ procedure TDataModule2.DataModuleDestroy(Sender: TObject);
 begin
   pgqGetLoggedInUser.Free;
   pgcDBconnection.Free;
+end;
+
+function TDataModule2.FirstCharUpperCase(myText: string): string;
+var
+  temp, temp2: string;
+begin
+  if(Length(myText) > 0) then
+  begin
+    if(myText[1].IsLetter) then
+    begin
+      temp := myText;
+      temp2 := myText;
+      temp := UpperCase(temp[1]);
+      Delete(temp2, 1, 1);
+      Result  := temp + temp2;
+    end
+    else
+    begin
+      Result := myText;
+    end;
+  end;
 end;
 
 end.

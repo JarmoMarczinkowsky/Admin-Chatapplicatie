@@ -89,18 +89,19 @@ object frmGroupEdit: TfrmGroupEdit
     TabOrder = 1
   end
   object edtEditGroupSearch: TEdit
-    Left = 334
+    Left = 324
     Top = 13
     Width = 200
     Height = 23
     Anchors = [akTop, akRight]
     TabOrder = 2
-    ExplicitLeft = 332
+    OnKeyPress = edtEditGroupSearchKeyPress
+    ExplicitLeft = 322
   end
   object sbtnEditSearchUser: TAdvSmoothButton
-    Left = 542
+    Left = 530
     Top = 13
-    Width = 65
+    Width = 67
     Height = 23
     Anchors = [akTop, akRight]
     Appearance.SimpleLayout = True
@@ -125,11 +126,10 @@ object frmGroupEdit: TfrmGroupEdit
     TabOrder = 3
     Version = '2.2.3.1'
     OnClick = sbtnEditSearchUserClick
-    ExplicitLeft = 540
     TMSStyle = 8
   end
   object slsbEditAddUserToGroup: TAdvSmoothButton
-    Left = 540
+    Left = 530
     Top = 42
     Width = 67
     Height = 23
@@ -162,11 +162,11 @@ object frmGroupEdit: TfrmGroupEdit
     TabOrder = 4
     Version = '2.2.3.1'
     OnClick = slsbEditAddUserToGroupClick
-    ExplicitLeft = 538
+    ExplicitLeft = 528
     TMSStyle = 8
   end
   object slsbEditSearchUser: TAdvSmoothListBox
-    Left = 334
+    Left = 324
     Top = 42
     Width = 200
     Height = 151
@@ -398,11 +398,11 @@ object frmGroupEdit: TfrmGroupEdit
     Categories = <>
     Anchors = [akTop, akRight]
     TabOrder = 5
-    ExplicitLeft = 332
+    ExplicitLeft = 322
     TMSStyle = 0
   end
   object slsbEditGroupUsers: TAdvSmoothListBox
-    Left = 334
+    Left = 324
     Top = 199
     Width = 200
     Height = 151
@@ -634,11 +634,11 @@ object frmGroupEdit: TfrmGroupEdit
     Categories = <>
     Anchors = [akTop, akRight]
     TabOrder = 6
-    ExplicitLeft = 332
+    ExplicitLeft = 322
     TMSStyle = 0
   end
   object sbtnEditRemoveGroupUser: TAdvSmoothButton
-    Left = 540
+    Left = 530
     Top = 199
     Width = 67
     Height = 23
@@ -671,7 +671,7 @@ object frmGroupEdit: TfrmGroupEdit
     TabOrder = 7
     Version = '2.2.3.1'
     OnClick = sbtnEditRemoveGroupUserClick
-    ExplicitLeft = 538
+    ExplicitLeft = 528
     TMSStyle = 8
   end
   object sbtnEditGroupProfilePicture: TAdvSmoothButton
@@ -756,7 +756,7 @@ object frmGroupEdit: TfrmGroupEdit
     TMSStyle = 8
   end
   object sbtnEditGroupCancel: TAdvSmoothButton
-    Left = 495
+    Left = 485
     Top = 372
     Width = 125
     Height = 27
@@ -789,7 +789,7 @@ object frmGroupEdit: TfrmGroupEdit
     TabOrder = 12
     Version = '2.2.3.1'
     OnClick = sbtnEditGroupCancelClick
-    ExplicitLeft = 493
+    ExplicitLeft = 483
     ExplicitTop = 364
     TMSStyle = 8
   end

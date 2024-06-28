@@ -31,6 +31,7 @@ object DataModule2: TDataModule2
     Connection = pgcDBconnection
     SQL.Strings = (
       'SELECT * FROM tbl_gebruikers')
+    FetchRows = 100
     Left = 64
     Top = 272
     object pgqGetUsersgbr_id: TIntegerField
@@ -72,6 +73,7 @@ object DataModule2: TDataModule2
     Connection = pgcDBconnection
     SQL.Strings = (
       'SELECT * FROM tbl_groepen')
+    FetchRows = 100
     Options.ReturnParams = True
     Left = 224
     Top = 272
@@ -138,5 +140,16 @@ object DataModule2: TDataModule2
     Connection = pgcDBconnection
     Left = 224
     Top = 88
+  end
+  object pgqSearchUser: TPgQuery
+    Connection = pgcDBconnection
+    FetchRows = 100
+    Left = 64
+    Top = 448
+  end
+  object pgqGroepsleden: TPgQuery
+    Connection = pgcDBconnection
+    Left = 64
+    Top = 536
   end
 end
